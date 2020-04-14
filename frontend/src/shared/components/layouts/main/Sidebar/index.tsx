@@ -43,7 +43,7 @@ const Sidebar: FC = (): ReactElement => {
           </li>
 
           <li>
-            <Link href="#" title="Playground">
+            <Link href="/dashboard/playground" title="Playground">
               <Icon type="fas fa-play" />
             </Link>
           </li>

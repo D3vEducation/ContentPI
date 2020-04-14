@@ -2,19 +2,13 @@
 import React, { FC, ReactElement } from 'react'
 
 // Shared components
-import Header from '@layouts/main/Header'
-import Content from '@layouts/main/Content'
-import Sidebar from '@layouts/main/Sidebar'
+import MainLayout from '@layouts/main/MainLayout'
 
 const Home: FC = (): ReactElement => {
   return (
-    <>
-      <Sidebar />
-
-      <Content>
-        <Header />
-      </Content>
-    </>
+    <MainLayout title="Home" header content footer sidebar>
+      <h1>Home</h1>
+    </MainLayout>
   )
 }
 

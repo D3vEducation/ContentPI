@@ -2,31 +2,28 @@
 import React, { FC, ReactElement } from 'react'
 
 // components
+import Header from '../Header'
 import Footer from '../Footer'
-import Fields from '../Fields'
 
 // Styles
 import styles from './Content.scss'
 
 // Interfaces
 interface iProps {
+  header?: boolean
+  footer?: boolean
   children: ReactElement
 }
 
-const Content: FC<iProps> = ({ children }): ReactElement => (
+const Content: FC<iProps> = ({ children, header, footer }): ReactElement => (
   <section className={styles.content}>
-    {children}
+    {header && <Header />}
 
     <div className={styles.container}>
-      <div className={styles.wrapper}>
-        <h1>Dashboard</h1>
-        <p>Content</p>
-      </div>
-
-      <Fields />
+      <div className={styles.wrapper}>{children}</div>
     </div>
 
-    <Footer />
+    {footer && <Footer />}
   </section>
 )
 

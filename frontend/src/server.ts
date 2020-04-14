@@ -8,7 +8,7 @@ import cors from 'cors'
 import session from 'express-session'
 
 // Middleware
-import user, { isConnected } from './shared/lib/middlewares/user'
+import { isConnected } from './shared/lib/middlewares/user'
 
 // Config
 import config from './config'
@@ -37,12 +37,19 @@ nextApp.prepare().then(() => {
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(cookieParser(config.security.secretKey))
   app.use(cors({ credentials: true, origin: true }))
-  app.use(user)
 
   // Routes
   app.get('/login', isConnected(false), (req: any, res: any) => {
-    return nextApp.render(req, res, '/users/login', req.query)
+    return nextApp.render(req, res, '/users/login')
   })
+
+  app.use(
+    '/dashboard/playground',
+    isConnected(true, ['god', 'admin'], '/login?redirectTo=/dashboard'),
+    (req: any, res: any) => {
+      return nextApp.render(req, res, '/dashboard/playground')
+    }
+  )
 
   app.use(
     `/dashboard/:appId?/:stage?/:moduleName?`,
@@ -59,10 +66,7 @@ nextApp.prepare().then(() => {
         page = !moduleName ? '/dashboard/home' : `/dashboard/${moduleName}`
       }
 
-      return nextApp.render(req, res, page, {
-        ...req.params,
-        ...req.query
-      })
+      return nextApp.render(req, res, page)
     }
   )
 

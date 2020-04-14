@@ -1,8 +1,17 @@
 // Dependencies
-import React, { FC, createContext, ReactElement } from 'react'
+import React, {
+  FC,
+  createContext,
+  ReactElement,
+  useState,
+  useEffect
+} from 'react'
 import { useApolloClient } from 'react-apollo-hooks'
 import { useCookies } from 'react-cookie'
 import { getGraphQlError } from 'fogg-utils'
+
+// Util
+import { getUserData } from '@shared/lib/middlewares/jwt'
 
 // Mutations
 import LOGIN_MUTATION from '@graphql/user/login.mutation'
@@ -14,20 +23,24 @@ interface iUserContext {
 
 interface iProps {
   children: ReactElement
-  connectedUser?: object
 }
 
 export const UserContext = createContext<iUserContext>({
   login: () => null,
-  user: {}
+  user: null
 })
 
-const UserProvider: FC<iProps> = ({
-  children,
-  connectedUser
-}): ReactElement => {
+const UserProvider: FC<iProps> = ({ children }): ReactElement => {
   const { mutate } = useApolloClient()
-  const [, setCookie] = useCookies()
+  const [cookies, setCookie] = useCookies()
+  const [user, setUser] = useState(null)
+
+  // Effects
+  useEffect(() => {
+    if (!user) {
+      getUserData(cookies.at).then((userData: any) => setUser(userData))
+    }
+  }, [user])
 
   async function login(input: {
     email: string
@@ -54,7 +67,7 @@ const UserProvider: FC<iProps> = ({
 
   const context = {
     login,
-    user: connectedUser
+    user
   }
 
   return <UserContext.Provider value={context}>{children}</UserContext.Provider>
