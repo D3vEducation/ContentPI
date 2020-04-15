@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactElement, memo } from 'react'
 import styles from './Footer.scss'
 
 const Footer: FC = (): ReactElement => (
@@ -26,4 +26,4 @@ const Footer: FC = (): ReactElement => (
   </footer>
 )
 
-export default Footer
+export default memo(Footer)

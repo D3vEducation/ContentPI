@@ -1,5 +1,5 @@
 // Dependencies
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactElement, memo } from 'react'
 import { Icon } from 'fogg-ui'
 
 // Styles
@@ -21,4 +21,4 @@ const Breadcrumbs: FC = (): ReactElement => (
   </div>
 )
 
-export default Breadcrumbs
+export default memo(Breadcrumbs)

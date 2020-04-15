@@ -1,5 +1,5 @@
 // Dependencies
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactElement, memo } from 'react'
 
 // components
 import Header from '../Header'
@@ -27,4 +27,4 @@ const Content: FC<iProps> = ({ children, header, footer }): ReactElement => (
   </section>
 )
 
-export default Content
+export default memo(Content)

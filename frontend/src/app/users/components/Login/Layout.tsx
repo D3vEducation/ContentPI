@@ -1,5 +1,5 @@
 // Dependencies
-import React, { FC, ReactElement, useContext } from 'react'
+import React, { FC, ReactElement, useContext, memo } from 'react'
 import Head from 'next/head'
 
 // Contexts
@@ -31,4 +31,4 @@ const Layout: FC<iProps> = ({ currentUrl }): ReactElement => {
   )
 }
 
-export default Layout
+export default memo(Layout)

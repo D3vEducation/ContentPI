@@ -10,6 +10,7 @@ type App {
 
 type Query {
   getApps: [App!]
+  getAppById(id: UUID!): App!
 }
 
 type Mutation {

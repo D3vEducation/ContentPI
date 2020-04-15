@@ -1,6 +1,5 @@
 // Dependencies
-import React, { FC, ReactElement, useContext, useEffect } from 'react'
-import Head from 'next/head'
+import React, { FC, ReactElement, useContext, useEffect, memo } from 'react'
 
 // Contexts
 import { AppContext } from '@contexts/app'
@@ -54,4 +53,4 @@ const MyApps: FC = (): ReactElement => {
   )
 }
 
-export default MyApps
+export default memo(MyApps)

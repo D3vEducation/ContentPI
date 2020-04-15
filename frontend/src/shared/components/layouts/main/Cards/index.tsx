@@ -1,10 +1,11 @@
 // Dependencies
-import React, { FC, ReactElement, useState } from 'react'
+import React, { FC, ReactElement, useState, memo } from 'react'
 import { Icon } from 'fogg-ui'
 
 // Components
 import Link from '@ui/Link'
 import CreateAppModal from '@layouts/main/Modals/CreateAppModal'
+import AppIcon from '../AppIcon'
 
 // Styles
 import styles from './Cards.scss'
@@ -43,13 +44,7 @@ const Cards: FC<iProps> = ({ items }): ReactElement => {
               <li key={app.id}>
                 <Link href={`/dashboard/${app.id}/master`}>
                   <section className={styles.card} title={app.description}>
-                    <section
-                      className={styles.app}
-                      style={{ backgroundColor: app.icon }}
-                    >
-                      {app.appName.substring(0, 2)}
-                    </section>
-                    <span>{app.appName}</span>
+                    <AppIcon app={app} />
                   </section>
                 </Link>
               </li>
@@ -62,7 +57,7 @@ const Cards: FC<iProps> = ({ items }): ReactElement => {
                 <Icon type="fas fa-plus" />
               </section>
 
-              <span>Create new App</span>
+              <span className={styles.createNewApp}>Create New App</span>
             </section>
           </li>
         </ul>
@@ -71,4 +66,4 @@ const Cards: FC<iProps> = ({ items }): ReactElement => {
   )
 }
 
-export default Cards
+export default memo(Cards)

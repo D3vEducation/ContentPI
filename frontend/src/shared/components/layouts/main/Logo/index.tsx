@@ -1,5 +1,5 @@
 // Dependencies
-import React, { ReactElement } from 'react'
+import React, { ReactElement, memo } from 'react'
 
 // Components
 import Link from '@ui/Link'
@@ -17,4 +17,4 @@ const Logo = (): ReactElement => {
   )
 }
 
-export default Logo
+export default memo(Logo)

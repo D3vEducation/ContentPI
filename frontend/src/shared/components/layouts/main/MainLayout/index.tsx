@@ -1,5 +1,5 @@
 // Dependencies
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactElement, memo } from 'react'
 import Head from 'next/head'
 
 // Shared components
@@ -47,4 +47,4 @@ const Layout: FC<iProps> = ({
   )
 }
 
-export default Layout
+export default memo(Layout)

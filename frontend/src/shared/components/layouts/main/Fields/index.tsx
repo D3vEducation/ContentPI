@@ -1,5 +1,5 @@
 // Dependencies
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactElement, memo } from 'react'
 
 // Styles
 import styles from './Fields.scss'
@@ -64,4 +64,4 @@ const Fields: FC = (): ReactElement => {
   )
 }
 
-export default Fields
+export default memo(Fields)

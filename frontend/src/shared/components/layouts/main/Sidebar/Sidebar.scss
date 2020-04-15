@@ -38,6 +38,10 @@
         align-items: center;
         justify-content: center;
 
+        &.appIcon {
+          margin-top: 20px;
+        }
+
         &:hover {
           cursor: pointer;
         }

@@ -1,5 +1,5 @@
 // Dependencies
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactElement, memo } from 'react'
 
 // Shared components
 import MainLayout from '@layouts/main/MainLayout'
@@ -21,4 +21,4 @@ const Playground: FC = (): ReactElement => {
   )
 }
 
-export default Playground
+export default memo(Playground)

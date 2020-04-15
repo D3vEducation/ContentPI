@@ -1,5 +1,5 @@
 // Dependencies
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactElement, memo } from 'react'
 
 // Components
 import MyApps from './MyApps'
@@ -19,4 +19,4 @@ const Layout: FC<iProps> = ({ moduleName = '' }): ReactElement => {
   )
 }
 
-export default Layout
+export default memo(Layout)

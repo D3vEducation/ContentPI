@@ -7,7 +7,12 @@ export default {
       _: object,
       _args: object,
       { models }: { models: iModels }
-    ): iApp[] => models.App.findAll()
+    ): iApp[] => models.App.findAll(),
+    getAppById: (
+      _: object,
+      { id }: { id: string },
+      { models }: { models: iModels }
+    ): iApp => models.App.findByPk(id)
   },
   Mutation: {
     createApp: (

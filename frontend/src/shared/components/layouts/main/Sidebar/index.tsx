@@ -1,10 +1,14 @@
 // Dependencies
-import React, { FC, ReactElement, useState } from 'react'
+import React, { FC, ReactElement, useState, useContext, memo } from 'react'
 import { Icon } from 'fogg-ui'
+
+// Contexts
+import { AppContext } from '@contexts/app'
 
 // Components
 import Link from '../../../ui/Link'
 import Logo from '../Logo'
+import AppIcon from '../AppIcon'
 
 // Styles
 import styles from './Sidebar.scss'
@@ -12,6 +16,11 @@ import styles from './Sidebar.scss'
 const Sidebar: FC = (): ReactElement => {
   // State
   const [open, setOpen] = useState(false)
+
+  // Contexts
+  const {
+    state: { getAppById }
+  } = useContext(AppContext)
 
   // Methods
   const handleOpen = (): void => setOpen(!open)
@@ -24,6 +33,12 @@ const Sidebar: FC = (): ReactElement => {
         </div>
 
         <ul>
+          {getAppById && (
+            <li className={styles.appIcon}>
+              <AppIcon app={getAppById} hideName />
+            </li>
+          )}
+
           <li onClick={handleOpen}>
             <Link href="#" title="Models">
               <Icon type="fas fa-cubes" />
@@ -87,4 +102,4 @@ const Sidebar: FC = (): ReactElement => {
   )
 }
 
-export default Sidebar
+export default memo(Sidebar)

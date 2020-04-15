@@ -1,5 +1,12 @@
 // Dependencies
-import React, { FC, ReactElement, useContext, useState, useEffect } from 'react'
+import React, {
+  FC,
+  ReactElement,
+  useContext,
+  useState,
+  useEffect,
+  memo
+} from 'react'
 import { Modal, Badge, Input, DarkButton, Icon } from 'fogg-ui'
 import { generateHexCode, invertHexCode, redirectTo } from 'fogg-utils'
 
@@ -115,4 +122,4 @@ const CreateAppModal: FC<iProps> = ({
   )
 }
 
-export default CreateAppModal
+export default memo(CreateAppModal)

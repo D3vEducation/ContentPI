@@ -11,21 +11,25 @@ interface iProps {
   title?: string
 }
 
-const Link: FC<iProps> = memo(
-  ({ href, children, className, onClick, title }): ReactElement => {
-    const linkProps = {
-      onClick,
-      className
-    }
-
-    return (
-      <NextLink as={href} href={href}>
-        <a {...linkProps} title={title || href}>
-          {children}
-        </a>
-      </NextLink>
-    )
+const Link: FC<iProps> = ({
+  href,
+  children,
+  className,
+  onClick,
+  title
+}): ReactElement => {
+  const linkProps = {
+    onClick,
+    className
   }
-)
 
-export default Link
+  return (
+    <NextLink as={href} href={href}>
+      <a {...linkProps} title={title || href}>
+        {children}
+      </a>
+    </NextLink>
+  )
+}
+
+export default memo(Link)

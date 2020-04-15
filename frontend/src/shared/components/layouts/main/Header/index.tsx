@@ -1,5 +1,5 @@
 // Dependencies
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactElement, memo } from 'react'
 
 // Styles
 import styles from './Header.scss'
@@ -15,4 +15,4 @@ const Header: FC = (): ReactElement => {
   )
 }
 
-export default Header
+export default memo(Header)
