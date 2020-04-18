@@ -1,4 +1,4 @@
-import { App, User, Sequelize } from './types'
+import { App, Declaration, Field, Model, User, Sequelize } from './types'
 
 // Sequelize
 export interface iDataTypes {
@@ -16,6 +16,33 @@ export interface iApp extends App, Sequelize {
 }
 
 export interface iCreateAppInput extends App {}
+
+// Declaration
+export interface iDeclaration extends Declaration, Sequelize {
+  id: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface iCreateDeclarationInput extends Declaration {}
+
+// Field
+export interface iField extends Field, Sequelize {
+  id: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface iCreateFieldInput extends Field {}
+
+// Model
+export interface iModel extends Model, Sequelize {
+  id: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface iCreateModelInput extends Model {}
 
 // User
 export interface iUser extends User, Sequelize {
@@ -39,6 +66,9 @@ export interface iAuthPayload {
 // Models
 export interface iModels {
   App: any
+  Declaration: any
+  Field: any
+  Model: any
   User: any
   sequelize: any
 }

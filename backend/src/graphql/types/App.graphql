@@ -6,11 +6,12 @@ type App {
   description: String!
   createdAt: Datetime!
   updatedAt: Datetime!
+  models: [Model!]
 }
 
 type Query {
   getApps: [App!]
-  getAppById(id: UUID!): App!
+  getApp(appName: String!): App!
 }
 
 type Mutation {

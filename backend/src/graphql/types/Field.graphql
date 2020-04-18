@@ -1,0 +1,34 @@
+type Field {
+  id: UUID!
+  type: String!
+  fieldName: String!
+  identifier: String!
+  description: String!
+  isMedia: Boolean!
+  isRequired: Boolean!
+  isUnique: Boolean!
+  isHide: Boolean!
+  createdAt: Datetime!
+  updatedAt: Datetime!
+  modelId: UUID!
+}
+
+type Query {
+  getFieldsByModelId(modelId: UUID!): [Field]!
+}
+
+type Mutation {
+  createField(input: CreateFieldInput): Field!
+}
+
+input CreateFieldInput {
+  type: String!
+  fieldName: String!
+  identifier: String!
+  description: String!
+  isMedia: Boolean!
+  isRequired: Boolean!
+  isUnique: Boolean!
+  isHide: Boolean!
+  modelId: UUID!
+}
