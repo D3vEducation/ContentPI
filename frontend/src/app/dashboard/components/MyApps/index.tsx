@@ -39,7 +39,7 @@ const MyApps: FC = (): ReactElement => {
   }
 
   return (
-    <MainLayout title="MyApps">
+    <MainLayout title="My Apps">
       <div className={styles.myApps}>
         <div className={styles.header}>
           <div className={styles.logo}>

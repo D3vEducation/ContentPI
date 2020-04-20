@@ -18,7 +18,7 @@ export default (): ReactElement => (
     <UserProvider>
       <AppProvider>
         <FormProvider>
-          <DashboardLayout moduleName="Home" />
+          <DashboardLayout moduleName="Schema" />
         </FormProvider>
       </AppProvider>
     </UserProvider>

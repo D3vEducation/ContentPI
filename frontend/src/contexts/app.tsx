@@ -1,11 +1,5 @@
 // Dependencies
-import React, {
-  FC,
-  createContext,
-  useState,
-  useEffect,
-  ReactElement
-} from 'react'
+import React, { FC, createContext, useState, useEffect, ReactElement } from 'react'
 import { useApolloClient } from 'react-apollo-hooks'
 import { getGraphQlError, getQueryName, getParams } from 'fogg-utils'
 

@@ -53,11 +53,7 @@ nextApp.prepare().then(() => {
 
   app.use(
     `/dashboard/:appId?/:stage?/:moduleName?`,
-    isConnected(
-      true,
-      ['god', 'admin', 'editor'],
-      '/login?redirectTo=/dashboard'
-    ),
+    isConnected(true, ['god', 'admin', 'editor'], '/login?redirectTo=/dashboard'),
     (req: any, res: any) => {
       const { appId, stage, moduleName } = req.params
       let page = '/dashboard'

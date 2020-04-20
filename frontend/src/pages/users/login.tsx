@@ -14,9 +14,7 @@ import UserProvider from '@contexts/user'
 import LoginLayout from '@app/users/components/Login/Layout'
 
 const LoginPage = ({
-  currentUrl = isBrowser()
-    ? window.location.search.replace('?redirectTo=', '')
-    : ''
+  currentUrl = isBrowser() ? window.location.search.replace('?redirectTo=', '') : ''
 }): ReactElement => (
   <ApolloProvider client={useApolloClient()}>
     <UserProvider>

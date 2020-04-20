@@ -21,10 +21,7 @@ export const FormContext = createContext<iFormContext>({
   values: {}
 })
 
-const FormProvider: FC<iProps> = ({
-  children,
-  initialValues = {}
-}): ReactElement => {
+const FormProvider: FC<iProps> = ({ children, initialValues = {} }): ReactElement => {
   const [state, setState] = useState(initialValues)
 
   function onChange(e: any): void {

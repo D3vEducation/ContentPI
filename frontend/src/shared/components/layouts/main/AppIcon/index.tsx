@@ -13,11 +13,7 @@ interface iProps {
 const AppIcon: FC<iProps> = ({ app, hideName }): ReactElement => {
   return (
     <>
-      <div
-        className={styles.appIcon}
-        style={{ backgroundColor: app.icon }}
-        title={app.appName}
-      >
+      <div className={styles.appIcon} style={{ backgroundColor: app.icon }} title={app.appName}>
         {app.appName.substring(0, 2)}
       </div>
 

@@ -1,11 +1,5 @@
 // Dependencies
-import React, {
-  FC,
-  createContext,
-  ReactElement,
-  useState,
-  useEffect
-} from 'react'
+import React, { FC, createContext, ReactElement, useState, useEffect } from 'react'
 import { useApolloClient } from 'react-apollo-hooks'
 import { useCookies } from 'react-cookie'
 import { getGraphQlError } from 'fogg-utils'
@@ -42,10 +36,7 @@ const UserProvider: FC<iProps> = ({ children }): ReactElement => {
     }
   }, [user])
 
-  async function login(input: {
-    email: string
-    password: string
-  }): Promise<any> {
+  async function login(input: { email: string; password: string }): Promise<any> {
     try {
       const { data } = await mutate({
         mutation: LOGIN_MUTATION,

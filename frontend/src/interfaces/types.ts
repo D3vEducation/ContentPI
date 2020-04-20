@@ -1,5 +1,6 @@
 export type App = {
   appName: string
+  identifier: string
   icon: string
   description: string
 }

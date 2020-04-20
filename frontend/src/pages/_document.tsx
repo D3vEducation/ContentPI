@@ -9,10 +9,7 @@ export default class MyDocument extends Document {
     return (
       <html lang="es">
         <Head>
-          <link
-            rel="stylesheet"
-            href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
-          />
+          <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" />
           <meta name="viewport" content={viewport} />
         </Head>
 

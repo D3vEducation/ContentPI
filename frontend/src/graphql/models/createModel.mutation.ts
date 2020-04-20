@@ -2,28 +2,25 @@
 import { gql } from 'apollo-boost'
 
 export default gql`
-  mutation createApp(
-    $appName: String!
+  mutation createModel(
+    $modelName: String!
     $identifier: String!
-    $icon: String!
     $description: String!
-    $userId: UUID!
+    $appId: UUID!
   ) {
-    createApp(
+    createModel(
       input: {
-        appName: $appName
+        modelName: $modelName
         identifier: $identifier
-        icon: $icon
         description: $description
-        userId: $userId
+        appId: $appId
       }
     ) {
       id
-      appName
+      modelName
       identifier
-      icon
       description
-      userId
+      appId
     }
   }
 `

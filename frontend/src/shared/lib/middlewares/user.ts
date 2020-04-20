@@ -1,11 +1,11 @@
 // Dependencies
 import { getUserData } from './jwt'
 
-export const isConnected = (
-  isLogged = true,
-  privileges = ['user'],
-  redirectTo = '/'
-) => async (req: any, res: any, next: any): Promise<void> => {
+export const isConnected = (isLogged = true, privileges = ['user'], redirectTo = '/') => async (
+  req: any,
+  res: any,
+  next: any
+): Promise<void> => {
   const user = await getUserData(req.cookies.at)
 
   if (!user && !isLogged) {

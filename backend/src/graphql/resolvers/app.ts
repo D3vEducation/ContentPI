@@ -16,14 +16,14 @@ export default {
           }
         ]
       }),
-    getApp: async (
+    getAppById: async (
       _: object,
-      { appName }: { appName: string },
+      { id }: { id: string },
       { models }: { models: iModels }
     ): Promise<iApp> => {
       const data = await models.App.findAll({
         where: {
-          appName
+          id
         },
         include: [
           {

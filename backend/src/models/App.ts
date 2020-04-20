@@ -14,6 +14,11 @@ export default (sequelize: any, DataTypes: iDataTypes): iApp => {
       allowNull: false,
       unique: true
     },
+    identifier: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
     icon: {
       type: DataTypes.STRING,
       allowNull: false

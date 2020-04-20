@@ -1,15 +1,14 @@
 // Dependencies
 import React, { FC, ReactElement, useContext, useState, useEffect, memo } from 'react'
-import { Modal, Badge, Input, DarkButton, Icon } from 'fogg-ui'
-import { generateHexCode, invertHexCode, redirectTo, slugFn } from 'fogg-utils'
+import { Modal, Badge, Input, DarkButton } from 'fogg-ui'
+import { redirectTo, getParams, camelCase } from 'fogg-utils'
 
 // Contexts
 import { FormContext } from '@contexts/form'
 import { AppContext } from '@contexts/app'
-import { UserContext } from '@contexts/user'
 
 // Mutation
-import CREATE_APP_MUTATION from '@graphql/apps/createApp.mutation'
+import CREATE_MODEL_MUTATION from '@graphql/models/createModel.mutation'
 
 interface iProps {
   isOpen: boolean
@@ -18,41 +17,41 @@ interface iProps {
   onClose(): void
 }
 
-const CreateAppModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactElement => {
+const CreateModelModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactElement => {
   // States
   const [required, setRequired] = useState<any>({
-    appName: false,
+    modelName: false,
     identifier: false
   })
 
   // Contexts
-  const { user } = useContext(UserContext)
   const { onChange, values, setInitialValues, setValue } = useContext(FormContext)
   const { post } = useContext(AppContext)
 
+  // Getting appId
+  const { appId } = getParams(['page', 'appId', 'stage'])
+
   // Methods
   const handleSubmit = async (): Promise<void> => {
-    if (values.appName === '' || values.identifier === '') {
+    if (values.modelName === '' || values.identifier === '') {
       setRequired({
-        appName: values.appName === '',
+        modelName: values.modelName === '',
         identifier: values.identifier === ''
       })
     } else {
-      const { createApp } = await post({
-        mutation: CREATE_APP_MUTATION,
+      const { createModel } = await post({
+        mutation: CREATE_MODEL_MUTATION,
         variables: values
       })
 
-      if (createApp) {
-        redirectTo(`/dashboard/${createApp.id}/master`)
+      if (createModel) {
+        redirectTo(`/dashboard/${appId}/master/schema/model/${values.identifier}`)
       }
     }
   }
 
-  const handleIconColor = (): void => setValue('icon', generateHexCode())
-
   const _onChange = (e: any): any => {
-    setValue('identifier', slugFn(e.target.value))
+    setValue('identifier', camelCase(e.target.value))
     onChange(e)
   }
 
@@ -60,26 +59,25 @@ const CreateAppModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
   useEffect(() => {
     // Setting up our initial values
     setInitialValues({
-      appName: '',
+      modelName: '',
       identifier: '',
-      icon: generateHexCode(),
       description: '',
-      userId: user.id
+      appId
     })
   }, [])
 
   return (
     <Modal isOpen={isOpen} label={label} options={options} onClose={onClose}>
       <div>
-        <label htmlFor="appName">
-          App Name {required.appName && <Badge danger>Required</Badge>}
+        <label htmlFor="modelName">
+          Model Name {required.modelName && <Badge danger>Required</Badge>}
         </label>
         <Input
-          name="appName"
-          placeholder="First App? Try Blog or Forums"
-          hasError={required.appName}
+          name="modelName"
+          placeholder="First Model? Try Post"
+          hasError={required.modelName}
           onChange={_onChange}
-          value={values.appName}
+          value={values.modelName}
         />
       </div>
 
@@ -96,22 +94,6 @@ const CreateAppModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
       </div>
 
       <div>
-        <label htmlFor="icon">
-          Icon Color <Icon type="fas fa-sync-alt" onClick={handleIconColor} />
-        </label>
-        <Input
-          name="icon"
-          onChange={onChange}
-          value={values.icon}
-          readOnly
-          style={{
-            color: invertHexCode(values.icon),
-            backgroundColor: values.icon
-          }}
-        />
-      </div>
-
-      <div>
         <label htmlFor="description">Description</label>
         <Input
           name="description"
@@ -122,10 +104,10 @@ const CreateAppModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
       </div>
 
       <div>
-        <DarkButton onClick={handleSubmit}>Create App</DarkButton>
+        <DarkButton onClick={handleSubmit}>Create Model</DarkButton>
       </div>
     </Modal>
   )
 }
 
-export default memo(CreateAppModal)
+export default memo(CreateModelModal)

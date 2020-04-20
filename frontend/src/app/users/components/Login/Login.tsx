@@ -78,10 +78,7 @@ const Login: FC<iProps> = ({ login, currentUrl }): ReactElement => {
 
             <div className={styles.actions}>
               <div className={styles.left}>
-                <DarkButton
-                  name="login"
-                  onClick={(): Promise<void> => handleLogin(values)}
-                >
+                <DarkButton name="login" onClick={(): Promise<void> => handleLogin(values)}>
                   Login
                 </DarkButton>
                 &nbsp;

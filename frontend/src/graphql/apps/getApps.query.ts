@@ -6,6 +6,7 @@ export default gql`
     getApps {
       id
       appName
+      identifier
       description
       icon
     }

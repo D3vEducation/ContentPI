@@ -2,6 +2,7 @@ type App {
   id: UUID!
   userId: UUID!
   appName: String!
+  identifier: String!
   icon: String!
   description: String!
   createdAt: Datetime!
@@ -11,7 +12,7 @@ type App {
 
 type Query {
   getApps: [App!]
-  getApp(appName: String!): App!
+  getAppById(id: String!): App!
 }
 
 type Mutation {
@@ -20,6 +21,7 @@ type Mutation {
 
 input CreateAppInput {
   appName: String!
+  identifier: String!
   icon: String!
   description: String!
   userId: UUID!
