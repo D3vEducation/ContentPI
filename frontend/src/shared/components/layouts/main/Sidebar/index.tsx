@@ -70,6 +70,12 @@ const Sidebar: FC = (): ReactElement => {
               <Icon type="fas fa-play" />
             </Link>
           </li>
+
+          <li>
+            <Link href="/logout?redirectTo=/dashboard" title="Logout">
+              <Icon type="fas fa-power-off" />
+            </Link>
+          </li>
         </ul>
 
         <section className={styles.profile}>

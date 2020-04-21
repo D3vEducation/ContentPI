@@ -43,6 +43,12 @@ nextApp.prepare().then(() => {
     return nextApp.render(req, res, '/users/login')
   })
 
+  app.get('/logout', (req, res) => {
+    const redirect: any = req.query.redirectTo || '/'
+    res.clearCookie('at')
+    res.redirect(redirect)
+  })
+
   app.use(
     '/dashboard/playground',
     isConnected(true, ['god', 'admin'], '/login?redirectTo=/dashboard'),

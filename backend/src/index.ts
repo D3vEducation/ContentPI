@@ -27,7 +27,7 @@ const apolloServer = new ApolloServer({
 
 // Running Apollo Server
 const alter = true
-const force = false
+const force = true
 
 models.sequelize.sync({ alter, force }).then(() => {
   apolloServer.listen($server.port).then(({ url }) => {

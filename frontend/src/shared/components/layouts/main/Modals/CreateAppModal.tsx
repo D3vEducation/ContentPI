@@ -59,14 +59,16 @@ const CreateAppModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
   // Effects
   useEffect(() => {
     // Setting up our initial values
-    setInitialValues({
-      appName: '',
-      identifier: '',
-      icon: generateHexCode(),
-      description: '',
-      userId: user.id
-    })
-  }, [])
+    if (user) {
+      setInitialValues({
+        appName: '',
+        identifier: '',
+        icon: generateHexCode(),
+        description: '',
+        userId: user.id
+      })
+    }
+  }, [user])
 
   return (
     <Modal isOpen={isOpen} label={label} options={options} onClose={onClose}>

@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import { getBase64 } from 'fogg-utils'
 
 // Configuration
-import config from '../../../config'
+import config from '../../config'
 
 const {
   security: { secretKey }

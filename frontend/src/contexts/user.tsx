@@ -2,13 +2,13 @@
 import React, { FC, createContext, ReactElement, useState, useEffect } from 'react'
 import { useApolloClient } from 'react-apollo-hooks'
 import { useCookies } from 'react-cookie'
-import { getGraphQlError } from 'fogg-utils'
-
-// Util
-import { getUserData } from '@shared/lib/middlewares/jwt'
+import { getGraphQlError, redirectTo } from 'fogg-utils'
 
 // Mutations
 import LOGIN_MUTATION from '@graphql/user/login.mutation'
+
+// Queries
+import GET_USER_DATA_QUERY from '@graphql/user/getUserData.query'
 
 interface iUserContext {
   login(input: any): any
@@ -25,16 +25,27 @@ export const UserContext = createContext<iUserContext>({
 })
 
 const UserProvider: FC<iProps> = ({ children }): ReactElement => {
-  const { mutate } = useApolloClient()
+  const { query, mutate } = useApolloClient()
   const [cookies, setCookie] = useCookies()
   const [user, setUser] = useState(null)
 
   // Effects
   useEffect(() => {
     if (!user) {
-      getUserData(cookies.at).then((userData: any) => setUser(userData))
+      query({
+        query: GET_USER_DATA_QUERY,
+        variables: {
+          at: cookies.at
+        }
+      }).then(({ data: { getUserData } }) => {
+        if (!getUserData.id) {
+          redirectTo('/logout?redirectTo=/dashboard')
+        } else {
+          setUser(getUserData)
+        }
+      })
     }
-  }, [user])
+  })
 
   async function login(input: { email: string; password: string }): Promise<any> {
     try {

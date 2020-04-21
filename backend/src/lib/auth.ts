@@ -32,15 +32,24 @@ export const createToken = async (user: iUser): Promise<string[]> => {
   return Promise.all([createTk])
 }
 
+export const getUserBy = async (
+  where: any,
+  models: iModels
+): Promise<iUser> => {
+  const user = await models.User.findOne({
+    where,
+    raw: true
+  })
+
+  return user
+}
+
 export const doLogin = async (
   email: string,
   password: string,
   models: iModels
 ): Promise<iAuthPayload> => {
-  const user = await models.User.findOne({
-    where: { email },
-    raw: true
-  })
+  const user = await getUserBy({ email }, models)
 
   if (!user) {
     throw new AuthenticationError('Invalid Login')

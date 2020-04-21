@@ -1,3 +1,6 @@
+// Lib
+import { getUserData } from '../../lib/jwt'
+
 // Interfaces
 import {
   iUser,
@@ -8,7 +11,7 @@ import {
 } from '../../interfaces'
 
 // Utils
-import { doLogin } from '../../utils/auth'
+import { doLogin, getUserBy } from '../../lib/auth'
 
 export default {
   Query: {
@@ -24,7 +27,41 @@ export default {
             as: 'apps'
           }
         ]
-      })
+      }),
+    getUserData: async (
+      _: object,
+      { at }: { at: string },
+      { models }: { models: iModels }
+    ): Promise<any> => {
+      // Current connected user
+      const connectedUser = await getUserData(at)
+
+      // Validating if the user is still valid
+      const user = await getUserBy(
+        {
+          id: connectedUser.id,
+          email: connectedUser.email,
+          privilege: connectedUser.privilege,
+          active: connectedUser.active
+        },
+        models
+      )
+
+      if (user) {
+        return {
+          ...connectedUser
+        }
+      }
+
+      return {
+        id: '',
+        username: '',
+        password: '',
+        email: '',
+        privilege: '',
+        active: false
+      }
+    }
   },
   Mutation: {
     createUser: (
