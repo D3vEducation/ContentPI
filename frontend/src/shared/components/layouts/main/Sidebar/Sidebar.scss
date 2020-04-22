@@ -2,7 +2,7 @@
 
 .sidebar {
   width: auto;
-  height: 100vh;
+  //height: 100%;
   background-color: $white;
   display: flex;
   flex-direction: row;
@@ -10,6 +10,7 @@
 
   .firstOptions {
     width: 75px;
+    height: 100%;
     background-color: $denim;
     color: $white;
 

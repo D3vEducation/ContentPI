@@ -8,6 +8,7 @@ type Field {
   isRequired: Boolean!
   isUnique: Boolean!
   isHide: Boolean!
+  isSystem: Boolean!
   createdAt: Datetime!
   updatedAt: Datetime!
   modelId: UUID!
@@ -30,5 +31,6 @@ input CreateFieldInput {
   isRequired: Boolean!
   isUnique: Boolean!
   isHide: Boolean!
+  isSystem: Boolean!
   modelId: UUID!
 }
