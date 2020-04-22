@@ -6,10 +6,12 @@ import styles from './Header.scss'
 
 // Components
 import Breadcrumbs from '../Breadcrumbs'
+import Search from '../Search'
 
 const Header: FC = (): ReactElement => {
   return (
     <header className={styles.Header}>
+      <Search />
       <Breadcrumbs />
     </header>
   )

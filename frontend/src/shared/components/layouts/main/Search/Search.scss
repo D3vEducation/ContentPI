@@ -1,0 +1,41 @@
+@import '~styles/_dependencies';
+
+.search {
+  width: 200px;
+  height: 35px;
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
+  margin: 0px;
+  padding-left: 25px;
+
+  div {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+
+    input {
+      padding: .23rem 5px;
+      font-size: .875rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: $tundora;
+      border: 1px solid $mercury;
+      border-radius: .2rem;
+      background-color: $alabaster;
+      height: 100%;
+      width: 100%;
+
+      &::-webkit-input-placeholder { /* Edge */
+        color: $tundora;
+      }
+
+      &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: $tundora;
+      }
+
+      &::placeholder {
+        color: $tundora;
+      }
+    }
+  }
+}
