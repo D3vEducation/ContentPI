@@ -51,30 +51,50 @@ const Sidebar: FC = (): ReactElement => {
             <Link href="#" title="Models">
               <Icon type="fas fa-cubes" />
             </Link>
+            <section className={styles.triangle} />
+            <section className={styles.description}>
+              <span>Models</span>
+            </section>
           </li>
 
           <li onClick={(): void => handleOpen('content', true)}>
             <Link href="#" title="Content">
               <Icon type="fas fa-pencil-alt" />
             </Link>
+            <section className={styles.triangle} />
+            <section className={styles.description}>
+              <span>Content</span>
+            </section>
           </li>
 
           <li>
             <Link href="#" title="Media">
               <Icon type="fas fa-photo-video" />
             </Link>
+            <section className={styles.triangle} />
+            <section className={styles.description}>
+              <span>Media</span>
+            </section>
           </li>
 
           <li>
             <Link href="/dashboard/playground" title="Playground">
               <Icon type="fas fa-play" />
             </Link>
+            <section className={styles.triangle} />
+            <section className={styles.description}>
+              <span>Playground</span>
+            </section>
           </li>
 
           <li>
             <Link href="/logout?redirectTo=/dashboard" title="Logout">
               <Icon type="fas fa-power-off" />
             </Link>
+            <section className={styles.triangle} />
+            <section className={styles.description}>
+              <span>Logout</span>
+            </section>
           </li>
         </ul>
 

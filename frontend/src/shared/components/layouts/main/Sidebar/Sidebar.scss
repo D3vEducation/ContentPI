@@ -31,11 +31,52 @@
       margin: 0px;
 
       li {
-        width: 100%;
-        height: 60px;
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 45px;
+        height: 40px;
+        margin: 14px;
+
+        .triangle {
+          width: 0;
+          height: 0;
+          border-top: 8px solid transparent;
+          border-right: 8px solid $denim;
+          border-bottom: 8px solid transparent;
+          left: 76px;
+          position: absolute;
+          display: none;
+
+          &:hover {
+            cursor: text;
+          }
+        }
+
+        .description {
+          width: auto;
+          padding-left: 10px;
+          padding-right: 10px;
+          height: 30px;
+          background-color: $denim;
+          color: $white;
+          position: absolute;
+          left: 84px;
+          border-radius: 5px;
+          display: none;
+          font-size: 10px;
+          text-align: center;
+          display: none;
+
+          span {
+            position: relative;
+            top: 25%;
+          }
+
+          &:hover {
+            cursor: text;
+          }
+        }
 
         &.appIcon {
           margin-top: 20px;
@@ -43,6 +84,10 @@
 
         &:hover {
           cursor: pointer;
+
+          .triangle, .description {
+            display: block;
+          }
         }
 
         a {
