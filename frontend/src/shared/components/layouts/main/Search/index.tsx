@@ -11,12 +11,7 @@ import styles from './Search.scss'
 
 const Search: FC = (): ReactElement => {
   // Context
-  const { onChange, values, setValue } = useContext(FormContext)
-
-  const _onChange = (e: any): any => {
-    setValue('identifier', slugFn(e.target.value))
-    onChange(e)
-  }
+  const { onChange, values } = useContext(FormContext)
 
   return (
     <aside className={styles.search}>
@@ -24,7 +19,7 @@ const Search: FC = (): ReactElement => {
         name="search"
         id="search"
         placeholder="Search ..."
-        onChange={_onChange}
+        onChange={onChange}
         value={values.search}
       />
     </aside>
