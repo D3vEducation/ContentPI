@@ -37,10 +37,73 @@ export default {
     }
   },
   Mutation: {
-    createModel: (
+    createModel: async (
       _: object,
       { input }: { input: iCreateModelInput },
       { models }: { models: iModels }
-    ): iModel => models.Model.create({ ...input })
+    ): Promise<iModel> => {
+      const newModel = await models.Model.create({ ...input })
+
+      const systemFields = [
+        {
+          modelId: newModel.id,
+          fieldName: 'ID',
+          identifier: 'id',
+          type: 'ID',
+          isHide: false,
+          isMedia: false,
+          isUnique: true,
+          isRequired: true,
+          isPrimaryKey: true,
+          isSystem: true,
+          description: 'The unique identifier'
+        },
+        {
+          modelId: newModel.id,
+          fieldName: 'Created At',
+          identifier: 'createdAt',
+          type: 'DateTime',
+          isHide: true,
+          isMedia: false,
+          isUnique: false,
+          isRequired: true,
+          isPrimaryKey: false,
+          isSystem: true,
+          description: 'The time the record was created'
+        },
+        {
+          modelId: newModel.id,
+          fieldName: 'Updated At',
+          identifier: 'updatedAt',
+          type: 'DateTime',
+          isHide: true,
+          isMedia: false,
+          isUnique: false,
+          isRequired: true,
+          isPrimaryKey: false,
+          isSystem: true,
+          description: 'The time the record was updated'
+        },
+        {
+          modelId: newModel.id,
+          fieldName: 'Status',
+          identifier: 'status',
+          type: 'Status',
+          isHide: false,
+          isMedia: false,
+          isUnique: false,
+          isRequired: true,
+          isPrimaryKey: false,
+          isSystem: true,
+          description: 'The status of the record',
+          defaultValue: 'draft'
+        }
+      ]
+
+      // Creating system fields
+      await models.Field.bulkCreate(systemFields)
+
+      return newModel
+    }
   }
 }

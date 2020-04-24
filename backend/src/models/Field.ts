@@ -15,17 +15,20 @@ export default (sequelize: any, DataTypes: iDataTypes): iField => {
     },
     fieldName: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
+      allowNull: false
     },
     identifier: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
+      allowNull: false
     },
     description: {
       type: DataTypes.STRING,
       allowNull: true
+    },
+    defaultValue: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: ''
     },
     isMedia: {
       type: DataTypes.BOOLEAN,
@@ -43,6 +46,16 @@ export default (sequelize: any, DataTypes: iDataTypes): iField => {
       defaultValue: false
     },
     isHide: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+    isSystem: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+    isPrimaryKey: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false

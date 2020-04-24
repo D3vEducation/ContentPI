@@ -4,10 +4,13 @@ type Field {
   fieldName: String!
   identifier: String!
   description: String!
+  defaultValue: String!
   isMedia: Boolean!
   isRequired: Boolean!
   isUnique: Boolean!
   isHide: Boolean!
+  isSystem: Boolean!
+  isPrimaryKey: Boolean!
   createdAt: Datetime!
   updatedAt: Datetime!
   modelId: UUID!
@@ -26,9 +29,12 @@ input CreateFieldInput {
   fieldName: String!
   identifier: String!
   description: String!
+  defaultValue: String!
   isMedia: Boolean!
   isRequired: Boolean!
   isUnique: Boolean!
   isHide: Boolean!
+  isSystem: Boolean!
+  isPrimaryKey: Boolean!
   modelId: UUID!
 }
