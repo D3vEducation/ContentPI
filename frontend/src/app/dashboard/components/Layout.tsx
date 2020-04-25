@@ -5,6 +5,7 @@ import React, { FC, ReactElement, memo } from 'react'
 import MyApps from './MyApps'
 import Home from './Home'
 import Schema from './Schema'
+import Media from './Media'
 
 // Interface
 interface iProps {
@@ -16,6 +17,7 @@ const Layout: FC<iProps> = ({ moduleName = '' }): ReactElement => {
     <>
       {moduleName === 'Schema' && <Schema />}
       {moduleName === 'Home' && <Home />}
+      {moduleName === 'Media' && <Media />}
       {!moduleName && <MyApps />}
     </>
   )
