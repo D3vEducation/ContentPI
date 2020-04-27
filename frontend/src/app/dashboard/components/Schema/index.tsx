@@ -44,7 +44,7 @@ const Schema: FC = (): ReactElement => {
   }
 
   const { getModel } = state
-  console.log(getModel)
+
   return (
     <MainLayout title="Schema" header content footer sidebar>
       <div className={styles.schema}>

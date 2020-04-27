@@ -1,7 +1,6 @@
 // Dependencies
 import React, { FC, ReactElement, memo, useContext } from 'react'
 import { Input } from 'fogg-ui'
-import { slugFn } from 'fogg-utils'
 
 // Contexts
 import { FormContext } from '@contexts/form'
