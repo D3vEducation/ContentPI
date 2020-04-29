@@ -3,8 +3,8 @@
 .container {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
 
+  // Button
   a {
     background-color: $skyBlue;
     border: 1px solid $skyBlue;
@@ -19,59 +19,267 @@
     margin-bottom: 70px;
   }
 
-  .fileTypes {
-    width: 100%;
-    height: 300px;
+  // title
+  .title {
+    text-align: left;
 
-    .type {
-      width: 100%;
-      margin-bottom: 40px;
+    i {
+      &.modeCarousel {
+        font-size: 24px;
+        margin-left: 10px;
 
-      .line {
-        border: 0.5px solid $mercury;
-        margin-top: 8px;
-        display: block;
+        &:hover {
+          color: $cerulean;
+          cursor: pointer;
+        }
       }
 
-      .items {
-        display: flex;
-        flex-direction: row;
-        flex-flow: wrap;
+      &.modeGrid {
+        font-size: 24px;
+        margin-left: 10px;
 
-        .item {
-          height: 160px;
-          width: 160px;
-          margin: 30px;
-          border-radius: 5px;
-          border: 1px solid $mercury;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
+        &:hover {
+          color: $cerulean;
+          cursor: pointer;
+        }
+      }
 
-          i {
-            font-size: 54px;
-            color: $lochmara;
-            margin-bottom: 10px;
-          }
+      &.disabled {
+        color: $gallery;
 
-          span {
-            font-size: 12px;
-          }
-
-          img {
-            object-fit: cover;
-            height: 150px;
-            width: 150px;
-          }
-
-          video {
-            width: 100%;
-            height: 100%;
-            border: 1px solid red;
-          }
+        &:hover {
+          color: $gallery !important;
+          cursor: inherit;
         }
       }
     }
+  }
+
+  // line
+  .line {
+    border: 0.5px solid $mercury;
+    margin-top: 8px;
+    display: block;
+    width: 100%;
+    margin-bottom: 50px;
+  }
+
+  // filesContainer
+  .filesContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+
+    .files {
+      width: 100%;
+      height: 180px;
+      display: flex;
+      flex-direction: row;
+
+      section {
+        height: 165px;
+        width: 170px;
+        border-radius: 5px;
+        border: 1px solid $mercury;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 25px;
+
+        i {
+          font-size: 54px;
+          color: $lochmara;
+          margin-bottom: 10px;
+        }
+
+        span {
+          font-size: 12px;
+        }
+      }
+    }
+
+    // Carousel
+    .carousel {
+      width: 100%;
+    }
+  }
+}
+
+// Global carousel styles
+:global {
+  .BrainhubCarousel {
+  	overflow: hidden;
+  	display: flex;
+  	align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+
+  	.BrainhubCarousel__trackContainer {
+      width: 85%;
+  		overflow: hidden;
+
+  		.BrainhubCarousel__track {
+  			display: flex;
+  			overflow: hidden;
+  			list-style: none;
+  			margin: 0;
+  			padding: 0;
+  		}
+
+  		.BrainhubCarousel__track.BrainhubCarousel__track--transition {
+  			transition: transform;
+  		}
+  	}
+  }
+
+  .BrainhubCarousel.BrainhubCarousel--isRTL {
+  	direction: rtl;
+  	.BrainhubCarousel__trackContainer {
+  		.BrainhubCarousel__track {
+  			direction: rtl;
+  		}
+  	}
+  }
+
+  // Arrows
+  .BrainhubCarousel__arrows {
+  	cursor: pointer;
+  	position: relative;
+  	padding: 21px;
+  	border: none;
+  	overflow: hidden;
+  	outline: 0;
+  	font-size: 0;
+  	line-height: 0;
+
+  	span {
+  		display: block;
+  		position: absolute;
+  		top: 50%;
+  		left: 50%;
+  		border-style: solid;
+  		border-color: $pictonBlue;
+  		border-width: 3px 3px 0 0;
+  		padding: 10px;
+  		transition: 0.3s;
+  		font-size: 0;
+  	}
+
+  	&:hover {
+  		span {
+  			display: block;
+  			position: absolute;
+  			top: 50%;
+  			left: 50%;
+  			border-style: solid;
+  			border-width: 3px 3px 0 0;
+  			padding: 10px;
+  			transition: 0.3s;
+  			font-size: 0;
+  		}
+
+  		&:enabled {
+  			span {
+  				border-color: $denim;
+  				margin: 0;
+  			}
+  		}
+  	}
+
+  	&:disabled {
+  		background-color: $dustyGray;
+  	}
+  }
+
+  // Items inside carousel
+  .BrainhubCarouselItem {
+  	display: flex;
+  	justify-content: center;
+  	align-items: center;
+  	position: relative;
+
+    // For documents
+    section {
+      height: 165px;
+      width: 170px;
+      border-radius: 5px;
+      border: 1px solid $mercury;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      i {
+        font-size: 54px;
+        color: $lochmara;
+        margin-bottom: 10px;
+      }
+
+      span {
+        font-size: 12px;
+      }
+    }
+
+    // For images
+    img {
+      height: 165px;
+      width: 170px;
+    }
+  }
+
+  .BrainhubCarouselItem.BrainhubCarouselItem--clickable {
+  	cursor: pointer;
+  }
+
+  // Icon arrows
+  .BrainhubCarousel__arrowLeft {
+  	span {
+  		transform: translate(-50%, -50%) rotate(-135deg);
+  		margin-left: 2.45px;
+  	}
+  }
+
+  .BrainhubCarousel__arrowRight {
+  	span {
+  		transform: translate(-50%, -50%) rotate(45deg);
+  		margin-left: -2.45px;
+  	}
+  }
+
+  .BrainhubCarousel--isRTL {
+  	.BrainhubCarousel__arrowLeft {
+  		span {
+  			transform: translate(-50%, -50%) rotate(45deg);
+  			margin-left: -2.45px;
+  		}
+  	}
+
+  	.BrainhubCarousel__custom-arrowLeft {
+  		span {
+  			transform: rotate(180deg);
+  		}
+  	}
+
+  	.BrainhubCarousel__arrowRight {
+  		span {
+  			transform: translate(-50%, -50%) rotate(-135deg);
+  			margin-left: 2.45px;
+  		}
+  	}
+
+  	.BrainhubCarousel__custom-arrowRight {
+  		span {
+  			transform: rotate(-180deg);
+  		}
+  	}
+
+  	.BrainhubCarousel__arrows {
+  		&:hover {
+  			span {
+  				margin: 0;
+  			}
+  		}
+  	}
   }
 }
