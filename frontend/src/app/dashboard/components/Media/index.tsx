@@ -20,7 +20,10 @@ const Media: FC = (): ReactElement => {
       name: '2.xml'
     },
     {
-      name: '1.pdf'
+      name: '3.pdf'
+    },
+    {
+      name: '4.doc'
     },
     {
       name: '1.doc'
@@ -29,19 +32,23 @@ const Media: FC = (): ReactElement => {
       name: '2.xml'
     },
     {
-      name: '1.pdf'
+      name: '3.pdf'
+    },
+    {
+      name: '4.doc'
     }
   ]
 
   // Local state
   const [carousel, setCarousel] = useState(false)
+  const [modeGrid, setModeGrid] = useState(false)
 
   // useEffect
   useEffect(() => {
     if (documentsFiles.length >= 5) {
       setCarousel(true)
     }
-  })
+  }, [])
 
   // Methods
   // Method for render files
@@ -61,14 +68,31 @@ const Media: FC = (): ReactElement => {
     })
   }
 
+  // Method to handle mode grid or carousel
+  const handleMode = (mode: any) => {
+    if (documentsFiles.length >= 5) {
+      if (mode === 'grid') {
+        setCarousel(false)
+        setModeGrid(true)
+      } else {
+        setCarousel(true)
+        setModeGrid(false)
+      }
+    }
+  }
+
   return (
     <MainLayout title="Media" header content footer sidebar>
       <section className={styles.container}>
         <div className={styles.title}>
           My documents
-          <i className={`far fa-square ${styles.modeCarousel}`} />
+          <i
+            className={`far fa-square ${styles.modeCarousel} ${!modeGrid ? styles.disabled : ''}`}
+            onClick={() => handleMode('carousel')}
+          />
           <i
             className={`fas fa-border-all ${styles.modeGrid} ${!carousel ? styles.disabled : ''}`}
+            onClick={() => handleMode('grid')}
           />
         </div>
         <div className={styles.line} />
@@ -81,7 +105,9 @@ const Media: FC = (): ReactElement => {
               </Carousel>
             </section>
           ) : (
-            <section className={styles.files}>{renderFiles(documentsFiles)}</section>
+            <section className={`${styles.files} ${modeGrid ? styles.modeGrid : ''}`}>
+              {renderFiles(documentsFiles)}
+            </section>
           )}
         </section>
       </section>
