@@ -20,6 +20,11 @@ describe('#App', () => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4()
       },
+      identifier: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+      },
       appName: {
         type: DataTypes.STRING,
         allowNull: false,

@@ -1,7 +1,7 @@
 // Dependencies
 import React, { FC, ReactElement, useContext, useState, useEffect, memo } from 'react'
 import { Modal, Badge, Input, DarkButton } from 'fogg-ui'
-import { redirectTo, getParams, camelCase } from 'fogg-utils'
+import { redirectTo, getParamsFromUrl, camelCase, getEmptyValues } from 'fogg-utils'
 
 // Contexts
 import { FormContext } from '@contexts/form'
@@ -29,15 +29,14 @@ const CreateModelModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
   const { post } = useContext(AppContext)
 
   // Getting appId
-  const { appId } = getParams(['page', 'appId', 'stage'])
+  const { appId } = getParamsFromUrl(['page', 'appId', 'stage'])
 
   // Methods
   const handleSubmit = async (): Promise<void> => {
-    if (values.modelName === '' || values.identifier === '') {
-      setRequired({
-        modelName: values.modelName === '',
-        identifier: values.identifier === ''
-      })
+    const emptyValues = getEmptyValues(values, ['modelName', 'identifier'])
+
+    if (emptyValues) {
+      setRequired(emptyValues)
     } else {
       const { createModel } = await post({
         mutation: CREATE_MODEL_MUTATION,

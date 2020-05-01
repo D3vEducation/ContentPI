@@ -1,22 +1,26 @@
 // Dependencies
 import React, { FC, ReactElement, useContext, useState, useEffect, memo } from 'react'
-import { cx, getParams } from 'fogg-utils'
-import { Icon, Toggle } from 'fogg-ui'
+import { cx, getParamsFromUrl } from 'fogg-utils'
+import { Toggle } from 'fogg-ui'
 
 // Contexts
 import { AppContext } from '@contexts/app'
 
 // Queries
 import GET_MODEL_QUERY from '@graphql/models/getModel.query'
+import GET_DECLARATIONS_QUERY from '@graphql/declarations/getDeclarations.query'
 
 // Shared components
 import MainLayout from '@layouts/main/MainLayout'
+import Fields from './Fields'
+import Declarations from './Declarations'
 
 // Styles
 import styles from './Schema.scss'
 
 const Schema: FC = (): ReactElement => {
   // State
+  const [isFetching, setIsFetching] = useState(true)
   const [showSystem, setShowSystem] = useState(false)
 
   // Contexts
@@ -24,29 +28,37 @@ const Schema: FC = (): ReactElement => {
 
   // Methods
   const fetch = async (): Promise<void> => {
-    const { model } = getParams(['page', 'appId', 'stage', 'module', 'section', 'model'])
+    const { model } = getParamsFromUrl(['page', 'appId', 'stage', 'module', 'section', 'model'])
 
     await get({
-      query: GET_MODEL_QUERY,
-      variables: {
-        identifier: model
-      }
+      queries: [
+        {
+          query: GET_MODEL_QUERY,
+          variables: {
+            identifier: model
+          }
+        },
+        {
+          query: GET_DECLARATIONS_QUERY
+        }
+      ]
     })
   }
 
   // Effects
   useEffect(() => {
-    if (!state.getModel) {
+    if (isFetching) {
       fetch()
+      setIsFetching(false)
     }
-  }, [state])
+  }, [isFetching])
+
+  const { getModel, getDeclarations } = state
 
   // First render
-  if (!state.getModel) {
+  if (!getModel && !getDeclarations) {
     return <div />
   }
-
-  const { getModel } = state
 
   return (
     <MainLayout title="Schema" header content footer sidebar>
@@ -56,89 +68,18 @@ const Schema: FC = (): ReactElement => {
           <span className={styles.identifier}>#{getModel.identifier}</span>
         </div>
 
-        <p>
+        <div className={styles.toggle}>
           <Toggle
+            checked={showSystem}
             type="round"
             label="Show system fields"
             onClick={(): void => setShowSystem(!showSystem)}
           />
-        </p>
+        </div>
 
-        <div className={styles.fields}>
-          {getModel.fields.map((field: any) => (
-            <div
-              className={cx(
-                styles.field,
-                field.isSystem ? styles.sys : styles[field.type],
-                field.isSystem && !showSystem ? styles.hideSys : ''
-              )}
-            >
-              <div className={cx(styles.icon, styles[field.type])}>
-                {field.type === 'ID' && (
-                  <Icon title={field.description} className={styles.id}>
-                    ID
-                  </Icon>
-                )}
-                {field.type === 'DateTime' && (
-                  <Icon title={field.description} type="fas fa-clock" />
-                )}
-                {field.type === 'Status' && (
-                  <Icon title={field.description} type="fas fa-low-vision" />
-                )}
-                {field.type === 'String' && <Icon title={field.description} type="fas fa-font" />}
-                {field.type === 'Text' && (
-                  <Icon title={field.description} type="fas fa-quote-right" />
-                )}
-                {field.type === 'Media' && <Icon title={field.description} type="fas fa-image" />}
-                {field.type === 'Boolean' && (
-                  <Icon title={field.description} type="fas fa-toggle-on" />
-                )}
-              </div>
-
-              <div className={styles.name}>
-                {field.fieldName}
-                <span className={styles.identifier}>#{field.identifier}</span>
-
-                <div className={styles.information}>
-                  {field.type !== 'Media' && (
-                    <span className={cx(styles.tag, field.isSystem ? styles.system : '')}>
-                      {field.type}
-                    </span>
-                  )}
-                  {field.isPrimaryKey && (
-                    <span className={cx(styles.tag, field.isSystem ? styles.system : '')}>
-                      Primary Key
-                    </span>
-                  )}
-                  {field.isRequired && (
-                    <span className={cx(styles.tag, field.isSystem ? styles.system : '')}>
-                      Required
-                    </span>
-                  )}
-                  {field.isUnique && (
-                    <span className={cx(styles.tag, field.isSystem ? styles.system : '')}>
-                      Unique
-                    </span>
-                  )}
-                  {field.isMedia && (
-                    <span className={cx(styles.tag, field.isSystem ? styles.system : '')}>
-                      Media
-                    </span>
-                  )}
-                  {field.isHide && (
-                    <span className={cx(styles.tag, field.isSystem ? styles.system : '')}>
-                      Hide
-                    </span>
-                  )}
-                  {field.isSystem && (
-                    <span className={cx(styles.tag, field.isSystem ? styles.system : '')}>
-                      System Field
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className={styles.wrapper}>
+          <Fields fields={getModel.fields} showSystem={showSystem} />
+          <Declarations declarations={getDeclarations} />
         </div>
       </div>
     </MainLayout>

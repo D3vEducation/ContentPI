@@ -3,7 +3,7 @@ import React, { ReactElement } from 'react'
 import { ApolloProvider } from 'react-apollo-hooks'
 
 // Hooks
-import useApolloClient from '@shared/lib/apollo'
+import useApolloClient from '@hooks/apollo'
 
 // Contexts
 import AppProvider from '@contexts/app'

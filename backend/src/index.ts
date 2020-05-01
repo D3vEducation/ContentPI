@@ -4,6 +4,9 @@ import { ApolloServer, makeExecutableSchema } from 'apollo-server'
 // Models
 import models from './models'
 
+// Data
+import { setInitialData } from './data'
+
 // Type Definitions & Resolvers
 import resolvers from './graphql/resolvers'
 import typeDefs from './graphql/types'
@@ -31,6 +34,9 @@ const force = false
 
 models.sequelize.sync({ alter, force }).then(() => {
   apolloServer.listen($server.port).then(({ url }) => {
+    // Setting up initial data
+    setInitialData()
+
     // eslint-disable-next-line no-console
     return console.log(`Running on ${url}`)
   })

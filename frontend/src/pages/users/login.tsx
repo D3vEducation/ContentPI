@@ -4,7 +4,7 @@ import { ApolloProvider } from 'react-apollo-hooks'
 import { isBrowser } from 'fogg-utils'
 
 // Hooks
-import useApolloClient from '@shared/lib/apollo'
+import useApolloClient from '@hooks/apollo'
 
 // Contexts
 import FormProvider from '@contexts/form'

@@ -3,7 +3,7 @@ import React, { FC, ReactElement, useState, memo } from 'react'
 import { Badge } from 'fogg-ui'
 
 // Modals
-import CreateModelModal from '@layouts/main/Modals/CreateModelModal'
+import CreateModelModal from '@dashboard/components/Modals/CreateModelModal'
 
 // Styles
 import styles from './ModelSidebar.scss'

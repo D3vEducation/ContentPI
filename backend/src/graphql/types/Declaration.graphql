@@ -3,6 +3,7 @@ type Declaration {
   declaration: String!
   icon: String!
   description: String!
+  color: String!
   createdAt: Datetime!
   updatedAt: Datetime!
 }
@@ -19,4 +20,5 @@ input CreateDeclarationInput {
   declaration: String!
   icon: String!
   description: String!
+  color: String!
 }

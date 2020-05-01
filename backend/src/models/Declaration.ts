@@ -18,6 +18,10 @@ export default (sequelize: any, DataTypes: iDataTypes): iDeclaration => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    color: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     description: {
       type: DataTypes.STRING,
       allowNull: true

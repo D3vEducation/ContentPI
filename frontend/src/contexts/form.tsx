@@ -6,6 +6,7 @@ interface iFormContext {
   onChange(e: any): any
   setInitialValues(values: any): any
   setValue(key: string, value: any): any
+  resetValues(): any
   values: any
 }
 
@@ -18,6 +19,7 @@ export const FormContext = createContext<iFormContext>({
   onChange: () => null,
   setInitialValues: () => null,
   setValue: () => null,
+  resetValues: () => null,
   values: {}
 })
 
@@ -50,10 +52,17 @@ const FormProvider: FC<iProps> = ({ children, initialValues = {} }): ReactElemen
     }
   }
 
+  function resetValues(): void {
+    if (Object.keys(state).length >= 0) {
+      setState({})
+    }
+  }
+
   const context = {
     onChange,
     setInitialValues,
     setValue,
+    resetValues,
     values: state
   }
 

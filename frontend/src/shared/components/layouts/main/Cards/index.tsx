@@ -4,7 +4,7 @@ import { Icon } from 'fogg-ui'
 
 // Components
 import Link from '@ui/Link'
-import CreateAppModal from '@layouts/main/Modals/CreateAppModal'
+import CreateAppModal from '@dashboard/components/Modals/CreateAppModal'
 import AppIcon from '../AppIcon'
 
 // Styles

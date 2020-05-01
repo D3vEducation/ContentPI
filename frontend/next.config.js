@@ -21,6 +21,8 @@ export default withSass({
     config.resolve.alias['@interfaces'] = path.resolve(dir, './src/interfaces')
     config.resolve.alias['@pages'] = path.resolve(dir, './src/pages')
     config.resolve.alias['@shared'] = path.resolve(dir, './src/shared')
+    config.resolve.alias['@lib'] = path.resolve(dir, './src/shared/lib')
+    config.resolve.alias['@hooks'] = path.resolve(dir, './src/shared/lib/hooks')
     config.resolve.alias['@layouts'] = path.resolve(dir, './src/shared/components/layouts')
     config.resolve.alias['@ui'] = path.resolve(dir, './src/shared/components/ui')
     config.resolve.alias.styles = path.resolve(dir, './src/shared/styles')

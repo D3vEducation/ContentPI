@@ -1,7 +1,7 @@
 // Dependencies
 import React, { FC, createContext, useState, useEffect, ReactElement } from 'react'
 import { useApolloClient } from 'react-apollo-hooks'
-import { getGraphQlError, getQueryName, getParams } from 'fogg-utils'
+import { getGraphQlError, getQueryName, getParamsFromUrl } from 'fogg-utils'
 
 // Queries
 import GET_APP_BY_ID_QUERY from '@graphql/apps/getAppById.query'
@@ -27,8 +27,45 @@ const AppProvider: FC<iProps> = ({ children }): ReactElement => {
   const [state, setState] = useState({})
 
   async function get(options: any): Promise<any> {
-    const { query, variables = {} } = options
+    const { query, variables = {}, queries = [] } = options
+    const promises: any = []
 
+    // Multiqueries
+    if (queries.length > 0) {
+      queries.forEach((q: any) => {
+        const queryName: any = getQueryName(q.query)
+
+        const promise = new Promise((resolve, reject) => {
+          queryFn({
+            query: q.query,
+            variables: q.variables
+          })
+            .then((response: any) => {
+              resolve({ data: response.data[queryName], queryName })
+            })
+            .catch(error => reject(error))
+        })
+
+        promises.push(promise)
+      })
+
+      return Promise.all(promises).then(dataArray => {
+        const newState: any = {}
+
+        dataArray.forEach((response: any) => {
+          newState[response.queryName] = response.data
+        })
+
+        setState(prevState => ({
+          ...prevState,
+          ...newState
+        }))
+
+        return newState
+      })
+    }
+
+    // Single query
     const queryName: any = getQueryName(query)
 
     try {
@@ -38,17 +75,16 @@ const AppProvider: FC<iProps> = ({ children }): ReactElement => {
       })
 
       if (data) {
-        setState({
+        setState(prevState => ({
+          ...prevState,
           [queryName]: data[queryName]
-        })
+        }))
 
         return data
       }
     } catch (err) {
       return getGraphQlError(err)
     }
-
-    return false
   }
 
   async function post(options: any): Promise<any> {
@@ -63,9 +99,10 @@ const AppProvider: FC<iProps> = ({ children }): ReactElement => {
       })
 
       if (data) {
-        setState({
+        setState(prevState => ({
+          ...prevState,
           [mutationName]: data[mutationName]
-        })
+        }))
 
         return data
       }
@@ -76,7 +113,7 @@ const AppProvider: FC<iProps> = ({ children }): ReactElement => {
 
   // Effects
   useEffect(() => {
-    const { appId } = getParams(['page', 'appId', 'stage'])
+    const { appId } = getParamsFromUrl(['page', 'appId', 'stage'])
 
     if (appId) {
       get({

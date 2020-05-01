@@ -1,7 +1,7 @@
 // Dependencies
 import React, { FC, ReactElement, useContext, useState, useEffect, memo } from 'react'
 import { Modal, Badge, Input, DarkButton, Icon } from 'fogg-ui'
-import { generateHexCode, invertHexCode, redirectTo, slugFn } from 'fogg-utils'
+import { generateHexCode, invertHexCode, redirectTo, slugFn, getEmptyValues } from 'fogg-utils'
 
 // Contexts
 import { FormContext } from '@contexts/form'
@@ -32,11 +32,10 @@ const CreateAppModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
 
   // Methods
   const handleSubmit = async (): Promise<void> => {
-    if (values.appName === '' || values.identifier === '') {
-      setRequired({
-        appName: values.appName === '',
-        identifier: values.identifier === ''
-      })
+    const emptyValues = getEmptyValues(values, ['appName', 'identifier'])
+
+    if (emptyValues) {
+      setRequired(emptyValues)
     } else {
       const { createApp } = await post({
         mutation: CREATE_APP_MUTATION,
