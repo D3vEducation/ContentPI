@@ -52,12 +52,22 @@
       i {
         padding: 16px;
 
-        &.id {
+        &.id,
+        &.interger,
+        &.float {
           background-color: $black;
           color: $white;
           display: inline-block;
           border-radius: 5px;
           font-style: normal;
+        }
+
+        &.integer {
+          background-color: $oxfordBlue;
+        }
+
+        &.float {
+          background-color: $fuelYellow;
         }
       }
     }

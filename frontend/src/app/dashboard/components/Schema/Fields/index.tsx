@@ -28,6 +28,16 @@ const Fields: FC<iProps> = ({ fields, showSystem }): ReactElement => (
               ID
             </Icon>
           )}
+          {field.type === 'Integer' && (
+            <Icon title={field.description} className={styles.integer}>
+              10
+            </Icon>
+          )}
+          {field.type === 'Float' && (
+            <Icon title={field.description} className={styles.float}>
+              1.0
+            </Icon>
+          )}
           {field.type === 'DateTime' && <Icon title={field.description} type="fas fa-clock" />}
           {field.type === 'Status' && <Icon title={field.description} type="fas fa-low-vision" />}
           {field.type === 'String' && <Icon title={field.description} type="fas fa-font" />}

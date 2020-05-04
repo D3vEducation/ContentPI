@@ -1,6 +1,6 @@
 // Dependencies
 import React, { FC, ReactElement, useContext, useState, useEffect, memo } from 'react'
-import { cx, getParamsFromUrl } from 'fogg-utils'
+import { getParamsFromUrl } from 'fogg-utils'
 import { Toggle } from 'fogg-ui'
 
 // Contexts

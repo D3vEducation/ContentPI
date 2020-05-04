@@ -11,6 +11,7 @@ export default class MyDocument extends Document {
         <Head>
           <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" />
           <meta name="viewport" content={viewport} />
+          <link rel="icon" type="image/png" href="/images/favicon.png" />
         </Head>
 
         <body>

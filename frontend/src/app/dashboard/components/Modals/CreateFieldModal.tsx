@@ -1,7 +1,14 @@
 // Dependencies
 import React, { FC, ReactElement, useContext, useState, useEffect, memo } from 'react'
 import { Modal, Badge, Input, PrimaryButton, Toggle } from 'fogg-ui'
-import { getParamsFromUrl, camelCase, getEmptyValues, isEmptyObject, redirectTo } from 'fogg-utils'
+import {
+  getParamsFromUrl,
+  camelCase,
+  getEmptyValues,
+  isEmptyObject,
+  redirectTo,
+  waitFor
+} from 'fogg-utils'
 
 // Hooks
 import usePrevious from '@hooks/usePrevious'
@@ -42,14 +49,6 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
   // Getting appId
   const { model } = getParamsFromUrl(['page', 'appId', 'stage', 'module', 'section', 'model'])
 
-  const handleLoading = (): void => {
-    setLoading(true)
-
-    setTimeout(() => {
-      setLoading(false)
-    }, 4000)
-  }
-
   // Methods
   const _onChange = (e: any): any => {
     setValue('identifier', camelCase(e.target.value))
@@ -67,28 +66,32 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
     if (emptyValues) {
       setRequired(emptyValues)
     } else {
-      handleLoading()
+      setLoading(true)
 
-      const { getModel } = await get({
-        query: GET_MODEL_QUERY,
-        variables: {
-          identifier: values.model
-        }
-      })
+      waitFor(1).then(async () => {
+        setLoading(false)
 
-      if (getModel && getModel.id) {
-        values.modelId = getModel.id
-
-        const { createField } = await post({
-          mutation: CREATE_FIELD_MUTATION,
-          variables: values
+        const { getModel } = await get({
+          query: GET_MODEL_QUERY,
+          variables: {
+            identifier: values.model
+          }
         })
 
-        if (createField) {
-          _onClose()
-          redirectTo('_self')
+        if (getModel && getModel.id) {
+          values.modelId = getModel.id
+
+          const { createField } = await post({
+            mutation: CREATE_FIELD_MUTATION,
+            variables: values
+          })
+
+          if (createField) {
+            _onClose()
+            redirectTo('_self')
+          }
         }
-      }
+      })
     }
   }
 

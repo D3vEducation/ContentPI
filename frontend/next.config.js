@@ -1,8 +1,9 @@
 // Dependencies
-import withSass from '@zeit/next-sass'
-import path from 'path'
+const withSass = require('@zeit/next-sass')
+const path = require('path')
+const Dotenv = require('dotenv-webpack')
 
-export default withSass({
+module.exports = withSass({
   cssModules: true,
   cssLoaderOptions: {
     localIdentName: '[name]__[local]__[hash:base64:5]'
@@ -10,9 +11,17 @@ export default withSass({
   devIndicators: {
     autoPrerender: false
   },
-  webpack: config => {
+  webpack: (config, { isServer }) => {
+    // Fixes npm packages that depend on `fs` module
+    if (!isServer) {
+      config.node = {
+        fs: 'empty'
+      }
+    }
+
     const dir = __dirname
 
+    // Aliases
     config.resolve.alias['@app'] = path.resolve(dir, './src/app')
     config.resolve.alias['@dashboard'] = path.resolve(dir, './src/app/dashboard')
     config.resolve.alias['@config'] = path.resolve(dir, './src/config')
@@ -26,6 +35,13 @@ export default withSass({
     config.resolve.alias['@layouts'] = path.resolve(dir, './src/shared/components/layouts')
     config.resolve.alias['@ui'] = path.resolve(dir, './src/shared/components/ui')
     config.resolve.alias.styles = path.resolve(dir, './src/shared/styles')
+
+    // Plugins
+    config.plugins.push(
+      new Dotenv({
+        silent: true
+      })
+    )
 
     return config
   }

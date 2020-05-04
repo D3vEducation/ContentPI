@@ -5,7 +5,7 @@ import path from 'path'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
-import session from 'express-session'
+import session from 'cookie-session'
 
 // Middleware
 import { isConnected } from './shared/lib/middlewares/user'
@@ -28,9 +28,8 @@ nextApp.prepare().then(() => {
   // Middlewares
   app.use(
     session({
-      resave: false,
-      saveUninitialized: true,
-      secret: config.security.secretKey
+      secret: config.security.secretKey,
+      maxAge: 24 * 60 * 60 * 1000 * Number(config.security.expiresIn[0])
     })
   )
   app.use(bodyParser.json())
