@@ -8,6 +8,7 @@ type User {
   createdAt: Datetime!
   updatedAt: Datetime!
   apps: [App!]
+  _DEBUG: JSON
 }
 
 type Query {

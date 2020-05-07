@@ -1,11 +1,5 @@
 // Dependencies
-import React, { FC, ReactElement, useContext, useEffect, memo } from 'react'
-
-// Contexts
-import { AppContext } from '@contexts/app'
-
-// Queries
-import GET_APPS_QUERY from '@graphql/apps/getApps.query'
+import React, { FC, ReactElement, memo } from 'react'
 
 // Shared components
 import MainLayout from '@layouts/main/MainLayout'
@@ -15,26 +9,13 @@ import Cards from '@layouts/main/Cards'
 // Styles
 import styles from './MyApps.scss'
 
-const MyApps: FC = (): ReactElement => {
-  // Contexts
-  const { get, state } = useContext(AppContext)
+interface iProps {
+  dataGetApps: any
+}
 
-  // Methods
-  const fetch = async (): Promise<void> => {
-    await get({
-      query: GET_APPS_QUERY
-    })
-  }
-
-  // Effects
-  useEffect(() => {
-    if (!state.getApps) {
-      fetch()
-    }
-  }, [state])
-
+const MyApps: FC<iProps> = ({ dataGetApps }): ReactElement => {
   // First render
-  if (!state.getApps) {
+  if (!dataGetApps.getApps) {
     return <div />
   }
 
@@ -47,7 +28,7 @@ const MyApps: FC = (): ReactElement => {
           </div>
         </div>
 
-        <Cards items={state.getApps} />
+        <Cards items={dataGetApps.getApps} />
       </div>
     </MainLayout>
   )

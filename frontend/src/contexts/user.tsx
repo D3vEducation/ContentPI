@@ -1,8 +1,8 @@
 // Dependencies
 import React, { FC, createContext, ReactElement, useState, useEffect } from 'react'
-import { useApolloClient } from 'react-apollo-hooks'
 import { useCookies } from 'react-cookie'
-import { getGraphQlError, redirectTo } from 'fogg-utils'
+import { getGraphQlError, redirectTo, getDebug } from 'fogg-utils'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 
 // Mutations
 import LOGIN_MUTATION from '@graphql/user/login.mutation'
@@ -10,6 +10,7 @@ import LOGIN_MUTATION from '@graphql/user/login.mutation'
 // Queries
 import GET_USER_DATA_QUERY from '@graphql/user/getUserData.query'
 
+// Interfaces
 interface iUserContext {
   login(input: any): any
   user: any
@@ -19,48 +20,52 @@ interface iProps {
   children: ReactElement
 }
 
+// Creating context
 export const UserContext = createContext<iUserContext>({
   login: () => null,
   user: null
 })
 
 const UserProvider: FC<iProps> = ({ children }): ReactElement => {
-  const { query, mutate } = useApolloClient()
   const [cookies, setCookie] = useCookies()
   const [user, setUser] = useState(null)
 
-  // Effects
-  useEffect(() => {
-    if (!user) {
-      query({
-        query: GET_USER_DATA_QUERY,
-        variables: {
-          at: cookies.at
-        }
-      }).then(({ data: { getUserData } }) => {
-        if (!getUserData.id) {
-          redirectTo('/logout?redirectTo=/dashboard')
-        } else {
-          setUser(getUserData)
-        }
-      })
+  // Mutations
+  const [loginMutation] = useMutation(LOGIN_MUTATION)
+
+  // Queries
+  const { data: dataUser } = useQuery(GET_USER_DATA_QUERY, {
+    variables: {
+      at: cookies.at || ''
     }
   })
 
+  // Effects
+  useEffect(() => {
+    if (dataUser) {
+      const debug = getDebug(dataUser.getUserData)
+
+      if (!dataUser.getUserData.id && debug.hasCookie) {
+        redirectTo('/logout?redirectTo=/dashboard')
+      } else {
+        setUser(dataUser.getUserData)
+      }
+    }
+  }, [dataUser])
+
   async function login(input: { email: string; password: string }): Promise<any> {
     try {
-      const { data } = await mutate({
-        mutation: LOGIN_MUTATION,
+      const { data: dataLogin } = await loginMutation({
         variables: {
           email: input.email,
           password: input.password
         }
       })
 
-      if (data) {
-        setCookie('at', data.login.token, { path: '/' })
+      if (dataLogin) {
+        setCookie('at', dataLogin.login.token, { path: '/' })
 
-        return data.login.token
+        return dataLogin.login.token
       }
     } catch (err) {
       return getGraphQlError(err)

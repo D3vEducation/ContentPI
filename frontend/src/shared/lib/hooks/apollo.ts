@@ -1,30 +1,27 @@
 // Dependencies
-import { ApolloClient } from 'apollo-boost'
+import { ApolloClient } from 'apollo-client'
+import { ApolloProvider } from '@apollo/react-hooks'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import { HttpLink } from 'apollo-link-http'
-import { ApolloLink } from 'apollo-link'
-import fetch from 'isomorphic-fetch'
+import { createHttpLink } from 'apollo-link-http'
+import withApollo from 'fogg-with-apollo'
+import fetch from 'isomorphic-unfetch'
 
 // Configuration
 import config from '@config'
 
-export default (): any => {
-  const httpLink = new HttpLink({
-    uri: config.api.uri,
-    credentials: config.api.credentials,
-    fetch
-  })
+const link = createHttpLink({
+  fetch,
+  uri: config.api.uri,
+  credentials: config.api.credentials
+})
 
-  const cache = new InMemoryCache({
-    dataIdFromObject: (object): any => object.id || null,
-    addTypename: false
+const client = withApollo(({ initialState }) => {
+  return new ApolloClient({
+    ssrMode: true,
+    ssrForceFetchDelay: 100,
+    cache: new InMemoryCache().restore(initialState || {}),
+    link
   })
+})
 
-  const client = new ApolloClient({
-    connectToDevTools: true,
-    link: ApolloLink.from([httpLink]),
-    cache
-  })
-
-  return client
-}
+export default client

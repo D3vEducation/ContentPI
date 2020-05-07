@@ -9,13 +9,13 @@ import {
   redirectTo,
   waitFor
 } from 'fogg-utils'
+import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 
 // Hooks
 import usePrevious from '@hooks/usePrevious'
 
 // Contexts
 import { FormContext } from '@contexts/form'
-import { AppContext } from '@contexts/app'
 
 // Mutation
 import CREATE_FIELD_MUTATION from '@graphql/fields/createField.mutation'
@@ -39,12 +39,19 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
   })
   const [loading, setLoading] = useState(false)
 
-  // Previous Props
-  const prevProps: any = usePrevious({ options })
-
   // Contexts
   const { onChange, values, setInitialValues, setValue, resetValues } = useContext(FormContext)
-  const { get, post } = useContext(AppContext)
+
+  // Mutations
+  const [createFieldMutation] = useMutation(CREATE_FIELD_MUTATION)
+
+  // Queries
+  const [getModelQueryThenCreateField] = useLazyQuery(GET_MODEL_QUERY, {
+    onCompleted: async data => createField(data)
+  })
+
+  // Previous Props
+  const prevProps: any = usePrevious({ options })
 
   // Getting appId
   const { model } = getParamsFromUrl(['page', 'appId', 'stage', 'module', 'section', 'model'])
@@ -60,6 +67,21 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
     onClose()
   }
 
+  const createField = async (data: any): Promise<void> => {
+    if (data.getModel && data.getModel.id) {
+      values.modelId = data.getModel.id
+
+      const { data: dataField } = await createFieldMutation({
+        variables: values
+      })
+
+      if (dataField.createField) {
+        _onClose()
+        redirectTo('_self')
+      }
+    }
+  }
+
   const handleSubmit = async (): Promise<void> => {
     const emptyValues = getEmptyValues(values, ['fieldName', 'identifier'])
 
@@ -71,26 +93,12 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
       waitFor(1).then(async () => {
         setLoading(false)
 
-        const { getModel } = await get({
-          query: GET_MODEL_QUERY,
+        // Creating a new field
+        getModelQueryThenCreateField({
           variables: {
             identifier: values.model
           }
         })
-
-        if (getModel && getModel.id) {
-          values.modelId = getModel.id
-
-          const { createField } = await post({
-            mutation: CREATE_FIELD_MUTATION,
-            variables: values
-          })
-
-          if (createField) {
-            _onClose()
-            redirectTo('_self')
-          }
-        }
       })
     }
   }
@@ -165,7 +173,7 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             color="#42f598"
             type="round"
             label="Make field required"
-            onClick={(): void => setValue('isRequired', !values.isRequired)}
+            onChange={(): void => setValue('isRequired', !values.isRequired)}
             checked={values.isRequired}
           />
         </p>
@@ -175,7 +183,7 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             color="#42f598"
             type="round"
             label="Set field as Primary Key"
-            onClick={(): void => setValue('isPrimaryKey', !values.isPrimaryKey)}
+            onChange={(): void => setValue('isPrimaryKey', !values.isPrimaryKey)}
             checked={values.isPrimaryKey}
           />
         </p>
@@ -185,7 +193,7 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             color="#42f598"
             type="round"
             label="Set field as unique"
-            onClick={(): void => setValue('isUnique', !values.isUnique)}
+            onChange={(): void => setValue('isUnique', !values.isUnique)}
             checked={values.isUnique}
           />
         </p>
@@ -195,7 +203,7 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             color="#42f598"
             type="round"
             label="Is System Field?"
-            onClick={(): void => setValue('isSystem', !values.isSystem)}
+            onChange={(): void => setValue('isSystem', !values.isSystem)}
             checked={values.isSystem}
           />
         </p>
@@ -205,7 +213,7 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             color="#42f598"
             type="round"
             label="Hide field"
-            onClick={(): void => setValue('isHide', !values.isHide)}
+            onChange={(): void => setValue('isHide', !values.isHide)}
             checked={values.isHide}
           />
         </p>
@@ -215,7 +223,7 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             color="#42f598"
             type="round"
             label="Is Media (image, video or document)?"
-            onClick={(): void => setValue('isMedia', !values.isMedia)}
+            onChange={(): void => setValue('isMedia', !values.isMedia)}
             checked={values.isMedia}
           />
         </p>

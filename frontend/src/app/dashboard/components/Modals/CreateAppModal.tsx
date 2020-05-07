@@ -2,10 +2,10 @@
 import React, { FC, ReactElement, useContext, useState, useEffect, memo } from 'react'
 import { Modal, Badge, Input, DarkButton, Icon } from 'fogg-ui'
 import { generateHexCode, invertHexCode, redirectTo, slugFn, getEmptyValues } from 'fogg-utils'
+import { useMutation } from '@apollo/react-hooks'
 
 // Contexts
 import { FormContext } from '@contexts/form'
-import { AppContext } from '@contexts/app'
 import { UserContext } from '@contexts/user'
 
 // Mutation
@@ -25,10 +25,12 @@ const CreateAppModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
     identifier: false
   })
 
+  // Mutations
+  const [createAppMutation] = useMutation(CREATE_APP_MUTATION)
+
   // Contexts
   const { user } = useContext(UserContext)
   const { onChange, values, setInitialValues, setValue } = useContext(FormContext)
-  const { post } = useContext(AppContext)
 
   // Methods
   const handleSubmit = async (): Promise<void> => {
@@ -37,13 +39,12 @@ const CreateAppModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
     if (emptyValues) {
       setRequired(emptyValues)
     } else {
-      const { createApp } = await post({
-        mutation: CREATE_APP_MUTATION,
+      const { data: dataCreateApp } = await createAppMutation({
         variables: values
       })
 
-      if (createApp) {
-        redirectTo(`/dashboard/${createApp.id}/master`)
+      if (dataCreateApp.createApp) {
+        redirectTo(`/dashboard/${dataCreateApp.createApp.id}/master`)
       }
     }
   }

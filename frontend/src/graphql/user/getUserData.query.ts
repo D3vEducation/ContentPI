@@ -1,5 +1,5 @@
 // Dependencies
-import { gql } from 'apollo-boost'
+import gql from 'graphql-tag'
 
 export default gql`
   query getUserData($at: String!) {
@@ -9,6 +9,7 @@ export default gql`
       username
       privilege
       active
+      _DEBUG
     }
   }
 `

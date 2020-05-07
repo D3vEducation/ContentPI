@@ -1,5 +1,5 @@
 // Dependencies
-import { gql } from 'apollo-boost'
+import gql from 'graphql-tag'
 
 export default gql`
   query getAppById($id: String!) {

@@ -2,10 +2,10 @@
 import React, { FC, ReactElement, useContext, useState, useEffect, memo } from 'react'
 import { Modal, Badge, Input, DarkButton } from 'fogg-ui'
 import { redirectTo, getParamsFromUrl, camelCase, getEmptyValues } from 'fogg-utils'
+import { useMutation } from '@apollo/react-hooks'
 
 // Contexts
 import { FormContext } from '@contexts/form'
-import { AppContext } from '@contexts/app'
 
 // Mutation
 import CREATE_MODEL_MUTATION from '@graphql/models/createModel.mutation'
@@ -24,9 +24,11 @@ const CreateModelModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
     identifier: false
   })
 
+  // Mutations
+  const [createModelMutation] = useMutation(CREATE_MODEL_MUTATION)
+
   // Contexts
   const { onChange, values, setInitialValues, setValue } = useContext(FormContext)
-  const { post } = useContext(AppContext)
 
   // Getting appId
   const { appId } = getParamsFromUrl(['page', 'appId', 'stage'])
@@ -38,12 +40,11 @@ const CreateModelModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
     if (emptyValues) {
       setRequired(emptyValues)
     } else {
-      const { createModel } = await post({
-        mutation: CREATE_MODEL_MUTATION,
+      const { data: dataCreateModel } = await createModelMutation({
         variables: values
       })
 
-      if (createModel) {
+      if (dataCreateModel.createModel) {
         redirectTo(`/dashboard/${appId}/master/schema/model/${values.identifier}`)
       }
     }

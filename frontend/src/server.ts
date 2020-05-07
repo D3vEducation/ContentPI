@@ -6,6 +6,7 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import session from 'cookie-session'
+import { buildUrl } from 'fogg-utils'
 
 // Middleware
 import { isConnected } from './shared/lib/middlewares/user'
@@ -57,17 +58,14 @@ nextApp.prepare().then(() => {
   )
 
   app.use(
-    `/dashboard/:appId?/:stage?/:moduleName?`,
+    `/dashboard/:appId?/:stage?/:moduleName?/:section?/:model?`,
     isConnected(true, ['god', 'admin', 'editor'], '/login?redirectTo=/dashboard'),
     (req: any, res: any) => {
-      const { appId, stage, moduleName } = req.params
-      let page = '/dashboard'
+      const { appId, stage, moduleName, section, model } = req.params
 
-      if (appId && stage) {
-        page = !moduleName ? '/dashboard/home' : `/dashboard/${moduleName}`
-      }
+      const url = buildUrl(['dashboard', appId, stage, moduleName, section, model])
 
-      return nextApp.render(req, res, page)
+      return nextApp.render(req, res, `/${url}`)
     }
   )
 

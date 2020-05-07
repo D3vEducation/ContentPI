@@ -1,14 +1,6 @@
 // Dependencies
-import React, { FC, ReactElement, useContext, useState, useEffect, memo } from 'react'
-import { getParamsFromUrl } from 'fogg-utils'
+import React, { FC, ReactElement, useContext, useState, memo } from 'react'
 import { Toggle } from 'fogg-ui'
-
-// Contexts
-import { AppContext } from '@contexts/app'
-
-// Queries
-import GET_MODEL_QUERY from '@graphql/models/getModel.query'
-import GET_DECLARATIONS_QUERY from '@graphql/declarations/getDeclarations.query'
 
 // Shared components
 import MainLayout from '@layouts/main/MainLayout'
@@ -18,42 +10,16 @@ import Declarations from './Declarations'
 // Styles
 import styles from './Schema.scss'
 
-const Schema: FC = (): ReactElement => {
+interface iProps {
+  data: any
+}
+
+const Schema: FC<iProps> = ({ data }): ReactElement => {
   // State
-  const [isFetching, setIsFetching] = useState(true)
   const [showSystem, setShowSystem] = useState(false)
 
-  // Contexts
-  const { get, state } = useContext(AppContext)
-
-  // Methods
-  const fetch = async (): Promise<void> => {
-    const { model } = getParamsFromUrl(['page', 'appId', 'stage', 'module', 'section', 'model'])
-
-    await get({
-      queries: [
-        {
-          query: GET_MODEL_QUERY,
-          variables: {
-            identifier: model
-          }
-        },
-        {
-          query: GET_DECLARATIONS_QUERY
-        }
-      ]
-    })
-  }
-
-  // Effects
-  useEffect(() => {
-    if (isFetching) {
-      fetch()
-      setIsFetching(false)
-    }
-  }, [isFetching])
-
-  const { getModel, getDeclarations } = state
+  // Data
+  const { getModel, getDeclarations } = data
 
   // First render
   if (!getModel && !getDeclarations) {
@@ -73,7 +39,7 @@ const Schema: FC = (): ReactElement => {
             checked={showSystem}
             type="round"
             label="Show system fields"
-            onClick={(): void => setShowSystem(!showSystem)}
+            onChange={(): void => setShowSystem(!showSystem)}
           />
         </div>
 

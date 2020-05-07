@@ -1,28 +1,31 @@
 // Dependencies
 import React, { ReactElement } from 'react'
-import { ApolloProvider } from 'react-apollo-hooks'
+import { useQuery } from '@apollo/react-hooks'
 
-// Hooks
-import useApolloClient from '@hooks/apollo'
+// Queries
+import GET_APPS_QUERY from '@graphql/apps/getApps.query'
 
 // Contexts
-import AppProvider from '@contexts/app'
 import UserProvider from '@contexts/user'
 import FormProvider from '@contexts/form'
 
 // Components
-import DashboardLayout from '@app/dashboard/components/Layout'
+import MyApps from '@app/dashboard/components/MyApps'
 
-const DashboardPage = (): ReactElement => (
-  <ApolloProvider client={useApolloClient()}>
+const Page = (): ReactElement => {
+  const { data: dataGetApps, loading } = useQuery(GET_APPS_QUERY)
+
+  if (loading) {
+    return <div />
+  }
+
+  return (
     <UserProvider>
-      <AppProvider>
-        <FormProvider>
-          <DashboardLayout />
-        </FormProvider>
-      </AppProvider>
+      <FormProvider>
+        <MyApps dataGetApps={dataGetApps} />
+      </FormProvider>
     </UserProvider>
-  </ApolloProvider>
-)
+  )
+}
 
-export default DashboardPage
+export default Page
