@@ -42,12 +42,14 @@ const Page: FC = (): ReactElement => {
     <UserProvider>
       <AppProvider id={appId}>
         <FormProvider>
-          <Schema
-            data={{
-              ...dataModel,
-              ...dataDeclarations
-            }}
-          />
+          {dataModel && dataDeclarations && (
+            <Schema
+              data={{
+                ...dataModel,
+                ...dataDeclarations
+              }}
+            />
+          )}
         </FormProvider>
       </AppProvider>
     </UserProvider>

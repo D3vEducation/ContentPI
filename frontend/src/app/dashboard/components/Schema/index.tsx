@@ -1,5 +1,5 @@
 // Dependencies
-import React, { FC, ReactElement, useContext, useState, memo } from 'react'
+import React, { FC, ReactElement, useState, memo } from 'react'
 import { Toggle } from 'fogg-ui'
 
 // Shared components

@@ -168,7 +168,7 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
           />
         </div>
 
-        <p>
+        <div style={{ marginBottom: '20px' }}>
           <Toggle
             color="#42f598"
             type="round"
@@ -176,9 +176,9 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             onChange={(): void => setValue('isRequired', !values.isRequired)}
             checked={values.isRequired}
           />
-        </p>
+        </div>
 
-        <p>
+        <div style={{ marginBottom: '20px' }}>
           <Toggle
             color="#42f598"
             type="round"
@@ -186,9 +186,9 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             onChange={(): void => setValue('isPrimaryKey', !values.isPrimaryKey)}
             checked={values.isPrimaryKey}
           />
-        </p>
+        </div>
 
-        <p>
+        <div style={{ marginBottom: '20px' }}>
           <Toggle
             color="#42f598"
             type="round"
@@ -196,9 +196,9 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             onChange={(): void => setValue('isUnique', !values.isUnique)}
             checked={values.isUnique}
           />
-        </p>
+        </div>
 
-        <p>
+        <div style={{ marginBottom: '20px' }}>
           <Toggle
             color="#42f598"
             type="round"
@@ -206,9 +206,9 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             onChange={(): void => setValue('isSystem', !values.isSystem)}
             checked={values.isSystem}
           />
-        </p>
+        </div>
 
-        <p>
+        <div style={{ marginBottom: '20px' }}>
           <Toggle
             color="#42f598"
             type="round"
@@ -216,9 +216,9 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             onChange={(): void => setValue('isHide', !values.isHide)}
             checked={values.isHide}
           />
-        </p>
+        </div>
 
-        <p>
+        <div style={{ marginBottom: '20px' }}>
           <Toggle
             color="#42f598"
             type="round"
@@ -226,7 +226,7 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             onChange={(): void => setValue('isMedia', !values.isMedia)}
             checked={values.isMedia}
           />
-        </p>
+        </div>
 
         <div className={styles.buttons}>
           <PrimaryButton outline onClick={_onClose}>

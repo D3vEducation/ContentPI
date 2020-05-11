@@ -22,6 +22,7 @@ type Query {
 
 type Mutation {
   createField(input: CreateFieldInput): Field!
+  deleteField(id: UUID!): Field!
 }
 
 input CreateFieldInput {

@@ -29,7 +29,7 @@ const Declarations: FC<iProps> = ({ declarations }): ReactElement => {
           options={{
             type: fieldType,
             position: 'top',
-            height: '680px',
+            height: '705px',
             width: '600px'
           }}
         />

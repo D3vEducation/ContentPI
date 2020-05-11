@@ -4,10 +4,7 @@ import styles from './Footer.scss'
 const Footer: FC = (): ReactElement => (
   <footer className={styles.footer}>
     <div className={styles.content}>
-      <div>
-        &copy; ContentPI.com
-        {new Date().getFullYear()}
-      </div>
+      <div className={styles.copyright}>&copy; {new Date().getFullYear()} ContentPI.com</div>
 
       <nav className={styles.rightOptions}>
         <ul>
