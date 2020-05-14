@@ -3,9 +3,10 @@ import React, { FC, ReactElement, useState, createContext } from 'react'
 
 // Interfaces
 interface iFormContext {
-  onChange(e: any): any
+  onChange(e: any, ctx?: any): any
   setInitialValues(values: any): any
-  setValue(key: string, value: any): any
+  setValue(name: string, value: any, ctx?: any): any
+  setValues(values: any): any
   resetValues(): any
   values: any
 }
@@ -19,6 +20,7 @@ export const FormContext = createContext<iFormContext>({
   onChange: () => null,
   setInitialValues: () => null,
   setValue: () => null,
+  setValues: () => null,
   resetValues: () => null,
   values: {}
 })
@@ -26,12 +28,47 @@ export const FormContext = createContext<iFormContext>({
 const FormProvider: FC<iProps> = ({ children, initialValues = {} }): ReactElement => {
   const [state, setState] = useState(initialValues)
 
-  function onChange(e: any): void {
+  function onChange(e: any, ctx?: any): void {
     const {
       target: { name, value }
     } = e
 
     if (name) {
+      if (ctx) {
+        setState((prevState: any) => {
+          const ctxPrevState: any = prevState[ctx]
+
+          return {
+            ...prevState,
+            [ctx]: {
+              ...ctxPrevState,
+              [name]: value
+            }
+          }
+        })
+      } else {
+        setState(prevState => ({
+          ...prevState,
+          [name]: value
+        }))
+      }
+    }
+  }
+
+  function setValue(name: string, value: any, ctx?: any): void {
+    if (ctx) {
+      setState((prevState: any) => {
+        const ctxPrevState: any = prevState[ctx]
+
+        return {
+          ...prevState,
+          [ctx]: {
+            ...ctxPrevState,
+            [name]: value
+          }
+        }
+      })
+    } else {
       setState(prevState => ({
         ...prevState,
         [name]: value
@@ -39,16 +76,20 @@ const FormProvider: FC<iProps> = ({ children, initialValues = {} }): ReactElemen
     }
   }
 
-  function setValue(key: string, value: any): void {
-    setState(prevState => ({
-      ...prevState,
-      [key]: value
-    }))
+  function setValues(values: any): void {
+    if (Object.keys(state).length > 0) {
+      setState(values)
+    }
   }
 
   function setInitialValues(values: any): void {
     if (Object.keys(state).length === 0) {
       setState(values)
+    } else {
+      setState(prevState => ({
+        ...prevState,
+        values
+      }))
     }
   }
 
@@ -62,6 +103,7 @@ const FormProvider: FC<iProps> = ({ children, initialValues = {} }): ReactElemen
     onChange,
     setInitialValues,
     setValue,
+    setValues,
     resetValues,
     values: state
   }

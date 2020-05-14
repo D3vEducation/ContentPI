@@ -33,6 +33,11 @@ export default {
         ]
       })
 
+      // Sorting by creation date
+      data[0].fields.sort((a: any, b: any) =>
+        a.createdAt > b.createdAt ? 1 : -1
+      )
+
       return data[0]
     }
   },

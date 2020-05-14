@@ -1,8 +1,8 @@
 // Dependencies
-import React, { FC, ReactElement, useContext, useState, useEffect, memo } from 'react'
+import React, { FC, ReactElement, useState, useEffect, useContext, memo } from 'react'
 import { Modal, Badge, Input, PrimaryButton, LinkButton, Toggle } from 'fogg-ui'
 import { camelCase, getEmptyValues, isEmptyObject, redirectTo, waitFor } from 'fogg-utils'
-import { useLazyQuery, useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/react-hooks'
 
 // Hooks
 import usePrevious from '@hooks/usePrevious'
@@ -11,11 +11,10 @@ import usePrevious from '@hooks/usePrevious'
 import { FormContext } from '@contexts/form'
 
 // Mutation
-import CREATE_FIELD_MUTATION from '@graphql/fields/createField.mutation'
-import GET_MODEL_QUERY from '@graphql/models/getModel.query'
+import EDIT_FIELD_MUTATION from '@graphql/fields/editField.mutation'
 
 // Styles
-import styles from './CreateFieldModal.scss'
+import styles from './EditFieldModal.scss'
 
 interface iProps {
   isOpen: boolean
@@ -24,30 +23,37 @@ interface iProps {
   onClose(): void
 }
 
-const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactElement => {
-  // States
-  const [required, setRequired] = useState<any>({
-    fieldName: false,
-    identifier: false
-  })
-  const [loading, setLoading] = useState(false)
-
-  // Contexts
-  const { onChange, values, setInitialValues, setValue, resetValues } = useContext(FormContext)
-  const formCtx = 'createField'
-
-  // Mutations
-  const [createFieldMutation] = useMutation(CREATE_FIELD_MUTATION)
-
-  // Queries
-  const [getModelQueryThenCreateField] = useLazyQuery(GET_MODEL_QUERY, {
-    onCompleted: async data => createField(data)
-  })
+const EditFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactElement => {
+  // Getting data from options
+  const {
+    data: { id: fieldId, fields }
+  } = options
 
   // Previous Props
   const prevProps: any = usePrevious({ options })
 
+  // States
+  const [required, setRequired] = useState<any>({
+    appName: false,
+    identifier: false
+  })
+  const [loading, setLoading] = useState(false)
+
+  // Mutations
+  const [editFieldMutation] = useMutation(EDIT_FIELD_MUTATION)
+
+  // Contexts
+  const { onChange, values, setInitialValues, setValue, setValues, resetValues } = useContext(
+    FormContext
+  )
+  const formCtx = 'editField'
+
   // Methods
+  const _onClose = (): any => {
+    resetValues()
+    onClose()
+  }
+
   const _onChange = (e: any): any => {
     if (e.target.name === 'fieldName') {
       setValue('identifier', camelCase(e.target.value), formCtx)
@@ -56,28 +62,8 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
     onChange(e, formCtx)
   }
 
-  const _onClose = (): any => {
-    resetValues()
-    onClose()
-  }
-
-  const createField = async (data: any): Promise<void> => {
-    if (data.getModel && data.getModel.id) {
-      values[formCtx].modelId = data.getModel.id
-
-      const { data: dataField } = await createFieldMutation({
-        variables: values[formCtx]
-      })
-
-      if (dataField.createField) {
-        _onClose()
-        redirectTo('_self')
-      }
-    }
-  }
-
   const handleSubmit = async (): Promise<void> => {
-    const emptyValues = getEmptyValues(values[formCtx], ['fieldName', 'identifier'])
+    const emptyValues = getEmptyValues(values[formCtx], ['appName', 'identifier'])
 
     if (emptyValues) {
       setRequired(emptyValues)
@@ -87,42 +73,35 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
       waitFor(1).then(async () => {
         setLoading(false)
 
-        // Creating a new field
-        getModelQueryThenCreateField({
+        const edited = await editFieldMutation({
           variables: {
-            identifier: values[formCtx].model
+            id: fieldId,
+            ...values[formCtx]
           }
         })
+
+        if (edited) {
+          redirectTo('_self')
+        }
       })
     }
   }
 
   // Effects
   useEffect(() => {
-    // Setting up our initial values
-    if (isEmptyObject(values)) {
+    const currentField = fields ? fields.filter((field: any) => field.id === fieldId) : []
+
+    if (fields && isEmptyObject(values)) {
       setInitialValues({
-        [formCtx]: {
-          model: options.data.modelIdentifier,
-          fieldName: '',
-          identifier: '',
-          type: options.data.type,
-          defaultValue: '',
-          description: '',
-          isHide: false,
-          isMedia: false,
-          isUnique: false,
-          isRequired: true,
-          isSystem: false,
-          isPrimaryKey: false
-        }
+        [formCtx]: currentField[0],
+        createField: {}
+      })
+    } else if (prevProps && prevProps.options !== options && !isEmptyObject(values) && fields) {
+      setValues({
+        [formCtx]: currentField[0]
       })
     }
-
-    if (prevProps && prevProps.options !== options) {
-      setValue('type', options.data.type, formCtx)
-    }
-  }, [values, prevProps, options])
+  }, [values, fields, options])
 
   // Wait until we set our form context
   if (!values[formCtx]) {
@@ -230,11 +209,9 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
         </div>
 
         <div className={styles.buttons}>
-          <PrimaryButton outline onClick={_onClose}>
-            Cancel
-          </PrimaryButton>
-          <PrimaryButton onClick={handleSubmit} isLoading={loading} loadingText="Creating Field...">
-            Create Field
+          <LinkButton onClick={_onClose}>Cancel</LinkButton>
+          <PrimaryButton onClick={handleSubmit} isLoading={loading} loadingText="Updating Field...">
+            Update Field
           </PrimaryButton>
         </div>
       </div>
@@ -242,4 +219,4 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
   )
 }
 
-export default memo(CreateFieldModal)
+export default memo(EditFieldModal)

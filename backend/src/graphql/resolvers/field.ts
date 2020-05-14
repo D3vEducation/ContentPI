@@ -28,6 +28,24 @@ export default {
       }
 
       return null
+    },
+    editField: async (
+      _: object,
+      { id, input }: { id: string; input: iCreateFieldInput },
+      { models }: { models: iModels }
+    ): Promise<any> => {
+      const fieldToEdit = await models.Field.findByPk(id)
+
+      if (fieldToEdit) {
+        const updatedField = await fieldToEdit.update(
+          { ...input },
+          { where: { id } }
+        )
+
+        return updatedField
+      }
+
+      return null
     }
   }
 }

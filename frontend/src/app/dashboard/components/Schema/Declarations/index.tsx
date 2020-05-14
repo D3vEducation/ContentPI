@@ -9,9 +9,10 @@ import styles from './Declarations.scss'
 
 interface iProps {
   declarations: any
+  model: any
 }
 
-const Declarations: FC<iProps> = ({ declarations }): ReactElement => {
+const Declarations: FC<iProps> = ({ declarations, model }): ReactElement => {
   // Local state
   const [isOpen, setIsOpen] = useState(false)
   const [fieldType, setFieldType] = useState('')
@@ -27,7 +28,10 @@ const Declarations: FC<iProps> = ({ declarations }): ReactElement => {
           isOpen={isOpen}
           onClose={handleModal}
           options={{
-            type: fieldType,
+            data: {
+              type: fieldType,
+              modelIdentifier: model.identifier
+            },
             position: 'top',
             height: '705px',
             width: '600px'

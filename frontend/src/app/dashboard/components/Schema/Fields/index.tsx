@@ -5,6 +5,7 @@ import { Icon } from 'fogg-ui'
 
 // Components
 import DeleteFieldModal from '@dashboard/components/Modals/DeleteFieldModal'
+import EditFieldModal from '@dashboard/components/Modals/EditFieldModal'
 
 // Styles
 import styles from './Fields.scss'
@@ -16,14 +17,17 @@ interface iProps {
 
 const Fields: FC<iProps> = ({ fields, showSystem }): ReactElement => {
   // State
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpenEdit, setIsOpenEdit] = useState(false)
+  const [isOpenDelete, setIsOpenDelete] = useState(false)
   const [data, setData] = useState({})
 
   // Methods
-  const handleDeleteModal = (): void => setIsOpen(!isOpen)
+  const handleEditModal = (): void => setIsOpenEdit(!isOpenEdit)
+  const handleDeleteModal = (): void => setIsOpenDelete(!isOpenDelete)
 
   const handleEdit = (id: any): any => {
-    console.log('EDIT', id)
+    handleEditModal()
+    setData({ id, fields })
   }
 
   const handleDelete = (id: any): any => {
@@ -33,9 +37,21 @@ const Fields: FC<iProps> = ({ fields, showSystem }): ReactElement => {
 
   return (
     <>
+      <EditFieldModal
+        label="Edit Field"
+        isOpen={isOpenEdit}
+        onClose={handleEditModal}
+        options={{
+          data,
+          position: 'center',
+          height: '705px',
+          width: '600px'
+        }}
+      />
+
       <DeleteFieldModal
         label="Delete Field"
-        isOpen={isOpen}
+        isOpen={isOpenDelete}
         onClose={handleDeleteModal}
         options={{
           data,

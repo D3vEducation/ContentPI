@@ -45,7 +45,7 @@ const Schema: FC<iProps> = ({ data }): ReactElement => {
 
         <div className={styles.wrapper}>
           <Fields fields={getModel.fields} showSystem={showSystem} />
-          <Declarations declarations={getDeclarations} />
+          <Declarations model={getModel} declarations={getDeclarations} />
         </div>
       </div>
     </MainLayout>
