@@ -31,7 +31,8 @@ export default (sequelize: any, DataTypes: iDataTypes): iModel => {
         name: 'modelId',
         field: 'model_id'
       },
-      as: 'fields'
+      as: 'fields',
+      onDelete: 'CASCADE'
     })
   }
 

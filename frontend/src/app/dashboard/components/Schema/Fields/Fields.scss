@@ -4,11 +4,7 @@
   display: flex;
   flex-flow: column;
   margin-top: 0px;
-  width: 75%;
-
-  @include tablet {
-    width: 100%;
-  }
+  width: 100%;
 
   .field {
     box-sizing: border-box;

@@ -109,6 +109,20 @@ export default {
       await models.Field.bulkCreate(systemFields)
 
       return newModel
+    },
+    deleteModel: async (
+      _: object,
+      { id }: { id: string },
+      { models }: { models: iModels }
+    ): Promise<any> => {
+      const modelToRemove = await models.Model.findByPk(id)
+
+      if (modelToRemove) {
+        await modelToRemove.destroy({ where: { id } })
+        return modelToRemove
+      }
+
+      return null
     }
   }
 }

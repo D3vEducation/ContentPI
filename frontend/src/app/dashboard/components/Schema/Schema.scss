@@ -2,6 +2,13 @@
 
 .schema {
   .model {
+    position: relative;
+
+    div {
+      top: 45px;
+      left: 96px;
+    }
+
     .name {
       color: $tuna;
       display: inline;
