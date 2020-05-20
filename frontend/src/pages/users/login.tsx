@@ -13,7 +13,7 @@ const LoginPage = ({
   currentUrl = isBrowser() ? window.location.search.replace('?redirectTo=', '') : ''
 }): ReactElement => (
   <UserProvider>
-    <FormProvider initialValues={{ email: '', password: '' }}>
+    <FormProvider>
       <LoginLayout currentUrl={currentUrl} />
     </FormProvider>
   </UserProvider>

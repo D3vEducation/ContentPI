@@ -1,7 +1,7 @@
 // Dependencies
 import React, { FC, ReactElement, useContext, useState, useEffect, memo } from 'react'
 import { Modal, Badge, Input, PrimaryButton, LinkButton, Toggle } from 'fogg-ui'
-import { camelCase, getEmptyValues, isEmptyObject, redirectTo, waitFor } from 'fogg-utils'
+import { camelCase, getEmptyValues, redirectTo, waitFor } from 'fogg-utils'
 import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 
 // Hooks
@@ -15,7 +15,7 @@ import CREATE_FIELD_MUTATION from '@graphql/fields/createField.mutation'
 import GET_MODEL_QUERY from '@graphql/models/getModel.query'
 
 // Styles
-import styles from './CreateFieldModal.scss'
+import styles from './Modal.scss'
 
 interface iProps {
   isOpen: boolean
@@ -26,6 +26,22 @@ interface iProps {
 
 const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactElement => {
   // States
+  const initialValues = {
+    model: options.data.modelIdentifier,
+    modelId: '',
+    fieldName: '',
+    identifier: '',
+    type: options.data.type,
+    defaultValue: '',
+    description: '',
+    isHide: false,
+    isMedia: false,
+    isUnique: false,
+    isRequired: true,
+    isSystem: false,
+    isPrimaryKey: false
+  }
+  const [values, setValues] = useState(initialValues)
   const [required, setRequired] = useState<any>({
     fieldName: false,
     identifier: false
@@ -33,8 +49,7 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
   const [loading, setLoading] = useState(false)
 
   // Contexts
-  const { onChange, values, setInitialValues, setValue, resetValues } = useContext(FormContext)
-  const formCtx = 'createField'
+  const { onChange, setValue } = useContext(FormContext)
 
   // Mutations
   const [createFieldMutation] = useMutation(CREATE_FIELD_MUTATION)
@@ -50,23 +65,23 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
   // Methods
   const _onChange = (e: any): any => {
     if (e.target.name === 'fieldName') {
-      setValue('identifier', camelCase(e.target.value), formCtx)
+      setValue('identifier', camelCase(e.target.value), setValues)
     }
 
-    onChange(e, formCtx)
+    onChange(e, setValues)
   }
 
   const _onClose = (): any => {
-    resetValues()
+    setValues(initialValues)
     onClose()
   }
 
   const createField = async (data: any): Promise<void> => {
     if (data.getModel && data.getModel.id) {
-      values[formCtx].modelId = data.getModel.id
+      values.modelId = data.getModel.id
 
       const { data: dataField } = await createFieldMutation({
-        variables: values[formCtx]
+        variables: values
       })
 
       if (dataField.createField) {
@@ -77,7 +92,7 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
   }
 
   const handleSubmit = async (): Promise<void> => {
-    const emptyValues = getEmptyValues(values[formCtx], ['fieldName', 'identifier'])
+    const emptyValues = getEmptyValues(values, ['fieldName', 'identifier'])
 
     if (emptyValues) {
       setRequired(emptyValues)
@@ -90,7 +105,7 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
         // Creating a new field
         getModelQueryThenCreateField({
           variables: {
-            identifier: values[formCtx].model
+            identifier: values.model
           }
         })
       })
@@ -99,35 +114,10 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
 
   // Effects
   useEffect(() => {
-    // Setting up our initial values
-    if (isEmptyObject(values)) {
-      setInitialValues({
-        [formCtx]: {
-          model: options.data.modelIdentifier,
-          fieldName: '',
-          identifier: '',
-          type: options.data.type,
-          defaultValue: '',
-          description: '',
-          isHide: false,
-          isMedia: false,
-          isUnique: false,
-          isRequired: true,
-          isSystem: false,
-          isPrimaryKey: false
-        }
-      })
-    }
-
     if (prevProps && prevProps.options !== options) {
-      setValue('type', options.data.type, formCtx)
+      setValue('type', options.data.type, setValues)
     }
-  }, [values, prevProps, options])
-
-  // Wait until we set our form context
-  if (!values[formCtx]) {
-    return <div />
-  }
+  }, [prevProps, options])
 
   return (
     <Modal isOpen={isOpen} label={label} options={options} onClose={_onClose}>
@@ -142,7 +132,7 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             placeholder="First Field? Try Title"
             hasError={required.fieldName}
             onChange={_onChange}
-            value={values[formCtx].fieldName}
+            value={values.fieldName}
           />
         </div>
 
@@ -153,7 +143,7 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
           <Input
             id="identifier"
             name="identifier"
-            value={values[formCtx].identifier}
+            value={values.identifier}
             hasError={required.identifier}
             onChange={_onChange}
           />
@@ -165,7 +155,7 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             name="description"
             placeholder="Small description about your new app"
             onChange={_onChange}
-            value={values[formCtx].description}
+            value={values.description}
           />
         </div>
 
@@ -174,8 +164,8 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             color="#42f598"
             type="round"
             label="Make field required"
-            onChange={(): void => setValue('isRequired', !values[formCtx].isRequired, formCtx)}
-            checked={values[formCtx].isRequired}
+            onChange={(): void => setValue('isRequired', !values.isRequired, setValues)}
+            checked={values.isRequired}
           />
         </div>
 
@@ -184,8 +174,8 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             color="#42f598"
             type="round"
             label="Set field as Primary Key"
-            onChange={(): void => setValue('isPrimaryKey', !values[formCtx].isPrimaryKey, formCtx)}
-            checked={values[formCtx].isPrimaryKey}
+            onChange={(): void => setValue('isPrimaryKey', !values.isPrimaryKey, setValues)}
+            checked={values.isPrimaryKey}
           />
         </div>
 
@@ -194,8 +184,8 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             color="#42f598"
             type="round"
             label="Set field as unique"
-            onChange={(): void => setValue('isUnique', !values[formCtx].isUnique, formCtx)}
-            checked={values[formCtx].isUnique}
+            onChange={(): void => setValue('isUnique', !values.isUnique, setValues)}
+            checked={values.isUnique}
           />
         </div>
 
@@ -204,8 +194,8 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             color="#42f598"
             type="round"
             label="Is System Field?"
-            onChange={(): void => setValue('isSystem', !values[formCtx].isSystem, formCtx)}
-            checked={values[formCtx].isSystem}
+            onChange={(): void => setValue('isSystem', !values.isSystem, setValues)}
+            checked={values.isSystem}
           />
         </div>
 
@@ -214,8 +204,8 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             color="#42f598"
             type="round"
             label="Hide field"
-            onChange={(): void => setValue('isHide', !values[formCtx].isHide, formCtx)}
-            checked={values[formCtx].isHide}
+            onChange={(): void => setValue('isHide', !values.isHide, setValues)}
+            checked={values.isHide}
           />
         </div>
 
@@ -224,15 +214,13 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             color="#42f598"
             type="round"
             label="Is Media (image, video or document)?"
-            onChange={(): void => setValue('isMedia', !values[formCtx].isMedia, formCtx)}
-            checked={values[formCtx].isMedia}
+            onChange={(): void => setValue('isMedia', !values.isMedia, setValues)}
+            checked={values.isMedia}
           />
         </div>
 
         <div className={styles.buttons}>
-          <PrimaryButton outline onClick={_onClose}>
-            Cancel
-          </PrimaryButton>
+          <LinkButton onClick={_onClose}>Cancel</LinkButton>
           <PrimaryButton onClick={handleSubmit} isLoading={loading} loadingText="Creating Field...">
             Create Field
           </PrimaryButton>

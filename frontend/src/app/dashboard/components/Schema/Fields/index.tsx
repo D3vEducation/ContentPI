@@ -43,7 +43,7 @@ const Fields: FC<iProps> = ({ fields, showSystem }): ReactElement => {
         onClose={handleEditModal}
         options={{
           data,
-          position: 'center',
+          position: 'top',
           height: '705px',
           width: '600px'
         }}

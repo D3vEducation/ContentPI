@@ -14,7 +14,7 @@ import { FormContext } from '@contexts/form'
 import EDIT_FIELD_MUTATION from '@graphql/fields/editField.mutation'
 
 // Styles
-import styles from './EditFieldModal.scss'
+import styles from './Modal.scss'
 
 interface iProps {
   isOpen: boolean
@@ -33,6 +33,19 @@ const EditFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
   const prevProps: any = usePrevious({ options })
 
   // States
+  const initialValues = {
+    type: '',
+    fieldName: '',
+    identifier: '',
+    description: '',
+    isMedia: false,
+    isRequired: true,
+    isUnique: false,
+    isHide: false,
+    isSystem: false,
+    isPrimaryKey: false
+  }
+  const [values, setValues] = useState(initialValues)
   const [required, setRequired] = useState<any>({
     appName: false,
     identifier: false
@@ -43,27 +56,24 @@ const EditFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
   const [editFieldMutation] = useMutation(EDIT_FIELD_MUTATION)
 
   // Contexts
-  const { onChange, values, setInitialValues, setValue, setValues, resetValues } = useContext(
-    FormContext
-  )
-  const formCtx = 'editField'
+  const { onChange, setValue } = useContext(FormContext)
 
   // Methods
   const _onClose = (): any => {
-    resetValues()
+    setValues(initialValues)
     onClose()
   }
 
   const _onChange = (e: any): any => {
     if (e.target.name === 'fieldName') {
-      setValue('identifier', camelCase(e.target.value), formCtx)
+      setValue('identifier', camelCase(e.target.value), setValues)
     }
 
-    onChange(e, formCtx)
+    onChange(e, setValues)
   }
 
   const handleSubmit = async (): Promise<void> => {
-    const emptyValues = getEmptyValues(values[formCtx], ['appName', 'identifier'])
+    const emptyValues = getEmptyValues(values, ['appName', 'identifier'])
 
     if (emptyValues) {
       setRequired(emptyValues)
@@ -76,7 +86,7 @@ const EditFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
         const edited = await editFieldMutation({
           variables: {
             id: fieldId,
-            ...values[formCtx]
+            ...values
           }
         })
 
@@ -91,20 +101,15 @@ const EditFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
   useEffect(() => {
     const currentField = fields ? fields.filter((field: any) => field.id === fieldId) : []
 
-    if (fields && isEmptyObject(values)) {
-      setInitialValues({
-        [formCtx]: currentField[0],
-        createField: {}
-      })
-    } else if (prevProps && prevProps.options !== options && !isEmptyObject(values) && fields) {
-      setValues({
-        [formCtx]: currentField[0]
-      })
+    if (prevProps && prevProps.options !== options && currentField.length > 0) {
+      setValues(currentField[0])
+    } else if (currentField.length > 0) {
+      setValues(currentField[0])
     }
-  }, [values, fields, options])
+  }, [fields, options])
 
   // Wait until we set our form context
-  if (!values[formCtx]) {
+  if (!values) {
     return <div />
   }
 
@@ -121,7 +126,7 @@ const EditFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
             placeholder="First Field? Try Title"
             hasError={required.fieldName}
             onChange={_onChange}
-            value={values[formCtx].fieldName}
+            value={values.fieldName}
           />
         </div>
 
@@ -132,7 +137,7 @@ const EditFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
           <Input
             id="identifier"
             name="identifier"
-            value={values[formCtx].identifier}
+            value={values.identifier}
             hasError={required.identifier}
             onChange={_onChange}
           />
@@ -144,7 +149,7 @@ const EditFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
             name="description"
             placeholder="Small description about your new app"
             onChange={_onChange}
-            value={values[formCtx].description}
+            value={values.description}
           />
         </div>
 
@@ -153,8 +158,8 @@ const EditFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
             color="#42f598"
             type="round"
             label="Make field required"
-            onChange={(): void => setValue('isRequired', !values[formCtx].isRequired, formCtx)}
-            checked={values[formCtx].isRequired}
+            onChange={(): void => setValue('isRequired', !values.isRequired, setValues)}
+            checked={values.isRequired}
           />
         </div>
 
@@ -163,8 +168,8 @@ const EditFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
             color="#42f598"
             type="round"
             label="Set field as Primary Key"
-            onChange={(): void => setValue('isPrimaryKey', !values[formCtx].isPrimaryKey, formCtx)}
-            checked={values[formCtx].isPrimaryKey}
+            onChange={(): void => setValue('isPrimaryKey', !values.isPrimaryKey, setValues)}
+            checked={values.isPrimaryKey}
           />
         </div>
 
@@ -173,8 +178,8 @@ const EditFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
             color="#42f598"
             type="round"
             label="Set field as unique"
-            onChange={(): void => setValue('isUnique', !values[formCtx].isUnique, formCtx)}
-            checked={values[formCtx].isUnique}
+            onChange={(): void => setValue('isUnique', !values.isUnique, setValues)}
+            checked={values.isUnique}
           />
         </div>
 
@@ -183,8 +188,8 @@ const EditFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
             color="#42f598"
             type="round"
             label="Is System Field?"
-            onChange={(): void => setValue('isSystem', !values[formCtx].isSystem, formCtx)}
-            checked={values[formCtx].isSystem}
+            onChange={(): void => setValue('isSystem', !values.isSystem, setValues)}
+            checked={values.isSystem}
           />
         </div>
 
@@ -193,8 +198,8 @@ const EditFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
             color="#42f598"
             type="round"
             label="Hide field"
-            onChange={(): void => setValue('isHide', !values[formCtx].isHide, formCtx)}
-            checked={values[formCtx].isHide}
+            onChange={(): void => setValue('isHide', !values.isHide, setValues)}
+            checked={values.isHide}
           />
         </div>
 
@@ -203,8 +208,8 @@ const EditFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactE
             color="#42f598"
             type="round"
             label="Is Media (image, video or document)?"
-            onChange={(): void => setValue('isMedia', !values[formCtx].isMedia, formCtx)}
-            checked={values[formCtx].isMedia}
+            onChange={(): void => setValue('isMedia', !values.isMedia, setValues)}
+            checked={values.isMedia}
           />
         </div>
 

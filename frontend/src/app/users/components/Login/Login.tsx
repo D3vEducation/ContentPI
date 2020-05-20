@@ -22,14 +22,22 @@ interface iProps {
 
 const Login: FC<iProps> = ({ login, currentUrl }): ReactElement => {
   // States
+  const [values, setValues] = useState({
+    email: '',
+    password: ''
+  })
   const [errorMessage, setErrorMessage] = useState('')
   const [invalidLogin, setInvalidLogin] = useState(false)
 
   // Contexts
-  const { onChange, values } = useContext(FormContext)
+  const { onChange } = useContext(FormContext)
 
   // Methods
-  const handleLogin = async (user: iUser): Promise<void> => {
+  const _onChange = (e: any): any => {
+    onChange(e, setValues)
+  }
+
+  const handleSubmit = async (user: iUser): Promise<void> => {
     const response = await login(user)
 
     if (response.error) {
@@ -62,7 +70,7 @@ const Login: FC<iProps> = ({ login, currentUrl }): ReactElement => {
               className={styles.email}
               name="email"
               placeholder="Email"
-              onChange={onChange}
+              onChange={_onChange}
               value={values.email}
             />
 
@@ -72,13 +80,13 @@ const Login: FC<iProps> = ({ login, currentUrl }): ReactElement => {
               className={styles.password}
               name="password"
               placeholder="Password"
-              onChange={onChange}
+              onChange={_onChange}
               value={values.password}
             />
 
             <div className={styles.actions}>
               <div className={styles.left}>
-                <DarkButton name="login" onClick={(): Promise<void> => handleLogin(values)}>
+                <DarkButton name="login" onClick={(): Promise<void> => handleSubmit(values)}>
                   Login
                 </DarkButton>
                 &nbsp;

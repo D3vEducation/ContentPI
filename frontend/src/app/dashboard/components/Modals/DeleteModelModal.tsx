@@ -8,7 +8,7 @@ import { useMutation } from '@apollo/react-hooks'
 import DELETE_MODEL_MUTATION from '@graphql/models/deleteModel.mutation'
 
 // Styles
-import styles from './DeleteModelModal.scss'
+import styles from './Modal.scss'
 
 interface iProps {
   isOpen: boolean

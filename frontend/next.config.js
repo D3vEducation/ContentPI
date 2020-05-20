@@ -2,6 +2,7 @@
 const withSass = require('@zeit/next-sass')
 const path = require('path')
 const Dotenv = require('dotenv-webpack')
+const FilterWarningsPlugin = require('webpack-filter-warnings-plugin')
 
 module.exports = withSass({
   cssModules: true,
@@ -40,6 +41,9 @@ module.exports = withSass({
     config.plugins.push(
       new Dotenv({
         silent: true
+      }),
+      new FilterWarningsPlugin({
+        exclude: /mini-css-extract-plugin[^]*Conflicting order between:/
       })
     )
 

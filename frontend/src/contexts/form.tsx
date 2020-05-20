@@ -1,14 +1,10 @@
 // Dependencies
-import React, { FC, ReactElement, useState, createContext } from 'react'
+import React, { FC, ReactElement, createContext } from 'react'
 
 // Interfaces
 interface iFormContext {
-  onChange(e: any, ctx?: any): any
-  setInitialValues(values: any): any
-  setValue(name: string, value: any, ctx?: any): any
-  setValues(values: any): any
-  resetValues(): any
-  values: any
+  onChange(e: any, setState: any): any
+  setValue(name: string, value: any, setState: any): any
 }
 
 interface iProps {
@@ -18,94 +14,33 @@ interface iProps {
 
 export const FormContext = createContext<iFormContext>({
   onChange: () => null,
-  setInitialValues: () => null,
-  setValue: () => null,
-  setValues: () => null,
-  resetValues: () => null,
-  values: {}
+  setValue: () => null
 })
 
-const FormProvider: FC<iProps> = ({ children, initialValues = {} }): ReactElement => {
-  const [state, setState] = useState(initialValues)
-
-  function onChange(e: any, ctx?: any): void {
+const FormProvider: FC<iProps> = ({ children }): ReactElement => {
+  function onChange(e: any, setState: any): void {
     const {
       target: { name, value }
     } = e
 
     if (name) {
-      if (ctx) {
-        setState((prevState: any) => {
-          const ctxPrevState: any = prevState[ctx]
-
-          return {
-            ...prevState,
-            [ctx]: {
-              ...ctxPrevState,
-              [name]: value
-            }
-          }
-        })
-      } else {
-        setState(prevState => ({
-          ...prevState,
-          [name]: value
-        }))
-      }
-    }
-  }
-
-  function setValue(name: string, value: any, ctx?: any): void {
-    if (ctx) {
-      setState((prevState: any) => {
-        const ctxPrevState: any = prevState[ctx]
-
-        return {
-          ...prevState,
-          [ctx]: {
-            ...ctxPrevState,
-            [name]: value
-          }
-        }
-      })
-    } else {
-      setState(prevState => ({
+      setState((prevState: any) => ({
         ...prevState,
         [name]: value
       }))
     }
   }
 
-  function setValues(values: any): void {
-    if (Object.keys(state).length > 0) {
-      setState(values)
-    }
-  }
-
-  function setInitialValues(values: any): void {
-    if (Object.keys(state).length === 0) {
-      setState(values)
-    } else {
-      setState(prevState => ({
-        ...prevState,
-        values
-      }))
-    }
-  }
-
-  function resetValues(): void {
-    if (Object.keys(state).length >= 0) {
-      setState({})
-    }
+  function setValue(name: string, value: any, setState: any): void {
+    setState((prevState: any) => ({
+      ...prevState,
+      [name]: value
+    }))
   }
 
   const context = {
     onChange,
-    setInitialValues,
-    setValue,
-    setValues,
-    resetValues,
-    values: state
+    setValue
   }
 
   return <FormContext.Provider value={context}>{children}</FormContext.Provider>

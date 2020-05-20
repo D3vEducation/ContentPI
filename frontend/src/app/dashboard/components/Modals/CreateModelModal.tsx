@@ -1,7 +1,7 @@
 // Dependencies
 import React, { FC, ReactElement, useContext, useState, useEffect, memo } from 'react'
-import { Modal, Badge, Input, DarkButton } from 'fogg-ui'
-import { redirectTo, getParamsFromUrl, camelCase, getEmptyValues } from 'fogg-utils'
+import { Modal, Badge, Input, PrimaryButton, LinkButton } from 'fogg-ui'
+import { redirectTo, getParamsFromUrl, camelCase, getEmptyValues, waitFor } from 'fogg-utils'
 import { useMutation } from '@apollo/react-hooks'
 
 // Contexts
@@ -9,6 +9,9 @@ import { FormContext } from '@contexts/form'
 
 // Mutation
 import CREATE_MODEL_MUTATION from '@graphql/models/createModel.mutation'
+
+// Styles
+import styles from './Modal.scss'
 
 interface iProps {
   isOpen: boolean
@@ -18,20 +21,27 @@ interface iProps {
 }
 
 const CreateModelModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactElement => {
+  // Getting appId
+  const { appId } = getParamsFromUrl(['page', 'appId', 'stage'])
+
   // States
+  const [values, setValues] = useState({
+    modelName: '',
+    identifier: '',
+    description: '',
+    appId
+  })
   const [required, setRequired] = useState<any>({
     modelName: false,
     identifier: false
   })
+  const [loading, setLoading] = useState(false)
 
   // Mutations
   const [createModelMutation] = useMutation(CREATE_MODEL_MUTATION)
 
   // Contexts
-  const { onChange, values, setInitialValues, setValue } = useContext(FormContext)
-
-  // Getting appId
-  const { appId } = getParamsFromUrl(['page', 'appId', 'stage'])
+  const { onChange, setValue } = useContext(FormContext)
 
   // Methods
   const handleSubmit = async (): Promise<void> => {
@@ -40,71 +50,74 @@ const CreateModelModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
     if (emptyValues) {
       setRequired(emptyValues)
     } else {
-      const { data: dataCreateModel } = await createModelMutation({
-        variables: values
-      })
+      setLoading(true)
 
-      if (dataCreateModel.createModel) {
-        redirectTo(`/dashboard/${appId}/master/schema/model/${values.identifier}`)
-      }
+      waitFor(2).then(async () => {
+        setLoading(false)
+
+        const { data: dataCreateModel } = await createModelMutation({
+          variables: values
+        })
+
+        if (dataCreateModel.createModel) {
+          redirectTo(`/dashboard/${appId}/master/schema/model/${values.identifier}`)
+        }
+      })
     }
   }
 
   const _onChange = (e: any): any => {
-    setValue('identifier', camelCase(e.target.value))
-    onChange(e)
-  }
+    if (e.target.name === 'modelName') {
+      setValue('identifier', camelCase(e.target.value), setValues)
+    }
 
-  // Effects
-  useEffect(() => {
-    // Setting up our initial values
-    setInitialValues({
-      modelName: '',
-      identifier: '',
-      description: '',
-      appId
-    })
-  }, [])
+    onChange(e, setValues)
+  }
 
   return (
     <Modal isOpen={isOpen} label={label} options={options} onClose={onClose}>
-      <div>
-        <label htmlFor="modelName">
-          Model Name {required.modelName && <Badge danger>Required</Badge>}
-        </label>
-        <Input
-          name="modelName"
-          placeholder="First Model? Try Post"
-          hasError={required.modelName}
-          onChange={_onChange}
-          value={values.modelName}
-        />
-      </div>
+      <div className={styles.modal}>
+        <div>
+          <label htmlFor="modelName">
+            Model Name {required.modelName && <Badge danger>Required</Badge>}
+          </label>
+          <Input
+            name="modelName"
+            placeholder="First Model? Try Post"
+            hasError={required.modelName}
+            onChange={_onChange}
+            value={values.modelName}
+          />
+        </div>
 
-      <div>
-        <label htmlFor="identifier">
-          Identifier {required.identifier && <Badge danger>Required</Badge>}
-        </label>
-        <Input
-          name="identifier"
-          value={values.identifier}
-          hasError={required.identifier}
-          onChange={onChange}
-        />
-      </div>
+        <div>
+          <label htmlFor="identifier">
+            Identifier {required.identifier && <Badge danger>Required</Badge>}
+          </label>
+          <Input
+            name="identifier"
+            value={values.identifier}
+            hasError={required.identifier}
+            onChange={_onChange}
+          />
+        </div>
 
-      <div>
-        <label htmlFor="description">Description</label>
-        <Input
-          name="description"
-          placeholder="Small description about your new app"
-          onChange={onChange}
-          value={values.description}
-        />
-      </div>
+        <div>
+          <label htmlFor="description">Description</label>
+          <Input
+            name="description"
+            placeholder="Small description about your new app"
+            onChange={_onChange}
+            value={values.description}
+          />
+        </div>
 
-      <div>
-        <DarkButton onClick={handleSubmit}>Create Model</DarkButton>
+        <div className={styles.buttons}>
+          <LinkButton onClick={onClose}>Cancel</LinkButton>
+          <PrimaryButton onClick={handleSubmit} isLoading={loading} loadingText="Creating Model...">
+            Create Model
+          </PrimaryButton>
+        </div>
       </div>
     </Modal>
   )
