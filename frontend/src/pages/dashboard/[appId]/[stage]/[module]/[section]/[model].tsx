@@ -23,7 +23,8 @@ const Page: FC = (): ReactElement => {
   // Executing Queries
   const { data: dataModel, loading: loadingModel } = useQuery(GET_MODEL_QUERY, {
     variables: {
-      identifier: model
+      identifier: model,
+      appId
     }
   })
   const { data: dataDeclarations, loading: loadingDeclarations } = useQuery(GET_DECLARATIONS_QUERY)

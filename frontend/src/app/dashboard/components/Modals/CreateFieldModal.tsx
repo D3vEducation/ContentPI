@@ -1,7 +1,7 @@
 // Dependencies
 import React, { FC, ReactElement, useContext, useState, useEffect, memo } from 'react'
 import { Modal, Badge, Input, PrimaryButton, LinkButton, Toggle } from 'fogg-ui'
-import { camelCase, getEmptyValues, redirectTo, waitFor } from 'fogg-utils'
+import { camelCase, getEmptyValues, redirectTo, getParamsFromUrl, waitFor } from 'fogg-utils'
 import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 
 // Hooks
@@ -25,6 +25,8 @@ interface iProps {
 }
 
 const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactElement => {
+  const { appId } = getParamsFromUrl(['page', 'appId', 'stage'])
+
   // States
   const initialValues = {
     model: options.data.modelIdentifier,
@@ -105,7 +107,8 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
         // Creating a new field
         getModelQueryThenCreateField({
           variables: {
-            identifier: values.model
+            identifier: values.model,
+            appId
           }
         })
       })

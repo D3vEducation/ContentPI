@@ -30,7 +30,8 @@ const Declarations: FC<iProps> = ({ declarations, model }): ReactElement => {
           options={{
             data: {
               type: fieldType,
-              modelIdentifier: model.identifier
+              modelIdentifier: model.identifier,
+              appId: model.appId
             },
             position: 'top',
             height: '705px',

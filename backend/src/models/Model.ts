@@ -11,13 +11,11 @@ export default (sequelize: any, DataTypes: iDataTypes): iModel => {
     },
     modelName: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
+      allowNull: false
     },
     identifier: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
+      allowNull: false
     },
     description: {
       type: DataTypes.STRING,

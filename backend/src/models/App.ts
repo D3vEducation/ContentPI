@@ -35,7 +35,8 @@ export default (sequelize: any, DataTypes: iDataTypes): iApp => {
         name: 'appId',
         field: 'app_id'
       },
-      as: 'models'
+      as: 'models',
+      onDelete: 'CASCADE'
     })
   }
 

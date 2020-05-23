@@ -2,8 +2,8 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query getModel($identifier: String!) {
-    getModel(identifier: $identifier) {
+  query getModel($identifier: String!, $appId: UUID!) {
+    getModel(identifier: $identifier, appId: $appId) {
       id
       appId
       modelName

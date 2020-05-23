@@ -4,6 +4,7 @@ import { Toggle, LinkButton, Menu } from 'fogg-ui'
 
 // Components
 import DeleteModelModal from '@dashboard/components/Modals/DeleteModelModal'
+import EditModelModal from '@dashboard/components/Modals/EditModelModal'
 
 // Shared components
 import MainLayout from '@layouts/main/MainLayout'
@@ -22,15 +23,21 @@ const Schema: FC<iProps> = ({ data }): ReactElement => {
   const [showSystem, setShowSystem] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [isOpenDelete, setIsOpenDelete] = useState(false)
+  const [isOpenEdit, setIsOpenEdit] = useState(false)
   const [modalData, setModalData] = useState({})
 
   // Methods
   const handleDeleteModal = (): void => setIsOpenDelete(!isOpenDelete)
+  const handleEditModal = (): void => setIsOpenEdit(!isOpenEdit)
   const handleMenu = (): void => setIsOpen(!isOpen)
   const handleDelete = (id: any): any => {
     handleMenu()
     handleDeleteModal()
     setModalData({ id })
+  }
+  const handleEdit = (): any => {
+    handleMenu()
+    handleEditModal()
   }
 
   // Data
@@ -43,6 +50,17 @@ const Schema: FC<iProps> = ({ data }): ReactElement => {
 
   return (
     <>
+      <EditModelModal
+        label="Edit Model"
+        isOpen={isOpenEdit}
+        onClose={handleEditModal}
+        options={{
+          data: { model: getModel },
+          position: 'center',
+          width: '400px'
+        }}
+      />
+
       <DeleteModelModal
         label="Delete Model"
         isOpen={isOpenDelete}
@@ -58,7 +76,7 @@ const Schema: FC<iProps> = ({ data }): ReactElement => {
         <div className={styles.schema}>
           <div className={styles.model}>
             <h3 className={styles.name}>{getModel.modelName}</h3>{' '}
-            <span className={styles.identifier}>#{getModel.identifier}</span>
+            <span className={styles.identifier}>#{getModel.identifier}</span>{' '}
             <LinkButton onClick={handleMenu}>•••</LinkButton>
             <Menu
               isOpen={isOpen}
@@ -66,7 +84,7 @@ const Schema: FC<iProps> = ({ data }): ReactElement => {
                 {
                   option: 'Edit Model',
                   icon: 'edit',
-                  onClick: (): void => console.log('Edit')
+                  onClick: (): void => handleEdit()
                 },
                 {
                   option: 'Delete Model',
