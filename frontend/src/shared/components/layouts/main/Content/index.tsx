@@ -1,7 +1,7 @@
 // Dependencies
 import React, { FC, ReactElement, memo } from 'react'
 
-// components
+// Components
 import Header from '../Header'
 import Footer from '../Footer'
 
@@ -12,16 +12,21 @@ import styles from './Content.scss'
 interface iProps {
   header?: boolean
   footer?: boolean
+  noWrapper?: boolean
   children: ReactElement
 }
 
-const Content: FC<iProps> = ({ children, header, footer }): ReactElement => (
+const Content: FC<iProps> = ({ children, header, footer, noWrapper }): ReactElement => (
   <section className={styles.content}>
     {header && <Header />}
 
-    <div className={styles.container}>
-      <div className={styles.wrapper}>{children}</div>
-    </div>
+    {!noWrapper && (
+      <div className={styles.container}>
+        <div className={styles.wrapper}>{children}</div>
+      </div>
+    )}
+
+    {noWrapper && <div className={styles.container}>{children}</div>}
 
     {footer && <Footer />}
   </section>

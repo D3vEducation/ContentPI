@@ -17,6 +17,7 @@ interface iProps {
   content?: boolean
   footer?: boolean
   title?: string
+  noWrapper?: boolean
 }
 
 const Layout: FC<iProps> = ({
@@ -25,7 +26,8 @@ const Layout: FC<iProps> = ({
   sidebar,
   content,
   footer,
-  title
+  title,
+  noWrapper
 }): ReactElement => {
   return (
     <>
@@ -37,7 +39,7 @@ const Layout: FC<iProps> = ({
       <div className={styles.layout}>
         {sidebar && <Sidebar />}
         {content && (
-          <Content header={header} footer={footer}>
+          <Content header={header} footer={footer} noWrapper={noWrapper}>
             {children}
           </Content>
         )}

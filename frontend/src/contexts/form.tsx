@@ -9,7 +9,7 @@ interface iFormContext {
 
 interface iProps {
   children: ReactElement
-  initialValues?: object
+  initialValues?: any
 }
 
 export const FormContext = createContext<iFormContext>({

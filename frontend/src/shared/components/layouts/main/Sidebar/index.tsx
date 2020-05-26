@@ -65,11 +65,13 @@ const Sidebar: FC = (): ReactElement => {
             </Link>
           </li>
 
-          <li>
-            <Link href="/dashboard/playground" title="Playground">
-              <Icon type="fas fa-play" />
-            </Link>
-          </li>
+          {getAppById && (
+            <li>
+              <Link href={`/dashboard/${getAppById.id}/master/playground`} title="Playground">
+                <Icon type="fas fa-play" />
+              </Link>
+            </li>
+          )}
 
           <li>
             <Link href="/logout?redirectTo=/dashboard" title="Logout">
@@ -92,7 +94,7 @@ const Sidebar: FC = (): ReactElement => {
 
         <div className={styles.subOptions}>
           {sidebar === 'model' && <ModelSidebar app={getAppById} />}
-          {sidebar === 'content' && <ContentSidebar />}
+          {sidebar === 'content' && <ContentSidebar app={getAppById} />}
         </div>
       </section>
     </aside>

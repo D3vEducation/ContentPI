@@ -1,5 +1,5 @@
 // Dependencies
-import React, { FC, ReactElement, useContext, useState, useEffect, memo } from 'react'
+import React, { FC, ReactElement, useContext, useState, memo } from 'react'
 import { Modal, Badge, Input, PrimaryButton, LinkButton } from 'fogg-ui'
 import { redirectTo, getParamsFromUrl, camelCase, getEmptyValues, waitFor } from 'fogg-utils'
 import { useMutation } from '@apollo/react-hooks'

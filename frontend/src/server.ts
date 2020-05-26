@@ -50,7 +50,7 @@ nextApp.prepare().then(() => {
   })
 
   app.use(
-    '/dashboard/playground',
+    '/dashboard/:appId/:stage?/playground',
     isConnected(true, ['god', 'admin'], '/login?redirectTo=/dashboard'),
     (req: any, res: any) => {
       return nextApp.render(req, res, '/dashboard/playground')
