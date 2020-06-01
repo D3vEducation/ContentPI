@@ -15,11 +15,7 @@ import { doLogin, getUserBy } from '../../lib/auth'
 
 export default {
   Query: {
-    getUsers: (
-      _: object,
-      _args: object,
-      { models }: { models: iModels }
-    ): iUser[] =>
+    getUsers: (_: any, _args: any, { models }: { models: iModels }): iUser[] =>
       models.User.findAll({
         include: [
           {
@@ -29,7 +25,7 @@ export default {
         ]
       }),
     getUserData: async (
-      _: object,
+      _: any,
       { at }: { at: string },
       { models }: { models: iModels }
     ): Promise<any> => {
@@ -70,12 +66,12 @@ export default {
   },
   Mutation: {
     createUser: (
-      _: object,
+      _: any,
       { input }: { input: iCreateUserInput },
       { models }: { models: iModels }
     ): iUser => models.User.create({ ...input }),
     login: (
-      _: object,
+      _: any,
       { input }: { input: iLoginInput },
       { models }: { models: iModels }
     ): Promise<iAuthPayload> => doLogin(input.email, input.password, models)

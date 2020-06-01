@@ -14,6 +14,7 @@ type Field {
   createdAt: Datetime!
   updatedAt: Datetime!
   modelId: UUID!
+  values: [Value!]
 }
 
 type Query {

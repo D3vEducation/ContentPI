@@ -21,6 +21,11 @@ export default gql`
         isUnique
         isSystem
         isPrimaryKey
+        values {
+          id
+          entry
+          value
+        }
       }
     }
   }

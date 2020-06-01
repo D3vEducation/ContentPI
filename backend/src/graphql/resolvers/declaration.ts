@@ -8,14 +8,14 @@ import {
 export default {
   Query: {
     getDeclarations: (
-      _: object,
-      _args: object,
+      _: any,
+      _args: any,
       { models }: { models: iModels }
     ): iDeclaration[] => models.Declaration.findAll()
   },
   Mutation: {
     createDeclaration: (
-      _: object,
+      _: any,
       { input }: { input: iCreateDeclarationInput },
       { models }: { models: iModels }
     ): iDeclaration => models.Declaration.create({ ...input })

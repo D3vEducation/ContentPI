@@ -4,19 +4,19 @@ import { iField, iCreateFieldInput, iModels } from '../../interfaces'
 export default {
   Query: {
     getFieldsByModelId: (
-      _: object,
+      _: any,
       { id }: { id: string },
       { models }: { models: iModels }
     ): iField[] => models.Field.findByPk(id)
   },
   Mutation: {
     createField: (
-      _: object,
+      _: any,
       { input }: { input: iCreateFieldInput },
       { models }: { models: iModels }
     ): iField => models.Field.create({ ...input }),
     deleteField: async (
-      _: object,
+      _: any,
       { id }: { id: string },
       { models }: { models: iModels }
     ): Promise<any> => {
@@ -30,7 +30,7 @@ export default {
       return null
     },
     editField: async (
-      _: object,
+      _: any,
       { id, input }: { id: string; input: iCreateFieldInput },
       { models }: { models: iModels }
     ): Promise<any> => {

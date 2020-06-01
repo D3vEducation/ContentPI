@@ -3,11 +3,7 @@ import { iApp, iCreateAppInput, iModels } from '../../interfaces'
 
 export default {
   Query: {
-    getApps: (
-      _: object,
-      _args: object,
-      { models }: { models: iModels }
-    ): iApp[] =>
+    getApps: (_: any, _args: any, { models }: { models: iModels }): iApp[] =>
       models.App.findAll({
         include: [
           {
@@ -17,7 +13,7 @@ export default {
         ]
       }),
     getAppById: async (
-      _: object,
+      _: any,
       { id }: { id: string },
       { models }: { models: iModels }
     ): Promise<iApp> => {
@@ -38,7 +34,7 @@ export default {
   },
   Mutation: {
     createApp: (
-      _: object,
+      _: any,
       { input }: { input: iCreateAppInput },
       { models }: { models: iModels }
     ): iApp => models.App.create({ ...input })

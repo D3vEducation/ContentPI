@@ -9,8 +9,8 @@ import {
 export default {
   Query: {
     getModels: (
-      _: object,
-      _args: object,
+      _: any,
+      _args: any,
       { models }: { models: iModels }
     ): iModel[] =>
       models.Model.findAll({
@@ -22,7 +22,7 @@ export default {
         ]
       }),
     getModel: async (
-      _: object,
+      _: any,
       { identifier, appId }: { identifier: string; appId: string },
       { models }: { models: iModels }
     ): Promise<iModel> => {
@@ -34,7 +34,13 @@ export default {
         include: [
           {
             model: models.Field,
-            as: 'fields'
+            as: 'fields',
+            include: [
+              {
+                model: models.Value,
+                as: 'values'
+              }
+            ]
           }
         ]
       })
@@ -49,13 +55,27 @@ export default {
   },
   Mutation: {
     createModel: async (
-      _: object,
+      _: any,
       { input }: { input: iCreateModelInput },
       { models }: { models: iModels }
     ): Promise<iModel> => {
       const newModel = await models.Model.create({ ...input })
 
       const systemFields = [
+        {
+          modelId: newModel.id,
+          fieldName: 'Status',
+          identifier: 'status',
+          type: 'Status',
+          isHide: false,
+          isMedia: false,
+          isUnique: false,
+          isRequired: true,
+          isPrimaryKey: false,
+          isSystem: true,
+          description: 'The status of the record',
+          defaultValue: 'draft'
+        },
         {
           modelId: newModel.id,
           fieldName: 'ID',
@@ -94,20 +114,6 @@ export default {
           isPrimaryKey: false,
           isSystem: true,
           description: 'The time the record was updated'
-        },
-        {
-          modelId: newModel.id,
-          fieldName: 'Status',
-          identifier: 'status',
-          type: 'Status',
-          isHide: false,
-          isMedia: false,
-          isUnique: false,
-          isRequired: true,
-          isPrimaryKey: false,
-          isSystem: true,
-          description: 'The status of the record',
-          defaultValue: 'draft'
         }
       ]
 
@@ -117,7 +123,7 @@ export default {
       return newModel
     },
     deleteModel: async (
-      _: object,
+      _: any,
       { id }: { id: string },
       { models }: { models: iModels }
     ): Promise<any> => {
@@ -131,7 +137,7 @@ export default {
       return null
     },
     editModel: async (
-      _: object,
+      _: any,
       { id, input }: { id: string; input: iEditModelInput },
       { models }: { models: iModels }
     ): Promise<any> => {
