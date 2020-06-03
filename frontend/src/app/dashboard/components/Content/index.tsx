@@ -31,7 +31,7 @@ const Content: FC<iProps> = ({ data, router }): ReactElement => {
     <MainLayout title="Schema" header content footer sidebar noWrapper>
       <div className={styles.content}>
         <div className={styles.model}>
-          <PrimaryButton>+ Create new</PrimaryButton>
+          <PrimaryButton href={`${url}/create`}>+ New Entry</PrimaryButton>
         </div>
 
         <div className={styles.rows}>

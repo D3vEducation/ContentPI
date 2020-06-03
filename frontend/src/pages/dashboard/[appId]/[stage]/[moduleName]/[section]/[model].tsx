@@ -1,5 +1,5 @@
 // Dependencies
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactElement, createElement } from 'react'
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/react-hooks'
 
@@ -10,6 +10,8 @@ import FormProvider from '@contexts/form'
 
 // Components
 import Schema from '@dashboard/components/Schema'
+import Content from '@dashboard/components/Content'
+import PageNotFound from '@dashboard/components/Error/PageNotFound'
 
 // Queries
 import GET_MODEL_QUERY from '@graphql/models/getModel.query'
@@ -18,7 +20,7 @@ import GET_DECLARATIONS_QUERY from '@graphql/declarations/getDeclarations.query'
 const Page: FC = (): ReactElement => {
   // Router
   const router = useRouter()
-  const { appId, model } = router.query
+  const { appId, moduleName, model } = router.query
 
   // Executing Queries
   const { data: dataModel, loading: loadingModel } = useQuery(GET_MODEL_QUERY, {
@@ -39,19 +41,30 @@ const Page: FC = (): ReactElement => {
     return <div />
   }
 
+  // Pages components
+  const Pages: any = {
+    schema: Schema,
+    content: Content
+  }
+
+  const renderPage = (page: any) => {
+    if (Pages[page] && dataModel && dataDeclarations) {
+      return createElement(Pages[page], {
+        router: router.query,
+        data: {
+          ...dataModel,
+          ...dataDeclarations
+        }
+      })
+    }
+
+    return <PageNotFound />
+  }
+
   return (
     <UserProvider>
       <AppProvider id={appId}>
-        <FormProvider>
-          {dataModel && dataDeclarations && (
-            <Schema
-              data={{
-                ...dataModel,
-                ...dataDeclarations
-              }}
-            />
-          )}
-        </FormProvider>
+        <FormProvider>{renderPage(moduleName)}</FormProvider>
       </AppProvider>
     </UserProvider>
   )
