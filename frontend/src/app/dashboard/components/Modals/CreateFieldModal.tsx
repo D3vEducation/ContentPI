@@ -196,16 +196,6 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
           <Toggle
             color="#42f598"
             type="round"
-            label="Is System Field?"
-            onChange={(): void => setValue('isSystem', !values.isSystem, setValues)}
-            checked={values.isSystem}
-          />
-        </div>
-
-        <div style={{ marginBottom: '20px' }}>
-          <Toggle
-            color="#42f598"
-            type="round"
             label="Hide field"
             onChange={(): void => setValue('isHide', !values.isHide, setValues)}
             checked={values.isHide}

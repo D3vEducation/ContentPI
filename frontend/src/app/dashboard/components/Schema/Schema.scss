@@ -4,11 +4,25 @@
   padding-left: 10px;
 
   .model {
-    position: relative;
+    display: flex;
+    align-items: center;
+
+    h3 {
+      margin-right: 10px;
+    }
+
+    .identifier {
+      color: $frenchGray;
+      margin-right: 10px;
+    }
+
+    .button {
+      margin-right: 10px;
+    }
 
     div {
-      top: 45px;
-      left: 96px;
+      top: 160px;
+      left: 205px;
     }
 
     .name {
@@ -18,13 +32,28 @@
       font-weight: 500;
     }
 
-    .identifier {
-      color: $frenchGray;
+    .editContent {
+      a {
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 10px;
+        padding-right: 10px;
+        color: $cerulean;
+        font-size: 14px;
+        border-radius: 0.25rem;
+
+        &:hover {
+          color: rgb(0, 174, 239);
+          background-color: rgb(238, 238, 238);
+        }
+      }
     }
   }
 
   .toggle {
-    margin: 20px 0px;
+    margin-top: 0px;
+    margin-bottom: 20px;
   }
 
   .wrapper {

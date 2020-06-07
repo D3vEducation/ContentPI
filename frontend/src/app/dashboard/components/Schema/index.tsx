@@ -1,6 +1,6 @@
 // Dependencies
 import React, { FC, ReactElement, useState, memo } from 'react'
-import { Toggle, LinkButton, Menu } from 'fogg-ui'
+import { Toggle, LinkButton, Menu, Icon } from 'fogg-ui'
 
 // Components
 import DeleteModelModal from '@dashboard/components/Modals/DeleteModelModal'
@@ -8,6 +8,7 @@ import EditModelModal from '@dashboard/components/Modals/EditModelModal'
 
 // Shared components
 import MainLayout from '@layouts/main/MainLayout'
+import Link from '@ui/Link'
 import Fields from './Fields'
 import Declarations from './Declarations'
 
@@ -77,7 +78,9 @@ const Schema: FC<iProps> = ({ data }): ReactElement => {
           <div className={styles.model}>
             <h3 className={styles.name}>{getModel.modelName}</h3>{' '}
             <span className={styles.identifier}>#{getModel.identifier}</span>{' '}
-            <LinkButton onClick={handleMenu}>•••</LinkButton>
+            <LinkButton className={styles.button} onClick={handleMenu}>
+              •••
+            </LinkButton>
             <Menu
               isOpen={isOpen}
               items={[
@@ -93,6 +96,15 @@ const Schema: FC<iProps> = ({ data }): ReactElement => {
                 }
               ]}
             />
+            <div className={styles.editContent}>
+              <Link
+                href={`/dashboard/${getModel.appId}/master/content/model/${getModel.identifier}`}
+              >
+                <>
+                  <Icon type="fas fa-edit" /> Go to content editing
+                </>
+              </Link>
+            </div>
           </div>
 
           <div className={styles.toggle}>

@@ -1,12 +1,17 @@
 // Interfaces
 import { iValue, iCreateValueInput, iModels } from '../../interfaces'
+import model from './model'
 
 export default {
   Mutation: {
-    createValue: (
+    createValues: async (
       _: any,
-      { input }: { input: iCreateValueInput },
+      { input }: { input: iCreateValueInput[] },
       { models }: { models: iModels }
-    ): iValue => models.Value.create({ ...input })
+    ): Promise<iValue[]> => {
+      const insertedValues = await models.Value.bulkCreate(input)
+
+      return insertedValues
+    }
   }
 }

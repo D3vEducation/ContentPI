@@ -5,7 +5,7 @@ type Value {
 }
 
 type Mutation {
-  createValue(input: CreateValueInput): Value!
+  createValues(input: [CreateValueInput]): [Value!]
 }
 
 input CreateValueInput {

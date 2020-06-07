@@ -25,18 +25,18 @@ const Content: FC<iProps> = ({ data, router }): ReactElement => {
   }
 
   // Url for records
-  const url = `/dashboard/${appId}/${stage}/content/${section}/${model}`
+  const url = `/dashboard/${appId}/${stage}`
 
   return (
-    <MainLayout title="Schema" header content footer sidebar noWrapper>
+    <MainLayout title="Content" header content footer sidebar noWrapper>
       <div className={styles.content}>
         <div className={styles.model}>
-          <PrimaryButton href={`${url}/create`}>+ New Entry</PrimaryButton>
+          <PrimaryButton href={`${url}/create/${section}/${model}`}>+ New Entry</PrimaryButton>
         </div>
 
         <div className={styles.rows}>
           <Table
-            url={url}
+            url={`${url}/edit/${section}/${model}`}
             data={getValuesForTable(getModel.fields)}
             onDelete={(ids: any): void => console.log('Delete', ids)}
             onPublish={(ids: any): void => console.log('Publish', ids)}

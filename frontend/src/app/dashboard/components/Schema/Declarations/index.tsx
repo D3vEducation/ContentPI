@@ -34,7 +34,7 @@ const Declarations: FC<iProps> = ({ declarations, model }): ReactElement => {
               appId: model.appId
             },
             position: 'top',
-            height: '705px',
+            height: '650px',
             width: '600px'
           }}
         />

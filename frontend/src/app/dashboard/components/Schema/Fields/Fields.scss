@@ -4,7 +4,11 @@
   display: flex;
   flex-flow: column;
   margin-top: 0px;
-  width: 100%;
+  width: 75%;
+
+  @include minBreakpoint(1300px) {
+    width: 88%;
+  }
 
   .field {
     box-sizing: border-box;

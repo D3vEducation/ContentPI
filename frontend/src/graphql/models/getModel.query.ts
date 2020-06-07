@@ -13,6 +13,7 @@ export default gql`
         id
         type
         fieldName
+        defaultValue
         identifier
         description
         isHide
