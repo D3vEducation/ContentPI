@@ -37,6 +37,10 @@ export interface iValue extends Value, Sequelize {
 
 export interface iCreateValueInput extends Value {}
 
+export interface iValueInput {
+  value: string
+}
+
 // Field
 export interface iField extends Field, Sequelize {
   id: string

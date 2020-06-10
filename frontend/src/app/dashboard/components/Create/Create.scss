@@ -14,11 +14,11 @@
     border-bottom: 1px solid $gallery;
     height: 100vh;
     padding-top: 10px;
-    width: 380px;
+    width: 420px;
     position: relative;
 
     @include maxBreakpoint(1024px) {
-      width: 450px;
+      width: 519px;
     }
 
     .wrapper {
@@ -93,15 +93,16 @@
       -webkit-transition-property: right, left;
       -webkit-transition-duration: 1s;
       position: absolute;
-      right: calc(100% - 800px);
+      right: calc(100% - 900px);
+      bottom: 150px;
 
       &.show {
         @include minBreakpoint(1024px) {
-          right: calc(100% - 302px);
+          right: calc(100% - 350px);
         }
 
         @include minBreakpoint(1280px) {
-          right: calc(100% - 400px);
+          right: calc(100% - 450px);
         }
 
         @include tablet {

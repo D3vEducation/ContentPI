@@ -14,6 +14,7 @@ import { FormContext } from '@contexts/form'
 
 // Mutation
 import CREATE_VALUES_MUTATION from '@graphql/values/createValues.mutation'
+import FIND_UNIQUE_VALUES_MUTATION from '@graphql/values/findUniqueValues.mutation'
 
 // Styles
 import styles from './Create.scss'
@@ -37,6 +38,7 @@ const Create: FC<iProps> = ({ data }): ReactElement => {
   const requiredValues: any = {}
   const systemFields = fields.filter((field: any) => field.isSystem)
   const customFields = fields.filter((field: any) => !field.isSystem)
+  const uniqueFields = fields.filter((field: any) => field.isUnique && !field.isSystem)
 
   customFields.forEach((field: any) => {
     initialValues[field.identifier] = ''
@@ -49,6 +51,7 @@ const Create: FC<iProps> = ({ data }): ReactElement => {
   // States
   const [active, setActive] = useState('')
   const [alert, setAlert] = useState('')
+  const [alertType, setAlertType] = useState('success')
   const [showAlert, setShowAlert] = useState(false)
   const [values, setValues] = useState(initialValues)
   const [required, setRequired] = useState(requiredValues)
@@ -57,6 +60,7 @@ const Create: FC<iProps> = ({ data }): ReactElement => {
 
   // Mutations
   const [createValuesMutation] = useMutation(CREATE_VALUES_MUTATION)
+  const [findUniqueValuesMutation] = useMutation(FIND_UNIQUE_VALUES_MUTATION)
 
   // Contexts
   const { onChange, setValue } = useContext(FormContext)
@@ -93,6 +97,14 @@ const Create: FC<iProps> = ({ data }): ReactElement => {
         setPublishLoading(true)
       }
 
+      const uniqueValues = uniqueFields.map((field: any) => ({ value: values[field.identifier] }))
+
+      const { data: dataFindUniqueValues } = await findUniqueValuesMutation({
+        variables: {
+          input: uniqueValues
+        }
+      })
+
       waitFor(2).then(async () => {
         if (action === 'save') {
           setSaveLoading(false)
@@ -100,35 +112,46 @@ const Create: FC<iProps> = ({ data }): ReactElement => {
           setPublishLoading(false)
         }
 
-        // Setting up System Field values
-        values.id = newId
-        values.status = action === 'save' ? 'Draft' : 'Published'
-        values.createdAt = moment().format()
-        values.updatedAt = moment().format()
-
-        Object.keys(values).forEach((fieldIdentifier: string) => {
-          const valueField = fields.find((field: any) => field.identifier === fieldIdentifier)
-
-          entryValues.push({
-            entry: newId,
-            fieldId: valueField.id,
-            value: values[fieldIdentifier]
-          })
-        })
-
-        const { data: dataCreateValues } = await createValuesMutation({
-          variables: {
-            values: entryValues
-          }
-        })
-
-        if (dataCreateValues) {
-          setAlert(action === 'save' ? 'Saved' : 'Published')
+        if (dataFindUniqueValues.findUniqueValues.length > 0) {
+          setAlert('This entry already exists')
           setShowAlert(true)
+          setAlertType('danger')
 
           waitFor(2).then(() => {
             setShowAlert(false)
           })
+        } else {
+          // Setting up System Field values
+          values.id = newId
+          values.status = action === 'save' ? 'Draft' : 'Published'
+          values.createdAt = moment().format()
+          values.updatedAt = moment().format()
+
+          Object.keys(values).forEach((fieldIdentifier: string) => {
+            const valueField = fields.find((field: any) => field.identifier === fieldIdentifier)
+
+            entryValues.push({
+              entry: newId,
+              fieldId: valueField.id,
+              value: values[fieldIdentifier]
+            })
+          })
+
+          const { data: dataCreateValues } = await createValuesMutation({
+            variables: {
+              values: entryValues
+            }
+          })
+
+          if (dataCreateValues) {
+            setAlert(action === 'save' ? 'Saved' : 'Published')
+            setShowAlert(true)
+            setAlertType('success')
+
+            waitFor(2).then(() => {
+              setShowAlert(false)
+            })
+          }
         }
       })
     }
@@ -251,7 +274,7 @@ const Create: FC<iProps> = ({ data }): ReactElement => {
           </div>
 
           <div className={cx(styles.alert, showAlert ? styles.show : '')}>
-            <Alert success flat>
+            <Alert success={alertType === 'success'} danger={alertType === 'danger'} flat>
               {alert}
             </Alert>
           </div>
