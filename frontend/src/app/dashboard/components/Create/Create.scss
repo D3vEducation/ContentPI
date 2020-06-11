@@ -9,7 +9,7 @@
   width: 100%;
 
   .sidebar {
-    background-color: #fafafc;
+    background-color: $whisper;
     border-left: 1px solid $gallery;
     border-bottom: 1px solid $gallery;
     height: 100vh;
@@ -47,9 +47,9 @@
 
           .label {
             display: inline-block;
-            background-color: #eee;
+            background-color: $gallery;
             border-radius: 3px;
-            color: #888;
+            color: $gray;
             font-size: 11px;
             padding: 5px 6px;
             margin-top: -5px;
@@ -70,17 +70,26 @@
           }
 
           .status {
-            color: #ffb914;
+            color: $mySin;
             text-transform: uppercase;
+
+            &.published {
+              color: $mountainMeadow;
+            }
           }
 
-          .createdAt {
+          .createdAt,
+          .updatedAt {
             @extend .label;
-            width: 118px;
+            width: 160px;
 
             @include tablet {
               width: 100px;
             }
+          }
+
+          .empty {
+            display: none;
           }
         }
       }
@@ -114,8 +123,8 @@
 
   .id {
     display: inline-block;
-    background-color: #eee;
-    color: #888;
+    background-color: $gallery;
+    color: $gray;
     font-size: 11px;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -126,10 +135,27 @@
   .fields {
     font-size: 13px;
     line-height: 24px;
-    color: #8091a5;
+    color: $regentGray;
     width: 100%;
     max-width: 800px;
     margin-top: 20px;
+
+    .badge {
+      padding: 6px;
+      margin-right: 10px;
+    }
+
+    .goBack {
+      display: flex;
+      align-items: center;
+      color: $tuna;
+      font-size: 24px;
+      margin-bottom: 40px;
+
+      a {
+        color: $tuna;
+      }
+    }
 
     .field {
       border-left: 3px solid $gallery;
@@ -159,8 +185,8 @@
         }
 
         .red {
-          color: red;
-          background-color: #ffe9e9;
+          color: $red;
+          background-color: $fairPink;
         }
       }
 
