@@ -6,6 +6,9 @@ import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 import { useMutation } from '@apollo/react-hooks'
 
+// Constants
+import { CONTENT_LINK } from '@constants/links'
+
 // Shared components
 import MainLayout from '@layouts/main/MainLayout'
 import Link from '@ui/Link'
@@ -28,7 +31,7 @@ interface iProps {
 // Setting a unique ID
 const newId = uuidv4()
 
-const Create: FC<iProps> = ({ data }): ReactElement => {
+const Create: FC<iProps> = ({ data, router }): ReactElement => {
   // Data
   const { getModel } = data
 
@@ -185,14 +188,11 @@ const Create: FC<iProps> = ({ data }): ReactElement => {
   }
 
   return (
-    <MainLayout title="Create new Entry" header content footer sidebar noWrapper>
+    <MainLayout title="Create new Entry" header content footer sidebar noWrapper router={router}>
       <div className={styles.create}>
         <div className={styles.fields}>
           <div className={styles.goBack}>
-            <Link
-              href={`/dashboard/${getModel.appId}/master/content/model/${getModel.identifier}`}
-              title={`Go back to ${getModel.modelName}`}
-            >
+            <Link href={CONTENT_LINK(router)} title={`Go back to ${getModel.modelName}`}>
               <Icon type="fas fa-chevron-left" />
             </Link>
             &nbsp;&nbsp;&nbsp;

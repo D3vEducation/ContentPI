@@ -19,7 +19,7 @@ interface iProps {
   data: any
 }
 
-const Schema: FC<iProps> = ({ data }): ReactElement => {
+const Schema: FC<iProps> = ({ data, router }): ReactElement => {
   // State
   const [showSystem, setShowSystem] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
@@ -73,7 +73,7 @@ const Schema: FC<iProps> = ({ data }): ReactElement => {
         }}
       />
 
-      <MainLayout title="Schema" header content footer sidebar>
+      <MainLayout title="Schema" header content footer sidebar router={router}>
         <div className={styles.schema}>
           <div className={styles.model}>
             <h3 className={styles.name}>{getModel.modelName}</h3>{' '}

@@ -65,7 +65,7 @@ nextApp.prepare().then(() => {
 
       const url = buildUrl(['dashboard', appId, stage, moduleName, section, model])
 
-      return nextApp.render(req, res, `/${url}`)
+      return nextApp.render(req, res, `/${url}`, req.query)
     }
   )
 

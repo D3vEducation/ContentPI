@@ -17,7 +17,12 @@ import AppIcon from '../AppIcon'
 // Styles
 import styles from './Sidebar.scss'
 
-const Sidebar: FC = (): ReactElement => {
+// Interface
+interface iProps {
+  router: any
+}
+
+const Sidebar: FC<iProps> = ({ router }): ReactElement => {
   // State
   const [open, setOpen] = useState(false)
   const [sidebar, setSidebar] = useState('')
@@ -65,14 +70,6 @@ const Sidebar: FC = (): ReactElement => {
             </Link>
           </li>
 
-          {getAppById && (
-            <li>
-              <Link href={`/dashboard/${getAppById.id}/master/playground`} title="Playground">
-                <Icon type="fas fa-play" />
-              </Link>
-            </li>
-          )}
-
           <li>
             <Link href="/logout?redirectTo=/dashboard" title="Logout">
               <Icon type="fas fa-power-off" />
@@ -93,8 +90,8 @@ const Sidebar: FC = (): ReactElement => {
         </div>
 
         <div className={styles.subOptions}>
-          {sidebar === 'model' && <ModelSidebar app={getAppById} />}
-          {sidebar === 'content' && <ContentSidebar app={getAppById} />}
+          {sidebar === 'model' && <ModelSidebar app={getAppById} router={router} />}
+          {sidebar === 'content' && <ContentSidebar app={getAppById} router={router} />}
         </div>
       </section>
     </aside>

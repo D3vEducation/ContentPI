@@ -1,6 +1,9 @@
 // Dependencies
 import React, { FC, ReactElement, memo } from 'react'
 
+// Constants
+import { CONTENT_LINK } from '@constants/links'
+
 // Component
 import Link from '@ui/Link'
 
@@ -9,9 +12,10 @@ import styles from './ContentSidebar.scss'
 
 interface iProps {
   app: any
+  router: any
 }
 
-const ContentSidebar: FC<iProps> = ({ app }): ReactElement => {
+const ContentSidebar: FC<iProps> = ({ app, router }): ReactElement => {
   // Models
   const { models = [] } = app
 
@@ -25,9 +29,7 @@ const ContentSidebar: FC<iProps> = ({ app }): ReactElement => {
         <div className={styles.modelsWrapper}>
           {models.map((model: any) => (
             <div key={model.id}>
-              <Link href={`/dashboard/${app.id}/master/content/model/${model.identifier}`}>
-                {model.modelName}
-              </Link>
+              <Link href={CONTENT_LINK(router)}>{model.modelName}</Link>
             </div>
           ))}
         </div>

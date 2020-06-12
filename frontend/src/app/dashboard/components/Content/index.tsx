@@ -1,7 +1,10 @@
 // Dependencies
 import React, { FC, ReactElement, memo } from 'react'
-import { Table, PrimaryButton } from 'fogg-ui'
+import { Table, PrimaryButton, Pagination } from 'fogg-ui'
 import { getValuesForTable } from 'fogg-utils'
+
+// Constants
+import { CREATE_ENTRY_LINK, EDIT_ENTRY_LINK, CONTENT_LINK } from '@constants/links'
 
 // Shared components
 import MainLayout from '@layouts/main/MainLayout'
@@ -17,30 +20,45 @@ interface iProps {
 const Content: FC<iProps> = ({ data, router }): ReactElement => {
   // Data
   const { getModel, getDeclarations } = data
-  const { appId, stage, section, model } = router
+  const { page = 1 } = router
 
   // First render
   if (!getModel && !getDeclarations) {
     return <div />
   }
 
-  // Url for records
-  const url = `/dashboard/${appId}/${stage}`
+  const { body, head, rows, total } = getValuesForTable(
+    getModel.fields,
+    null,
+    'status',
+    'createdAt'
+  )
 
   return (
-    <MainLayout title="Content" header content footer sidebar noWrapper>
+    <MainLayout title="Content" header content footer sidebar noWrapper router={router}>
       <div className={styles.content}>
         <div className={styles.model}>
-          <PrimaryButton href={`${url}/create/${section}/${model}`}>+ New Entry</PrimaryButton>
+          <PrimaryButton href={CREATE_ENTRY_LINK(router)}>+ New Entry</PrimaryButton>
         </div>
 
         <div className={styles.rows}>
           <Table
-            url={`${url}/edit/${section}/${model}`}
-            data={getValuesForTable(getModel.fields)}
+            url={EDIT_ENTRY_LINK(router)}
+            data={{
+              body,
+              head,
+              rows: rows[page - 1]
+            }}
             onDelete={(ids: any): void => console.log('Delete', ids)}
             onPublish={(ids: any): void => console.log('Publish', ids)}
             onUnpublish={(ids: any): void => console.log('Unpublish', ids)}
+          />
+
+          <Pagination
+            theme="primary"
+            page={page}
+            total={total}
+            url={`${CONTENT_LINK(router)}?page=`}
           />
         </div>
       </div>

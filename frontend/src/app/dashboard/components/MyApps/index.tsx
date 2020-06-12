@@ -11,16 +11,17 @@ import styles from './MyApps.scss'
 
 interface iProps {
   dataGetApps: any
+  router: any
 }
 
-const MyApps: FC<iProps> = ({ dataGetApps }): ReactElement => {
+const MyApps: FC<iProps> = ({ dataGetApps, router }): ReactElement => {
   // First render
   if (!dataGetApps.getApps) {
     return <div />
   }
 
   return (
-    <MainLayout title="My Apps">
+    <MainLayout title="My Apps" router={router}>
       <div className={styles.myApps}>
         <div className={styles.header}>
           <div className={styles.logo}>
@@ -28,7 +29,7 @@ const MyApps: FC<iProps> = ({ dataGetApps }): ReactElement => {
           </div>
         </div>
 
-        <Cards items={dataGetApps.getApps} />
+        <Cards items={dataGetApps.getApps} router={router} />
       </div>
     </MainLayout>
   )
