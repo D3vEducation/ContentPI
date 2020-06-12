@@ -26,6 +26,7 @@ module.exports = withSass({
     config.resolve.alias['@app'] = path.resolve(dir, './src/app')
     config.resolve.alias['@dashboard'] = path.resolve(dir, './src/app/dashboard')
     config.resolve.alias['@config'] = path.resolve(dir, './src/config')
+    config.resolve.alias['@constants'] = path.resolve(dir, './src/constants')
     config.resolve.alias['@contexts'] = path.resolve(dir, './src/contexts')
     config.resolve.alias['@graphql'] = path.resolve(dir, './src/graphql')
     config.resolve.alias['@interfaces'] = path.resolve(dir, './src/interfaces')

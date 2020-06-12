@@ -1,13 +1,17 @@
 // Dependencies
 import React, { FC, ReactElement, useState, useContext, memo } from 'react'
-import { Alert, Input, TextArea, PrimaryButton, SuccessButton } from 'fogg-ui'
+import { Alert, Badge, Icon, Input, TextArea, PrimaryButton, SuccessButton } from 'fogg-ui'
 import { cx, slugFn, getEmptyValues, waitFor } from 'fogg-utils'
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 import { useMutation } from '@apollo/react-hooks'
 
+// Constants
+import { CONTENT_LINK } from '@constants/links'
+
 // Shared components
 import MainLayout from '@layouts/main/MainLayout'
+import Link from '@ui/Link'
 
 // Contexts
 import { FormContext } from '@contexts/form'
@@ -27,25 +31,44 @@ interface iProps {
 // Setting a unique ID
 const newId = uuidv4()
 
-const Create: FC<iProps> = ({ data }): ReactElement => {
+const Create: FC<iProps> = ({ data, router }): ReactElement => {
   // Data
-  const {
-    getModel: { fields }
-  } = data
+  const { getModel } = data
 
   // Fields
   const initialValues: any = {}
+  const systemInitialValues: any = {}
   const requiredValues: any = {}
-  const systemFields = fields.filter((field: any) => field.isSystem)
-  const customFields = fields.filter((field: any) => !field.isSystem)
-  const uniqueFields = fields.filter((field: any) => field.isUnique && !field.isSystem)
+  const systemFields = getModel.fields.filter((field: any) => field.isSystem)
+  const customFields = getModel.fields.filter((field: any) => !field.isSystem)
+  const uniqueFields = getModel.fields.filter((field: any) => field.isUnique && !field.isSystem)
 
+  // Custom fields
   customFields.forEach((field: any) => {
     initialValues[field.identifier] = ''
 
-    if (field.isRequired && !field.isSystem) {
+    if (field.isRequired) {
       requiredValues[field.identifier] = false
     }
+  })
+
+  // System fields
+  systemFields.forEach((field: any) => {
+    let value = field.defaultValue
+
+    if (field.identifier === 'id') {
+      value = newId
+    }
+
+    if (field.identifier === 'createdAt') {
+      value = moment().format('MM/DD/YYYY hh:mm a')
+    }
+
+    if (field.identifier === 'updatedAt') {
+      value = ''
+    }
+
+    systemInitialValues[field.identifier] = value
   })
 
   // States
@@ -54,6 +77,7 @@ const Create: FC<iProps> = ({ data }): ReactElement => {
   const [alertType, setAlertType] = useState('success')
   const [showAlert, setShowAlert] = useState(false)
   const [values, setValues] = useState(initialValues)
+  const [systemValues, setSystemValues] = useState(systemInitialValues)
   const [required, setRequired] = useState(requiredValues)
   const [saveLoading, setSaveLoading] = useState(false)
   const [publishLoading, setPublishLoading] = useState(false)
@@ -128,7 +152,9 @@ const Create: FC<iProps> = ({ data }): ReactElement => {
           values.updatedAt = moment().format()
 
           Object.keys(values).forEach((fieldIdentifier: string) => {
-            const valueField = fields.find((field: any) => field.identifier === fieldIdentifier)
+            const valueField = getModel.fields.find(
+              (field: any) => field.identifier === fieldIdentifier
+            )
 
             entryValues.push({
               entry: newId,
@@ -147,6 +173,12 @@ const Create: FC<iProps> = ({ data }): ReactElement => {
             setAlert(action === 'save' ? 'Saved' : 'Published')
             setShowAlert(true)
             setAlertType('success')
+            setSystemValues({
+              id: values.id,
+              createdAt: values.createdAt,
+              updatedAt: values.updatedAt,
+              status: values.status
+            })
 
             waitFor(2).then(() => {
               setShowAlert(false)
@@ -158,9 +190,18 @@ const Create: FC<iProps> = ({ data }): ReactElement => {
   }
 
   return (
-    <MainLayout title="Create new Entry" header content footer sidebar noWrapper>
+    <MainLayout title="Create new Entry" header content footer sidebar noWrapper router={router}>
       <div className={styles.create}>
         <div className={styles.fields}>
+          <div className={styles.goBack}>
+            <Link href={CONTENT_LINK(router)} title={`Go back to ${getModel.modelName}`}>
+              <Icon type="fas fa-chevron-left" />
+            </Link>
+            &nbsp;&nbsp;&nbsp;
+            <Badge className={styles.badge}>{getModel.modelName}</Badge>
+            {values.title ? <>{values.title}</> : <>New {getModel.modelName}</>}
+          </div>
+
           {customFields.map((field: any) => (
             <div
               key={field.id}
@@ -220,7 +261,7 @@ const Create: FC<iProps> = ({ data }): ReactElement => {
                 disabled={publishLoading}
                 loadingText="Saving..."
               >
-                Save as Draft
+                Save
               </PrimaryButton>
               <SuccessButton
                 onClick={(): any => handleSubmit('publish')}
@@ -241,29 +282,23 @@ const Create: FC<iProps> = ({ data }): ReactElement => {
               </div>
 
               {systemFields.map((systemField: any): any => {
-                let value = ''
-
                 if (systemField.identifier !== 'id') {
-                  if (systemField.identifier === 'status') {
-                    value = systemField.defaultValue
-                  }
-
-                  if (systemField.identifier === 'createdAt') {
-                    value = moment().format('MM/DD/YYYY hh:mm a')
-                  }
-
-                  if (systemField.identifier === 'updatedAt') {
-                    value = ''
-                  }
-
                   return (
                     <div key={systemField.id} className={styles.systemField}>
                       <div>
                         {systemField.identifier === 'updatedAt'
-                          ? 'Last update'
+                          ? 'Last saved'
                           : systemField.fieldName}
                       </div>
-                      <div className={styles[systemField.identifier]}>{value}</div>
+                      <div
+                        className={cx(
+                          styles[systemField.identifier],
+                          styles[systemValues[systemField.identifier].toLowerCase()],
+                          systemValues[systemField.identifier] === '' ? styles.empty : ''
+                        )}
+                      >
+                        {systemValues[systemField.identifier]}
+                      </div>
                     </div>
                   )
                 }

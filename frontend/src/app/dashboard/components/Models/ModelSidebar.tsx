@@ -2,6 +2,12 @@
 import React, { FC, ReactElement, useState, memo } from 'react'
 import { Badge } from 'fogg-ui'
 
+// Constants
+import { SCHEMA_LINK } from '@constants/links'
+
+// Components
+import Link from '@ui/Link'
+
 // Modals
 import CreateModelModal from '@dashboard/components/Modals/CreateModelModal'
 
@@ -10,9 +16,10 @@ import styles from './ModelSidebar.scss'
 
 interface iProps {
   app: any
+  router: any
 }
 
-const ModelSidebar: FC<iProps> = ({ app }): ReactElement => {
+const ModelSidebar: FC<iProps> = ({ app, router }): ReactElement => {
   // Local state
   const [isOpen, setIsOpen] = useState(false)
 
@@ -43,13 +50,16 @@ const ModelSidebar: FC<iProps> = ({ app }): ReactElement => {
         </div>
 
         <div className={styles.modelsWrapper}>
-          {models.map((model: any) => (
-            <div key={model.id}>
-              <a href={`/dashboard/${app.id}/master/schema/model/${model.identifier}`}>
-                {model.modelName}
-              </a>
-            </div>
-          ))}
+          {models.map((model: any) => {
+            router.section = 'model'
+            router.model = model.identifier
+
+            return (
+              <div key={model.id}>
+                <Link href={SCHEMA_LINK(router)}>{model.modelName}</Link>
+              </div>
+            )
+          })}
         </div>
       </div>
     </>

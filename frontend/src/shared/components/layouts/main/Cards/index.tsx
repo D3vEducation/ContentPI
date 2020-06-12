@@ -2,6 +2,9 @@
 import React, { FC, ReactElement, useState, memo } from 'react'
 import { Icon } from 'fogg-ui'
 
+// Constants
+import { STAGE_LINK } from '@constants/links'
+
 // Components
 import Link from '@ui/Link'
 import CreateAppModal from '@dashboard/components/Modals/CreateAppModal'
@@ -13,9 +16,10 @@ import styles from './Cards.scss'
 // Interfaces
 interface iProps {
   items: any[]
+  router: any
 }
 
-const Cards: FC<iProps> = ({ items }): ReactElement => {
+const Cards: FC<iProps> = ({ items, router }): ReactElement => {
   // Local state
   const [isOpen, setIsOpen] = useState(false)
   const title = 'My Apps'
@@ -42,7 +46,7 @@ const Cards: FC<iProps> = ({ items }): ReactElement => {
           {items.map(app => {
             return (
               <li key={app.id}>
-                <Link href={`/dashboard/${app.id}/master`}>
+                <Link href={STAGE_LINK(router)}>
                   <section className={styles.card} title={app.description}>
                     <AppIcon app={app} />
                   </section>

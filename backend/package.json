@@ -42,10 +42,10 @@
     "typescript": "3.9.5"
   },
   "dependencies": {
-    "apollo-server": "2.14.3",
+    "apollo-server": "2.14.4",
     "dotenv": "^8.2.0",
     "express": "4.17.1",
-    "fogg-utils": "2.2.0",
+    "fogg-utils": "2.2.4",
     "jsonwebtoken": "^8.5.1",
     "merge-graphql-schemas-ts": "1.1.4",
     "mysql2": "^2.1.0",

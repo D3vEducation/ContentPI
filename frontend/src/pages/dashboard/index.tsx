@@ -19,10 +19,16 @@ const Page = (): ReactElement => {
     return <div />
   }
 
+  // Router
+  const router = {
+    appId: dataGetApps.getApps[0].id,
+    stage: 'master'
+  }
+
   return (
     <UserProvider>
       <FormProvider>
-        <MyApps dataGetApps={dataGetApps} />
+        <MyApps dataGetApps={dataGetApps} router={router} />
       </FormProvider>
     </UserProvider>
   )

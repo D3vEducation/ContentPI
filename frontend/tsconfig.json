@@ -23,6 +23,7 @@
       "@dashboard/*": ["app/dashboard/*"],
       "@app/*": ["app/*"],
       "@config": ["config"],
+      "@constants/*": ["constants/*"],
       "@contexts/*": ["contexts/*"],
       "@graphql/*": ["graphql/*"],
       "@interfaces": ["interfaces"],

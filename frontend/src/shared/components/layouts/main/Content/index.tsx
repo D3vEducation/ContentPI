@@ -14,6 +14,7 @@ interface iProps {
   footer?: boolean
   noWrapper?: boolean
   children: ReactElement
+  router?: any
 }
 
 const Content: FC<iProps> = ({ children, header, footer, noWrapper }): ReactElement => (
