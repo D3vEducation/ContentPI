@@ -8,7 +8,7 @@ import { STAGE_LINK } from '@constants/links'
 // Components
 import Link from '@ui/Link'
 import CreateAppModal from '@dashboard/components/Modals/CreateAppModal'
-import AppIcon from '../AppIcon'
+import AppIcon from '../../../../../shared/components/layouts/main/AppIcon'
 
 // Styles
 import styles from './Cards.scss'
@@ -46,7 +46,7 @@ const Cards: FC<iProps> = ({ items, router }): ReactElement => {
           {items.map(app => {
             return (
               <li key={app.id}>
-                <Link href={STAGE_LINK(router)}>
+                <Link as={STAGE_LINK(router).as} href={STAGE_LINK(router).href}>
                   <section className={styles.card} title={app.description}>
                     <AppIcon app={app} />
                   </section>

@@ -6,19 +6,28 @@ import NextLink from 'next/link'
 interface iProps {
   children: ReactElement
   href: string
+  as?: string
   className?: string
   onClick?(): any
   title?: string
 }
 
-const Link: FC<iProps> = ({ href, children, className, onClick, title }): ReactElement => {
+const Link: FC<iProps> = ({ href, as, children, className, onClick, title }): ReactElement => {
   const linkProps = {
     onClick,
     className
   }
 
+  const props: any = {
+    href
+  }
+
+  if (as) {
+    props.as = as
+  }
+
   return (
-    <NextLink as={href} href={href}>
+    <NextLink {...props}>
       <a {...linkProps} title={title || href}>
         {children}
       </a>
