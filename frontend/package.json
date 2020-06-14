@@ -73,7 +73,7 @@
     "dotenv": "^8.2.0",
     "dotenv-webpack": "^1.8.0",
     "express": "^4.17.1",
-    "fogg-ui": "2.5.10",
+    "fogg-ui": "2.6.0",
     "fogg-utils": "2.2.4",
     "fogg-with-apollo": "^1.0.0",
     "graphql": "^15.1.0",

@@ -40,7 +40,13 @@ const Content: FC<iProps> = ({ data, router }): ReactElement => {
     <MainLayout title="Content" header content footer sidebar noWrapper router={router}>
       <div className={styles.content}>
         <div className={styles.model}>
-          <PrimaryButton href={CREATE_ENTRY_LINK(router).as}>+ New Entry</PrimaryButton>
+          <PrimaryButton
+            as={CREATE_ENTRY_LINK(router).as}
+            href={CREATE_ENTRY_LINK(router).href}
+            Link={Link}
+          >
+            + New Entry
+          </PrimaryButton>
         </div>
 
         <div className={styles.rows}>

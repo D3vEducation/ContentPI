@@ -9,7 +9,7 @@ export const CONTENT_LINK = (u: any) => ({
 })
 
 export const CREATE_ENTRY_LINK = (u: any) => ({
-  as: `${STAGE_LINK(u)}/create/${u.section}/${u.model}`,
+  as: `${STAGE_LINK(u).as}/create/${u.section}/${u.model}`,
   href: `${STAGE_LINK(u).href}/[moduleName]/[section]/[model]`
 })
 

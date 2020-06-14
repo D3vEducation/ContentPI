@@ -44,6 +44,8 @@ const Cards: FC<iProps> = ({ items, router }): ReactElement => {
 
         <ul>
           {items.map(app => {
+            router.appId = app.id
+
             return (
               <li key={app.id}>
                 <Link as={STAGE_LINK(router).as} href={STAGE_LINK(router).href}>
