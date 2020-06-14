@@ -194,7 +194,7 @@ const Create: FC<iProps> = ({ data, router }): ReactElement => {
       <div className={styles.create}>
         <div className={styles.fields}>
           <div className={styles.goBack}>
-            <Link href={CONTENT_LINK(router)} title={`Go back to ${getModel.modelName}`}>
+            <Link href={CONTENT_LINK(router).as} title={`Go back to ${getModel.modelName}`}>
               <Icon type="fas fa-chevron-left" />
             </Link>
             &nbsp;&nbsp;&nbsp;

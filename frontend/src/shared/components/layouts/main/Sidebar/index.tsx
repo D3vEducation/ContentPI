@@ -11,8 +11,8 @@ import ContentSidebar from '@dashboard/components/Content/ContentSidebar'
 
 // Components
 import Link from '@ui/Link'
+import AppIcon from '@dashboard/components/MyApps/AppIcon'
 import Logo from '../Logo'
-import AppIcon from '../AppIcon'
 
 // Styles
 import styles from './Sidebar.scss'

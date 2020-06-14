@@ -4,7 +4,7 @@ import React, { FC, ReactElement, memo } from 'react'
 // Shared components
 import MainLayout from '@layouts/main/MainLayout'
 import Logo from '@layouts/main/Logo'
-import Cards from '@layouts/main/Cards'
+import Cards from './Cards'
 
 // Styles
 import styles from './MyApps.scss'

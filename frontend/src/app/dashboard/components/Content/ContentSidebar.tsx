@@ -27,11 +27,16 @@ const ContentSidebar: FC<iProps> = ({ app, router }): ReactElement => {
         </div>
 
         <div className={styles.modelsWrapper}>
-          {models.map((model: any) => (
-            <div key={model.id}>
-              <Link href={CONTENT_LINK(router)}>{model.modelName}</Link>
-            </div>
-          ))}
+          {models.map((model: any) => {
+            router.section = 'model'
+            router.model = model.identifier
+
+            return (
+              <div key={model.id}>
+                <Link href={CONTENT_LINK(router).as}>{model.modelName}</Link>
+              </div>
+            )
+          })}
         </div>
       </div>
     </>

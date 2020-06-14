@@ -56,7 +56,9 @@ const ModelSidebar: FC<iProps> = ({ app, router }): ReactElement => {
 
             return (
               <div key={model.id}>
-                <Link href={SCHEMA_LINK(router)}>{model.modelName}</Link>
+                <Link href={SCHEMA_LINK(router).href} as={SCHEMA_LINK(router).as}>
+                  {model.modelName}
+                </Link>
               </div>
             )
           })}
