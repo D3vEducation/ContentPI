@@ -31,7 +31,6 @@ const Layout: FC<iProps> = ({
   noWrapper,
   router
 }): ReactElement => {
-  console.log('MAIN LAYOUT===', router)
   return (
     <>
       <Head>
