@@ -7,7 +7,7 @@ import { STAGE_LINK } from '@constants/links'
 
 // Components
 import Link from '@ui/Link'
-import CreateAppModal from '@dashboard/components/Modals/CreateAppModal'
+import CreateAppModal from '@modals/CreateAppModal'
 import AppIcon from '../AppIcon'
 
 // Styles

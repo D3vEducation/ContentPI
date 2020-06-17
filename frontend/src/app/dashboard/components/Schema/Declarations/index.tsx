@@ -2,7 +2,7 @@
 import React, { FC, ReactElement, useState, memo } from 'react'
 
 // Modals
-import CreateFieldModal from '@dashboard/components/Modals/CreateFieldModal'
+import CreateFieldModal from '@modals/CreateFieldModal'
 
 // Styles
 import styles from './Declarations.scss'
