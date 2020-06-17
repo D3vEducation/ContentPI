@@ -2,10 +2,16 @@ type Value {
   id: UUID!
   entry: UUID!
   value: String!
+  fieldId: UUID!
+}
+
+type Query {
+  getValuesByEntry(entry: UUID!): [Value!]
 }
 
 type Mutation {
-  createValues(input: [CreateValueInput]): [Value!]
+  createValues(input: [CreateOrUpdateValueInput]): [Value!]
+  updateValues(entry: UUID!, input: [CreateOrUpdateValueInput]): [Value!]
   findUniqueValues(input: [ValueInput]): [Value!]
 }
 
@@ -13,7 +19,7 @@ input ValueInput {
   value: String!
 }
 
-input CreateValueInput {
+input CreateOrUpdateValueInput {
   entry: UUID!
   value: String!
   fieldId: UUID!

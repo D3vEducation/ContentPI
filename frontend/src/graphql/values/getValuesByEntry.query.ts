@@ -2,11 +2,12 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  mutation createValues($values: [CreateOrUpdateValueInput!]) {
-    createValues(input: $values) {
+  query getValuesByEntry($entry: UUID!) {
+    getValuesByEntry(entry: $entry) {
       id
       entry
       value
+      fieldId
     }
   }
 `

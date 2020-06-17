@@ -21,7 +21,7 @@ const Page = (): ReactElement => {
 
   // Router
   const router = {
-    appId: dataGetApps.getApps[0].id,
+    appId: dataGetApps.getApps.length > 0 ? dataGetApps.getApps[0].id : null,
     stage: 'master'
   }
 
