@@ -9,7 +9,7 @@ import { SCHEMA_LINK } from '@constants/links'
 import Link from '@ui/Link'
 
 // Modals
-import CreateModelModal from '@dashboard/components/Modals/CreateModelModal'
+import CreateModelModal from '@modals/CreateModelModal'
 
 // Styles
 import styles from './ModelSidebar.scss'

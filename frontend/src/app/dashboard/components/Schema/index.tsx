@@ -3,8 +3,8 @@ import React, { FC, ReactElement, useState, memo } from 'react'
 import { Toggle, LinkButton, Menu, Icon } from 'fogg-ui'
 
 // Components
-import DeleteModelModal from '@dashboard/components/Modals/DeleteModelModal'
-import EditModelModal from '@dashboard/components/Modals/EditModelModal'
+import DeleteModelModal from '@modals/DeleteModelModal'
+import EditModelModal from '@modals/EditModelModal'
 
 // Shared components
 import MainLayout from '@layouts/main/MainLayout'

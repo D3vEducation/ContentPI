@@ -93,11 +93,14 @@ const Edit: FC<iProps> = ({ data, router }): ReactElement => {
   const [required, setRequired] = useState(requiredValues)
   const [saveLoading, setSaveLoading] = useState(false)
   const [publishLoading, setPublishLoading] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
   // Contexts
   const { onChange, setValue } = useContext(FormContext)
 
   // Methods
+  const handleAfterCreateOrEditEntryModal = (): void => setIsOpen(!isOpen)
+
   const handleActive = (field: string) => {
     setActive(field)
   }
@@ -173,6 +176,7 @@ const Edit: FC<iProps> = ({ data, router }): ReactElement => {
 
           waitFor(2).then(() => {
             setShowAlert(false)
+            handleAfterCreateOrEditEntryModal()
           })
         }
       })
@@ -202,10 +206,12 @@ const Edit: FC<iProps> = ({ data, router }): ReactElement => {
         />
 
         <SystemFields
+          isOpen={isOpen}
           alert={alert}
           alertType={alertType}
           handleSubmit={handleSubmit}
           publishLoading={publishLoading}
+          router={router}
           saveLoading={saveLoading}
           showAlert={showAlert}
           systemFields={systemFields}
