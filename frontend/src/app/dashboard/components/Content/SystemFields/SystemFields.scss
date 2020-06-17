@@ -106,11 +106,11 @@
 
     &.show {
       @include minBreakpoint(1024px) {
-        right: calc(100% - 350px);
+        right: calc(100% - 300px);
       }
 
       @include minBreakpoint(1280px) {
-        right: calc(100% - 450px);
+        right: calc(100% - 350px);
       }
 
       @include tablet {
