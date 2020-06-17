@@ -1,6 +1,6 @@
 // Dependencies
 import React, { FC, ReactElement, useState, useContext, memo } from 'react'
-import { slugFn, getEmptyValues, waitFor } from 'fogg-utils'
+import { slugFn, getEmptyValues, waitFor, redirectTo } from 'fogg-utils'
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 import { useMutation } from '@apollo/react-hooks'
@@ -10,6 +10,9 @@ import MainLayout from '@layouts/main/MainLayout'
 
 // Contexts
 import { FormContext } from '@contexts/form'
+
+// Constants
+import { EDIT_ENTRY_LINK } from '@constants/links'
 
 // Mutation
 import CREATE_VALUES_MUTATION from '@graphql/values/createValues.mutation'
@@ -174,8 +177,9 @@ const Create: FC<iProps> = ({ data, router }): ReactElement => {
               status: values.status
             })
 
-            waitFor(2).then(() => {
+            waitFor(1).then(() => {
               setShowAlert(false)
+              redirectTo(`${EDIT_ENTRY_LINK(router).as}/${values.id}`)
             })
           }
         }
