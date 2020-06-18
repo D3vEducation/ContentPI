@@ -4,8 +4,8 @@ import { cx } from 'fogg-utils'
 import { Icon } from 'fogg-ui'
 
 // Components
-import DeleteFieldModal from '@dashboard/components/Modals/DeleteFieldModal'
-import EditFieldModal from '@dashboard/components/Modals/EditFieldModal'
+import DeleteFieldModal from '@modals/DeleteFieldModal'
+import EditFieldModal from '@modals/EditFieldModal'
 
 // Styles
 import styles from './Fields.scss'
