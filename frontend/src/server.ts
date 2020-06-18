@@ -58,12 +58,16 @@ nextApp.prepare().then(() => {
   )
 
   app.use(
-    `/dashboard/:appId?/:stage?/:moduleName?/:section?/:model?`,
+    `/dashboard/:appId?/:stage?/:moduleName?/:section?/:model?/:entryId?`,
     isConnected(true, ['god', 'admin', 'editor'], '/login?redirectTo=/dashboard'),
     (req: any, res: any) => {
-      const { appId, stage, moduleName, section, model } = req.params
+      const { appId, stage, moduleName, section, model, entryId } = req.params
 
       const url = buildUrl(['dashboard', appId, stage, moduleName, section, model])
+
+      if (entryId) {
+        req.query.entryId = entryId
+      }
 
       return nextApp.render(req, res, `/${url}`, req.query)
     }
