@@ -10,7 +10,7 @@ type Query {
 }
 
 type Mutation {
-  createValues(input: [CreateValueInput]): [Value!]
+  createValues(input: [CreateOrUpdateValueInput]): [Value!]
   findUniqueValues(input: [ValueInput]): [Value!]
   updateValues(entry: UUID!, input: [CreateOrUpdateValueInput]): [Value!]
 }
