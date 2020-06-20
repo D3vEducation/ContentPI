@@ -1,6 +1,6 @@
 // Dependencies
 import React, { FC, ReactElement, useContext, useState, useEffect, memo } from 'react'
-import { Modal, Badge, Input, PrimaryButton, LinkButton, Toggle } from 'fogg-ui'
+import { Modal, Badge, Input, Select, PrimaryButton, LinkButton, Toggle } from 'fogg-ui'
 import { camelCase, getEmptyValues, redirectTo, getParamsFromUrl, waitFor } from 'fogg-utils'
 import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 
@@ -26,6 +26,9 @@ interface iProps {
 
 const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): ReactElement => {
   const { appId } = getParamsFromUrl(['page', 'appId', 'stage'])
+  const {
+    data: { enumerations }
+  } = options
 
   // States
   const initialValues = {
@@ -44,6 +47,7 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
     isPrimaryKey: false
   }
   const [values, setValues] = useState(initialValues)
+  const [enumeration, setEnumeration] = useState('')
   const [required, setRequired] = useState<any>({
     fieldName: false,
     identifier: false
@@ -94,7 +98,17 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
   }
 
   const handleSubmit = async (): Promise<void> => {
-    const emptyValues = getEmptyValues(values, ['fieldName', 'identifier'])
+    let emptyValues = getEmptyValues(values, ['fieldName', 'identifier'])
+
+    if (options.data.type === 'Dropdown') {
+      if (!emptyValues && !enumeration) {
+        emptyValues = {
+          enumeration: true
+        }
+      } else if (!enumeration) {
+        emptyValues.enumeration = true
+      }
+    }
 
     if (emptyValues) {
       setRequired(emptyValues)
@@ -113,6 +127,31 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
         })
       })
     }
+  }
+
+  const renderDropdown = () => {
+    const enumOptions: any = enumerations.map((enu: any) => ({
+      option: enu.enumerationName,
+      value: enu.id
+    }))
+
+    return (
+      <div>
+        <label htmlFor="enumeration">
+          Enumeration {required.enumeration && <Badge danger>Required</Badge>}
+        </label>
+        <Select
+          name="language"
+          label="Select enumeration"
+          onClick={({ value }: { value: any }): void => {
+            if (value) {
+              setEnumeration(value)
+            }
+          }}
+          options={enumOptions}
+        />
+      </div>
+    )
   }
 
   // Effects
@@ -151,6 +190,8 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
             onChange={_onChange}
           />
         </div>
+
+        {options.data.type === 'Dropdown' && renderDropdown()}
 
         <div>
           <label htmlFor="description">Description</label>

@@ -124,7 +124,11 @@ const Schema: FC<iProps> = ({ data, router }): ReactElement => {
 
           <div className={styles.wrapper}>
             <Fields fields={getModel.fields} showSystem={showSystem} />
-            <Declarations model={getModel} declarations={getDeclarations} />
+            <Declarations
+              model={getModel}
+              declarations={getDeclarations}
+              enumerations={getEnumerationsByAppId}
+            />
           </div>
         </div>
       </MainLayout>

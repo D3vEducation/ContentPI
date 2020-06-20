@@ -24,8 +24,7 @@ const Page: FC = (): ReactElement => {
   // Router
   const router = useRouter()
   const { appId, section, moduleName, model, entryId = '' } = router.query
-  let dataModel: any = {}
-  let dataEnumerationsByAppId: any = {}
+  let dataModel: any = null
 
   // Executing Queries
   if (section === 'model') {
@@ -37,15 +36,13 @@ const Page: FC = (): ReactElement => {
     })
 
     dataModel = response.data
-  } else if (section === 'enumeration') {
-    const response = useQuery(GET_ENUMERATIONS_BY_APP_ID_QUERY, {
-      variables: {
-        appId
-      }
-    })
-
-    dataEnumerationsByAppId = response.data
   }
+
+  const { data: dataEnumerationsByAppId } = useQuery(GET_ENUMERATIONS_BY_APP_ID_QUERY, {
+    variables: {
+      appId
+    }
+  })
 
   const { data: dataDeclarations } = useQuery(GET_DECLARATIONS_QUERY)
 
