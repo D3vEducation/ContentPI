@@ -46,25 +46,31 @@ const Declarations: FC<iProps> = ({ declarations, model, enumerations }): ReactE
         <h3>Fields</h3>
 
         <ul>
-          {declarations.map((field: any) => (
-            <li key={field.id}>
-              <div>
-                <p>{field.declaration}</p>
+          {declarations.map((field: any) => {
+            if (field.declaration === 'Dropdown' && enumerations.length === 0) {
+              return <li />
+            }
 
-                <div
-                  className={styles.widgetOption}
-                  title={field.description}
-                  onClick={(): void => {
-                    setFieldType(field.declaration)
-                    handleModal()
-                  }}
-                >
-                  <i className={field.icon} style={{ color: field.color }} />
-                  <span>{field.declaration}</span>
+            return (
+              <li key={field.id}>
+                <div>
+                  <p>{field.declaration}</p>
+
+                  <div
+                    className={styles.widgetOption}
+                    title={field.description}
+                    onClick={(): void => {
+                      setFieldType(field.declaration)
+                      handleModal()
+                    }}
+                  >
+                    <i className={field.icon} style={{ color: field.color }} />
+                    <span>{field.declaration}</span>
+                  </div>
                 </div>
-              </div>
-            </li>
-          ))}
+              </li>
+            )
+          })}
         </ul>
       </section>
     </>

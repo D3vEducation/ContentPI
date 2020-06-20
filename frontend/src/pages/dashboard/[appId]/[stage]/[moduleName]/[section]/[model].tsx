@@ -51,7 +51,7 @@ const Page: FC = (): ReactElement => {
     return <div />
   }
 
-  if (section === 'enumeration' && !dataEnumerationsByAppId) {
+  if (!dataEnumerationsByAppId) {
     return <div />
   }
 

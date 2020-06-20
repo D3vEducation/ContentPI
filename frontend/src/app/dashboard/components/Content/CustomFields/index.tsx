@@ -1,6 +1,6 @@
 // Dependencies
 import React, { FC, ReactElement, memo } from 'react'
-import { Badge, Icon, Input, TextArea } from 'fogg-ui'
+import { Badge, Icon, Input, TextArea, Select } from 'fogg-ui'
 import { cx } from 'fogg-utils'
 
 // Constants
@@ -21,6 +21,7 @@ interface iProps {
   required: any
   router: any
   values: any
+  enumerations: any
 }
 
 const CustomFields: FC<iProps> = ({
@@ -31,70 +32,79 @@ const CustomFields: FC<iProps> = ({
   onChange,
   required,
   router,
-  values
-}): ReactElement => (
-  <div className={styles.customFields}>
-    <div className={styles.fields}>
-      <div className={styles.goBack}>
-        <Link href={CONTENT_LINK(router).as} title={`Go back to ${getModel.modelName}`}>
-          <Icon type="fas fa-chevron-left" />
-        </Link>
-        &nbsp;&nbsp;&nbsp;
-        <Badge className={styles.badge}>{getModel.modelName}</Badge>
-        <div className={styles.entryTitle}>
-          {values.title ? <>{values.title}</> : <>New {getModel.modelName}</>}
-        </div>
-      </div>
-
-      {customFields.map((field: any) => (
-        <div
-          key={field.id}
-          className={cx(
-            styles.field,
-            active === field.identifier ? styles.active : '',
-            required[field.identifier] ? styles.red : ''
-          )}
-          onClick={(): void => handleActive(field.identifier)}
-        >
-          <div>
-            <label>
-              {field.fieldName}{' '}
-              {field.isRequired && (
-                <span className={cx(styles.tag, required[field.identifier] ? styles.red : '')}>
-                  Required
-                </span>
-              )}
-            </label>
+  values,
+  enumerations
+}): ReactElement => {
+  return (
+    <div className={styles.customFields}>
+      <div className={styles.fields}>
+        <div className={styles.goBack}>
+          <Link href={CONTENT_LINK(router).as} title={`Go back to ${getModel.modelName}`}>
+            <Icon type="fas fa-chevron-left" />
+          </Link>
+          &nbsp;&nbsp;&nbsp;
+          <Badge className={styles.badge}>{getModel.modelName}</Badge>
+          <div className={styles.entryTitle}>
+            {values.title ? <>{values.title}</> : <>New {getModel.modelName}</>}
           </div>
-
-          {field.type === 'String' && (
-            <div className={styles[field.type.toLowerCase()]}>
-              <Input
-                type="text"
-                hasError={required[field.identifier]}
-                name={field.identifier}
-                onChange={onChange}
-                placeholder={field.fieldName}
-                value={values[field.identifier]}
-              />
-            </div>
-          )}
-
-          {field.type === 'Text' && (
-            <div className={styles[field.type.toLowerCase()]}>
-              <TextArea
-                name={field.identifier}
-                hasError={required[field.identifier]}
-                placeholder={field.fieldName}
-                onChange={onChange}
-                value={values[field.identifier]}
-              />
-            </div>
-          )}
         </div>
-      ))}
+
+        {customFields.map((field: any) => (
+          <div
+            key={field.id}
+            className={cx(
+              styles.field,
+              active === field.identifier ? styles.active : '',
+              required[field.identifier] ? styles.red : ''
+            )}
+            onClick={(): void => handleActive(field.identifier)}
+          >
+            <div>
+              <label>
+                {field.fieldName}{' '}
+                {field.isRequired && (
+                  <span className={cx(styles.tag, required[field.identifier] ? styles.red : '')}>
+                    Required
+                  </span>
+                )}
+              </label>
+            </div>
+
+            {field.type === 'String' && (
+              <div className={styles[field.type.toLowerCase()]}>
+                <Input
+                  type="text"
+                  hasError={required[field.identifier]}
+                  name={field.identifier}
+                  onChange={onChange}
+                  placeholder={field.fieldName}
+                  value={values[field.identifier]}
+                />
+              </div>
+            )}
+
+            {field.type === 'Text' && (
+              <div className={styles[field.type.toLowerCase()]}>
+                <TextArea
+                  name={field.identifier}
+                  hasError={required[field.identifier]}
+                  placeholder={field.fieldName}
+                  onChange={onChange}
+                  value={values[field.identifier]}
+                />
+              </div>
+            )}
+
+            {field.type === 'Dropdown' && (
+              <div className={styles[field.type.toLowerCase()]}>
+                <Select />
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 export default memo(CustomFields)

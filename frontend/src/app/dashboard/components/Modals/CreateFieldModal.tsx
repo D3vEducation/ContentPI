@@ -86,6 +86,10 @@ const CreateFieldModal: FC<iProps> = ({ isOpen, label, onClose, options }): Reac
     if (data.getModel && data.getModel.id) {
       values.modelId = data.getModel.id
 
+      if (options.data.type === 'Dropdown') {
+        values.defaultValue = enumeration
+      }
+
       const { data: dataField } = await createFieldMutation({
         variables: values
       })

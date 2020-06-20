@@ -1,10 +1,8 @@
 // Dependencies
-import React, { FC, ReactElement, useState, memo } from 'react'
-import { Toggle, LinkButton, Menu, Icon } from 'fogg-ui'
+import React, { FC, ReactElement, memo } from 'react'
 
 // Shared components
 import MainLayout from '@layouts/main/MainLayout'
-import Link from '@ui/Link'
 
 // Styles
 import styles from './Enumerations.scss'
@@ -31,7 +29,7 @@ const Enumerations: FC<iProps> = ({ data, router }): ReactElement => {
             const values = JSON.parse(enumeration.values)
 
             return (
-              <div className={styles.enumeration}>
+              <div key={enumeration.id} className={styles.enumeration}>
                 <div className={styles.information}>
                   <h3 className={styles.name}>{enumeration.enumerationName}</h3>{' '}
                   <span className={styles.identifier}>#{enumeration.identifier}</span>
@@ -39,7 +37,9 @@ const Enumerations: FC<iProps> = ({ data, router }): ReactElement => {
 
                 <div className={styles.values}>
                   {values.map((value: any) => (
-                    <span className={styles.value}>{value.value}</span>
+                    <span key={value.value} className={styles.value}>
+                      {value.value}
+                    </span>
                   ))}
                 </div>
               </div>
