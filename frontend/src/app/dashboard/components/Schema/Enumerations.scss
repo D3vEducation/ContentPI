@@ -1,0 +1,42 @@
+@import '~styles/_dependencies';
+
+.enumerations {
+  .enumeration {
+    border: 1px solid $gallery;
+    margin-bottom: 20px;
+    border-radius: 5px;
+
+    .information {
+      background-color: $alabaster;
+      padding: 20px 10px;
+      border-bottom: 1px solid $gallery;
+
+      .name {
+        color: $tuna;
+        display: inline;
+        font-size: $xLarge;
+        font-weight: 500;
+      }
+
+      .identifier {
+        color: $frenchGray;
+        margin-right: 10px;
+      }
+    }
+
+    .values {
+      display: flex;
+      padding: 20px 10px;
+      flex-wrap: wrap;
+
+      .value {
+        font-size: 14px;
+        color: $doveGray;
+        border-radius: 5px;
+        background-color: $gallery;
+        padding: 10px;
+        margin: 10px;
+      }
+    }
+  }
+}

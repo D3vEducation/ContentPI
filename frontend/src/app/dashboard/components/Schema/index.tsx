@@ -11,6 +11,7 @@ import MainLayout from '@layouts/main/MainLayout'
 import Link from '@ui/Link'
 import Fields from './Fields'
 import Declarations from './Declarations'
+import Enumerations from './Enumerations'
 
 // Styles
 import styles from './Schema.scss'
@@ -43,11 +44,15 @@ const Schema: FC<iProps> = ({ data, router }): ReactElement => {
   }
 
   // Data
-  const { getModel, getDeclarations } = data
+  const { getModel, getDeclarations, getEnumerationsByAppId, section } = data
 
   // First render
-  if (!getModel && !getDeclarations) {
+  if (!getModel && !getDeclarations && !getEnumerationsByAppId) {
     return <div />
+  }
+
+  if (section === 'enumeration') {
+    return <Enumerations data={data} router={router} />
   }
 
   return (

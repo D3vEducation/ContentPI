@@ -9,6 +9,9 @@ import { AppContext } from '@contexts/app'
 import ModelSidebar from '@dashboard/components/Models/ModelSidebar'
 import ContentSidebar from '@dashboard/components/Content/ContentSidebar'
 
+// Constants
+import { STAGE_LINK } from '@constants/links'
+
 // Components
 import Link from '@ui/Link'
 import AppIcon from '@dashboard/components/MyApps/AppIcon'
@@ -48,7 +51,9 @@ const Sidebar: FC<iProps> = ({ router }): ReactElement => {
         <ul>
           {getAppById && (
             <li className={styles.appIcon}>
-              <AppIcon app={getAppById} hideName />
+              <Link href={STAGE_LINK(router).href} as={STAGE_LINK(router).as}>
+                <AppIcon app={getAppById} hideName />
+              </Link>
             </li>
           )}
 

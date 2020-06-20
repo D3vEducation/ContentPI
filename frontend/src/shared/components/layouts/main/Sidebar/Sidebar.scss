@@ -44,6 +44,14 @@
         justify-content: center;
 
         &.appIcon {
+          a {
+            width: 60px;
+
+            &:hover {
+              background-color: transparent;
+            }
+          }
+
           margin-top: 20px;
         }
 
