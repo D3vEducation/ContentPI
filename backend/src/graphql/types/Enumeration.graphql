@@ -15,8 +15,6 @@ type Query {
 
 type Mutation {
   createEnumeration(input: CreateOrEditEnumerationInput): Enumeration!
-  deleteEnumeration(id: UUID!): Enumeration!
-  editEnumeration(id: UUID!, input: CreateOrEditEnumerationInput): Enumeration!
 }
 
 input CreateOrEditEnumerationInput {
