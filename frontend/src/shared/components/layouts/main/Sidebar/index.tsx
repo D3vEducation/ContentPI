@@ -5,6 +5,9 @@ import { Icon } from 'fogg-ui'
 // Contexts
 import { AppContext } from '@contexts/app'
 
+// Constants
+import { STAGE_LINK } from '@constants/links'
+
 // Sidebars
 import ModelSidebar from '@dashboard/components/Models/ModelSidebar'
 import ContentSidebar from '@dashboard/components/Content/ContentSidebar'
@@ -48,7 +51,9 @@ const Sidebar: FC<iProps> = ({ router }): ReactElement => {
         <ul>
           {getAppById && (
             <li className={styles.appIcon}>
-              <AppIcon app={getAppById} hideName />
+              <Link href={STAGE_LINK(router).href} as={STAGE_LINK(router).as}>
+                <AppIcon app={getAppById} hideName />
+              </Link>
             </li>
           )}
 

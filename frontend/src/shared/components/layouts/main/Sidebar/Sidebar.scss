@@ -45,6 +45,14 @@
 
         &.appIcon {
           margin-top: 20px;
+
+          a {
+            width: 60px;
+
+            &:hover {
+              background-color: transparent;
+            }
+          }
         }
 
         &:hover {
