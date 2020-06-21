@@ -21,6 +21,7 @@ interface iProps {
   required: any
   router: any
   values: any
+  setValues: any
   enumerations: any
 }
 
@@ -33,8 +34,33 @@ const CustomFields: FC<iProps> = ({
   required,
   router,
   values,
+  setValues,
   enumerations
 }): ReactElement => {
+  const renderDropdown = (field: any) => {
+    const enumId = field.defaultValue
+    const enumeration = enumerations.find((enu: any) => enu.id === enumId)
+    const options: any = JSON.parse(enumeration.values)
+
+    return (
+      <div className={styles[field.type.toLowerCase()]}>
+        <Select
+          name={enumeration.identifier}
+          label={enumeration.enumerationName}
+          onClick={({ option, value }: { option: string; value: string }): void => {
+            if (option && values) {
+              setValues((preValues: any) => ({
+                ...preValues,
+                [field.identifier]: `${option}:${value}`
+              }))
+            }
+          }}
+          options={options}
+        />
+      </div>
+    )
+  }
+
   return (
     <div className={styles.customFields}>
       <div className={styles.fields}>
@@ -95,11 +121,7 @@ const CustomFields: FC<iProps> = ({
               </div>
             )}
 
-            {field.type === 'Dropdown' && (
-              <div className={styles[field.type.toLowerCase()]}>
-                <Select />
-              </div>
-            )}
+            {field.type === 'Dropdown' && renderDropdown(field)}
           </div>
         ))}
       </div>

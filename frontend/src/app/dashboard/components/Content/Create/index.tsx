@@ -38,7 +38,7 @@ const Create: FC<iProps> = ({ data, router }): ReactElement => {
   const systemFields = getModel.fields.filter((field: any) => field.isSystem)
   const customFields = getModel.fields.filter((field: any) => !field.isSystem)
   const uniqueFields = getModel.fields.filter((field: any) => field.isUnique && !field.isSystem)
-  const enumerations = []
+  const enumerations: any = []
 
   // Custom fields
   customFields.forEach((field: any) => {
@@ -206,6 +206,7 @@ const Create: FC<iProps> = ({ data, router }): ReactElement => {
           required={required}
           router={router}
           values={values}
+          setValues={setValues}
           enumerations={enumerations}
         />
 

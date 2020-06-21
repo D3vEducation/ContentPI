@@ -38,7 +38,7 @@ const Enumerations: FC<iProps> = ({ data, router }): ReactElement => {
                 <div className={styles.values}>
                   {values.map((value: any) => (
                     <span key={value.value} className={styles.value}>
-                      {value.value}
+                      {value.option}
                     </span>
                   ))}
                 </div>
