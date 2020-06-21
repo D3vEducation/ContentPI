@@ -198,6 +198,7 @@ const Create: FC<iProps> = ({ data, router }): ReactElement => {
     <MainLayout title="Create new Entry" header content footer sidebar noWrapper router={router}>
       <>
         <CustomFields
+          action="create"
           active={active}
           customFields={customFields}
           getModel={getModel}

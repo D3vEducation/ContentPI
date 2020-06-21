@@ -13,6 +13,7 @@ import Link from '@ui/Link'
 import styles from './CustomFields.scss'
 
 interface iProps {
+  action: string
   active: string
   customFields: any
   getModel: any
@@ -26,6 +27,7 @@ interface iProps {
 }
 
 const CustomFields: FC<iProps> = ({
+  action,
   active,
   customFields,
   getModel,
@@ -41,6 +43,15 @@ const CustomFields: FC<iProps> = ({
     const enumId = field.defaultValue
     const enumeration = enumerations.find((enu: any) => enu.id === enumId)
     const options: any = JSON.parse(enumeration.values)
+
+    if (action === 'edit') {
+      const currentValue = values[field.identifier].split(':')[1]
+      const optionIndex = options.findIndex((option: any) => option.value === currentValue)
+
+      if (optionIndex > -1) {
+        options[optionIndex].selected = true
+      }
+    }
 
     return (
       <div className={styles[field.type.toLowerCase()]}>
