@@ -10,9 +10,10 @@ import styles from './Declarations.scss'
 interface iProps {
   declarations: any
   model: any
+  enumerations: any
 }
 
-const Declarations: FC<iProps> = ({ declarations, model }): ReactElement => {
+const Declarations: FC<iProps> = ({ declarations, model, enumerations }): ReactElement => {
   // Local state
   const [isOpen, setIsOpen] = useState(false)
   const [fieldType, setFieldType] = useState('')
@@ -29,12 +30,13 @@ const Declarations: FC<iProps> = ({ declarations, model }): ReactElement => {
           onClose={handleModal}
           options={{
             data: {
+              enumerations,
               type: fieldType,
               modelIdentifier: model.identifier,
               appId: model.appId
             },
             position: 'top',
-            height: '650px',
+            height: fieldType === 'Dropdown' ? '700px' : '620px',
             width: '600px'
           }}
         />
@@ -44,25 +46,31 @@ const Declarations: FC<iProps> = ({ declarations, model }): ReactElement => {
         <h3>Fields</h3>
 
         <ul>
-          {declarations.map((field: any) => (
-            <li key={field.id}>
-              <div>
-                <p>{field.declaration}</p>
+          {declarations.map((field: any) => {
+            if (field.declaration === 'Dropdown' && enumerations.length === 0) {
+              return <li />
+            }
 
-                <div
-                  className={styles.widgetOption}
-                  title={field.description}
-                  onClick={(): void => {
-                    setFieldType(field.declaration)
-                    handleModal()
-                  }}
-                >
-                  <i className={field.icon} style={{ color: field.color }} />
-                  <span>{field.declaration}</span>
+            return (
+              <li key={field.id}>
+                <div>
+                  <p>{field.declaration}</p>
+
+                  <div
+                    className={styles.widgetOption}
+                    title={field.description}
+                    onClick={(): void => {
+                      setFieldType(field.declaration)
+                      handleModal()
+                    }}
+                  >
+                    <i className={field.icon} style={{ color: field.color }} />
+                    <span>{field.declaration}</span>
+                  </div>
                 </div>
-              </div>
-            </li>
-          ))}
+              </li>
+            )
+          })}
         </ul>
       </section>
     </>

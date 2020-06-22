@@ -98,6 +98,9 @@ const Fields: FC<iProps> = ({ fields, showSystem }): ReactElement => {
               {field.type === 'Boolean' && (
                 <Icon title={field.description} type="fas fa-toggle-on" />
               )}
+              {field.type === 'Dropdown' && (
+                <Icon title={field.description} type="fas fa-caret-square-down" />
+              )}
             </div>
 
             <div className={styles.name}>

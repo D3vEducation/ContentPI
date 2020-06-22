@@ -25,7 +25,7 @@ interface iProps {
 
 const Edit: FC<iProps> = ({ data, router }): ReactElement => {
   // Data
-  const { getModel, entryId } = data
+  const { getModel, entryId, getEnumerationsByAppId } = data
 
   // Executing Queries
   const { data: dataValues } = useQuery(GET_VALUES_BY_ENTRY_QUERY, {
@@ -45,12 +45,19 @@ const Edit: FC<iProps> = ({ data, router }): ReactElement => {
   const requiredValues: any = {}
   const systemFields = getModel.fields.filter((field: any) => field.isSystem)
   const customFields = getModel.fields.filter((field: any) => !field.isSystem)
+  const enumerations: any = []
 
   // Custom fields
   customFields.forEach((field: any) => {
     const val = dataValues.getValuesByEntry.find(
       (valueEntry: any) => valueEntry.fieldId === field.id
     )
+
+    if (field.type === 'Dropdown') {
+      const enumerationId = field.defaultValue
+      const enumeration = getEnumerationsByAppId.find((enu: any) => enu.id === enumerationId)
+      enumerations.push(enumeration)
+    }
 
     initialValues[field.identifier] = val.value
 
@@ -194,6 +201,7 @@ const Edit: FC<iProps> = ({ data, router }): ReactElement => {
     >
       <>
         <CustomFields
+          action="edit"
           active={active}
           handleActive={handleActive}
           getModel={getModel}
@@ -202,6 +210,8 @@ const Edit: FC<iProps> = ({ data, router }): ReactElement => {
           customFields={customFields}
           required={required}
           onChange={_onChange}
+          setValues={setValues}
+          enumerations={enumerations}
         />
 
         <SystemFields

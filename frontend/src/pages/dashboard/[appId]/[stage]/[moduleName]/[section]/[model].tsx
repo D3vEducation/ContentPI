@@ -18,28 +18,36 @@ import PageNotFound from '@dashboard/components/Error/PageNotFound'
 // Queries
 import GET_MODEL_QUERY from '@graphql/models/getModel.query'
 import GET_DECLARATIONS_QUERY from '@graphql/declarations/getDeclarations.query'
+import GET_ENUMERATIONS_BY_APP_ID_QUERY from '@graphql/enumerations/getEnumerationsByAppId.query'
 
 const Page: FC = (): ReactElement => {
   // Router
   const router = useRouter()
-  const { appId, moduleName, model, entryId = '' } = router.query
+  const { appId, section, moduleName, model, entryId = '' } = router.query
+  let dataModel: any = null
 
   // Executing Queries
-  const { data: dataModel, loading: loadingModel } = useQuery(GET_MODEL_QUERY, {
+  if (section === 'model') {
+    const response = useQuery(GET_MODEL_QUERY, {
+      variables: {
+        identifier: model,
+        appId
+      }
+    })
+
+    dataModel = response.data
+  }
+
+  const { data: dataEnumerationsByAppId } = useQuery(GET_ENUMERATIONS_BY_APP_ID_QUERY, {
     variables: {
-      identifier: model,
       appId
     }
   })
-  const { data: dataDeclarations, loading: loadingDeclarations } = useQuery(GET_DECLARATIONS_QUERY)
 
-  // Loading...
-  if (loadingModel || loadingDeclarations) {
-    return <div />
-  }
+  const { data: dataDeclarations } = useQuery(GET_DECLARATIONS_QUERY)
 
   // First render?
-  if (!dataModel && !dataDeclarations) {
+  if (!dataEnumerationsByAppId) {
     return <div />
   }
 
@@ -52,11 +60,13 @@ const Page: FC = (): ReactElement => {
   }
 
   const renderPage = (page: any) => {
-    if (Pages[page] && dataModel && dataDeclarations) {
+    if (Pages[page]) {
       return createElement(Pages[page], {
         router: router.query,
         data: {
+          section,
           entryId,
+          ...dataEnumerationsByAppId,
           ...dataModel,
           ...dataDeclarations
         }

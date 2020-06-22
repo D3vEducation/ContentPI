@@ -7,7 +7,6 @@ import { useMutation } from '@apollo/react-hooks'
 
 // Shared components
 import MainLayout from '@layouts/main/MainLayout'
-import Link from '@ui/Link'
 
 // Contexts
 import { FormContext } from '@contexts/form'
@@ -27,7 +26,7 @@ interface iProps {
 
 const Create: FC<iProps> = ({ data, router }): ReactElement => {
   // Data
-  const { getModel } = data
+  const { getModel, getEnumerationsByAppId } = data
 
   // Setting a unique ID
   const newId = uuidv4()
@@ -39,10 +38,17 @@ const Create: FC<iProps> = ({ data, router }): ReactElement => {
   const systemFields = getModel.fields.filter((field: any) => field.isSystem)
   const customFields = getModel.fields.filter((field: any) => !field.isSystem)
   const uniqueFields = getModel.fields.filter((field: any) => field.isUnique && !field.isSystem)
+  const enumerations: any = []
 
   // Custom fields
   customFields.forEach((field: any) => {
     initialValues[field.identifier] = ''
+
+    if (field.type === 'Dropdown') {
+      const enumerationId = field.defaultValue
+      const enumeration = getEnumerationsByAppId.find((enu: any) => enu.id === enumerationId)
+      enumerations.push(enumeration)
+    }
 
     if (field.isRequired) {
       requiredValues[field.identifier] = false
@@ -192,6 +198,7 @@ const Create: FC<iProps> = ({ data, router }): ReactElement => {
     <MainLayout title="Create new Entry" header content footer sidebar noWrapper router={router}>
       <>
         <CustomFields
+          action="create"
           active={active}
           customFields={customFields}
           getModel={getModel}
@@ -200,6 +207,8 @@ const Create: FC<iProps> = ({ data, router }): ReactElement => {
           required={required}
           router={router}
           values={values}
+          setValues={setValues}
+          enumerations={enumerations}
         />
 
         <SystemFields

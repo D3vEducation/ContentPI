@@ -21,10 +21,17 @@
     }
   }
 
+  .values {
+    > div {
+      height: 200px;
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+  }
+
   .buttons {
     display: flex;
     justify-content: flex-end;
-    margin-top: 50px;
 
     &.center {
       justify-content: space-between;
