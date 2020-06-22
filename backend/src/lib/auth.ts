@@ -50,14 +50,15 @@ export const doLogin = async (
   models: iModels
 ): Promise<iAuthPayload> => {
   const user = await getUserBy({ email }, models)
-
+  console.log('USER===', user)
   if (!user) {
     throw new AuthenticationError('Invalid Login')
   }
 
   const passwordMatch = isPasswordMatch(encrypt(password), user.password)
   const isActive = user.active
-
+  console.log('PASSWORD===', passwordMatch)
+  console.log('IS ACTIVE===', isActive)
   if (!passwordMatch) {
     throw new AuthenticationError('Invalid Login')
   }

@@ -36,6 +36,12 @@ async function createDeclarations(): Promise<any> {
         color: '#ff0098'
       },
       {
+        declaration: 'Dropdown',
+        icon: 'fas fa-caret-square-down',
+        description: 'Dropdown',
+        color: '#00b1ff'
+      },
+      {
         declaration: 'Integer',
         icon: 'fas fa-dice-five',
         description: 'Integer',

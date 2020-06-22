@@ -1,4 +1,13 @@
-import { App, Declaration, Value, Field, Model, User, Sequelize } from './types'
+import {
+  App,
+  Declaration,
+  Value,
+  Field,
+  Model,
+  User,
+  Enumeration,
+  Sequelize
+} from './types'
 
 // Sequelize
 export interface iDataTypes {
@@ -40,6 +49,15 @@ export interface iCreateOrUpdateValueInput extends Value {}
 export interface iValueInput {
   value: string
 }
+
+// Enumeration
+export interface iEnumeration extends Enumeration, Sequelize {
+  id: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface iCreateOrEditEnumerationInput extends Enumeration {}
 
 // Field
 export interface iField extends Field, Sequelize {
@@ -83,6 +101,7 @@ export interface iAuthPayload {
 export interface iModels {
   App: any
   Declaration: any
+  Enumeration: any
   Field: any
   Value: any
   Model: any

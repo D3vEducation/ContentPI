@@ -3,7 +3,7 @@ import React, { FC, ReactElement, useState, memo } from 'react'
 import { Badge } from 'fogg-ui'
 
 // Constants
-import { SCHEMA_LINK } from '@constants/links'
+import { MODEL_LINK } from '@constants/links'
 
 // Components
 import Link from '@ui/Link'
@@ -56,7 +56,7 @@ const ModelSidebar: FC<iProps> = ({ app, router }): ReactElement => {
 
             return (
               <div key={model.id}>
-                <Link href={SCHEMA_LINK(router).href} as={SCHEMA_LINK(router).as}>
+                <Link href={MODEL_LINK(router).href} as={MODEL_LINK(router).as}>
                   {model.modelName}
                 </Link>
               </div>
